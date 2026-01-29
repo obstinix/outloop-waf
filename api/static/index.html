@@ -196,8 +196,15 @@
         }
 
         .nav-cta:hover {
-            background: rgba(0, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            background: rgba(0, 255, 255, 0.15);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.1);
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .nav-cta:active {
+            transform: translateY(0);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
         }
 
         /* Hero Section */
@@ -305,8 +312,13 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(1);
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.4);
         }
 
         .btn-secondary {
@@ -318,6 +330,14 @@
         .btn-secondary:hover {
             border-color: var(--accent-cyan);
             color: var(--accent-cyan);
+            background: rgba(0, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
         }
 
         /* 3D Globe Container */
@@ -392,9 +412,10 @@
         }
 
         .stat-card:hover {
-            transform: translateY(-5px) rotateX(5deg);
+            transform: translateY(-8px) rotateX(5deg);
             background: var(--bg-card-hover);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.3);
         }
 
         .stat-card:hover::before {
