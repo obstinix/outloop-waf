@@ -75,5 +75,4 @@ async def shutdown_event():
     logger.info("WAF Application shutting down...")
 
 
-# Vercel serverless handler
-handler = app
+# Vercel automatically detects the FastAPI 'app' variable for serverless functions
