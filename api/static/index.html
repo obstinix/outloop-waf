@@ -1423,6 +1423,61 @@
             const points = new THREE.Points(pointsGeometry, pointsMaterial);
             globe.add(points);
             
+            // Attack arcs system
+            const attackArcs = [];
+            const attackColors = [0xff4444, 0xff8800, 0xffcc00];
+            
+            function createAttackArc() {
+                // Random start and end points on sphere
+                const startTheta = Math.random() * Math.PI * 2;
+                const startPhi = Math.acos(2 * Math.random() - 1);
+                const endTheta = Math.random() * Math.PI * 2;
+                const endPhi = Math.acos(2 * Math.random() - 1);
+                
+                const start = new THREE.Vector3(
+                    Math.sin(startPhi) * Math.cos(startTheta),
+                    Math.sin(startPhi) * Math.sin(startTheta),
+                    Math.cos(startPhi)
+                );
+                const end = new THREE.Vector3(
+                    Math.sin(endPhi) * Math.cos(endTheta),
+                    Math.sin(endPhi) * Math.sin(endTheta),
+                    Math.cos(endPhi)
+                );
+                
+                // Create arc curve with height
+                const mid = start.clone().add(end).multiplyScalar(0.5);
+                mid.normalize().multiplyScalar(1.5);
+                
+                const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+                const arcGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(30));
+                const arcMaterial = new THREE.LineBasicMaterial({
+                    color: attackColors[Math.floor(Math.random() * attackColors.length)],
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const arc = new THREE.Line(arcGeometry, arcMaterial);
+                
+                arc.userData = {
+                    progress: 0,
+                    speed: 0.01 + Math.random() * 0.02,
+                    curve: curve
+                };
+                
+                globe.add(arc);
+                attackArcs.push(arc);
+                
+                // Remove arc after animation
+                setTimeout(() => {
+                    globe.remove(arc);
+                    const idx = attackArcs.indexOf(arc);
+                    if (idx > -1) attackArcs.splice(idx, 1);
+                }, 3000);
+            }
+            
+            // Create attack arcs periodically
+            setInterval(createAttackArc, 800);
+            
             // Animation for globe
             function animateGlobe() {
                 requestAnimationFrame(animateGlobe);
