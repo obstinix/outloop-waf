@@ -5,11 +5,11 @@
   <img src="https://img.shields.io/badge/Vercel-Deploy%20Ready-black?style=for-the-badge&logo=vercel" alt="Vercel">
 </p>
 
-<h1 align="center">🛡️ Web Application Firewall</h1>
+<h1 align="center">OUTERLOOP WAF</h1>
 
 <p align="center">
-  <strong>A production-grade Web Application Firewall built with FastAPI</strong><br>
-  Real-time threat detection • Middleware-based inspection • Serverless architecture
+  <strong>Perimeter-Grade Web Attack Protection</strong><br>
+  Real-time threat detection | Middleware-based inspection | Serverless architecture
 </p>
 
 <p align="center">
@@ -23,9 +23,9 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
-This project implements a comprehensive **Web Application Firewall (WAF)** that protects web applications from common attack vectors. The WAF operates as middleware, intercepting and analyzing all incoming HTTP requests before they reach your application logic.
+OUTERLOOP WAF is a comprehensive **Web Application Firewall** that provides perimeter-grade protection against common web attack vectors. The WAF operates as middleware, intercepting and analyzing all incoming HTTP requests before they reach your application logic.
 
 ### Key Highlights
 
@@ -37,9 +37,9 @@ This project implements a comprehensive **Web Application Firewall (WAF)** that 
 
 ---
 
-## ✨ Features
+## Features
 
-### 🔒 SQL Injection Protection
+### SQL Injection Protection
 Detects and blocks various SQL injection techniques:
 - UNION-based injection
 - Time-based blind injection
@@ -53,7 +53,7 @@ curl "/api/secure/test?payload='; DROP TABLE users;--"
 # Response: 403 Forbidden
 ```
 
-### ⚡ XSS Prevention
+### XSS Prevention
 Comprehensive cross-site scripting protection:
 - Script tag injection
 - Event handler attributes (`onclick`, `onerror`, etc.)
@@ -67,7 +67,7 @@ curl "/api/secure/test?payload=<script>alert(1)</script>"
 # Response: 403 Forbidden
 ```
 
-### 📁 Path Traversal Detection
+### Path Traversal Detection
 Multi-layer decoding to catch obfuscated attacks:
 - Directory traversal (`../`)
 - URL-encoded attacks (`%2e%2e%2f`)
@@ -75,14 +75,14 @@ Multi-layer decoding to catch obfuscated attacks:
 - Null byte injection (`%00`)
 - Sensitive file access attempts
 
-### 📋 Header Validation
+### Header Validation
 Request header security:
 - CRLF injection prevention
 - Header overflow protection
 - Content-type validation
 - Dangerous HTTP method blocking (TRACE, TRACK)
 
-### 📊 Request Tracking
+### Request Tracking
 - Unique request ID for every request
 - Comprehensive audit logging
 - Threat level classification
@@ -90,7 +90,7 @@ Request header security:
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -131,7 +131,7 @@ python -m uvicorn api.index:app --reload --port 8000
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -140,7 +140,7 @@ python -m uvicorn api.index:app --reload --port 8000
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      WAF MIDDLEWARE                              │
+│                      OUTERLOOP MIDDLEWARE                        │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
 │  │   Header    │  │   Content   │  │      Multi-pass        │  │
 │  │ Validation  │──│  Decoding   │──│   Pattern Matching     │  │
@@ -204,7 +204,7 @@ Web-Application-Firewall-WAF-/
 
 ---
 
-## 📚 API Reference
+## API Reference
 
 ### Health Endpoints
 
@@ -220,7 +220,7 @@ Web-Application-Firewall-WAF-/
 {
   "status": "healthy",
   "timestamp": "2024-01-29T00:00:00.000000",
-  "service": "waf-api",
+  "service": "outerloop-waf",
   "version": "1.0.0"
 }
 ```
@@ -254,7 +254,7 @@ curl "http://localhost:8000/api/secure/test?payload=<script>"
 
 ---
 
-## 🔬 Security Rules
+## Security Rules
 
 ### Threat Level Classification
 
@@ -290,7 +290,7 @@ curl "http://localhost:8000/api/secure/test?payload=<script>"
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Run All Tests
 
@@ -329,7 +329,7 @@ tests/test_waf.py::TestWAFBlocking::test_clean_request_passes PASSED
 
 ---
 
-## ☁️ Deployment
+## Deployment
 
 ### Vercel (Recommended)
 
@@ -367,8 +367,8 @@ CMD ["uvicorn", "api.index:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
 ```bash
-docker build -t waf-api .
-docker run -p 8000:8000 waf-api
+docker build -t outerloop-waf .
+docker run -p 8000:8000 outerloop-waf
 ```
 
 ### Environment Variables
@@ -381,7 +381,7 @@ docker run -p 8000:8000 waf-api
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 ### Customizing WAF Rules
 
@@ -424,7 +424,7 @@ if assessment.is_threat:
 
 ---
 
-## 📈 Performance
+## Performance
 
 | Metric | Value |
 |--------|-------|
@@ -433,7 +433,7 @@ if assessment.is_threat:
 | Memory footprint | ~50MB |
 | Cold start time | < 500ms |
 
-The WAF is optimized for:
+OUTERLOOP WAF is optimized for:
 - Compiled regex patterns
 - Stateless architecture
 - Minimal memory allocation
@@ -441,7 +441,7 @@ The WAF is optimized for:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -451,18 +451,18 @@ The WAF is optimized for:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 💡 Notes
+## Notes
 
 This system implements deterministic security behavior. However, there may be behavior in this system that only reveals itself under specific conditions. Curious engineers are encouraged to explore.
 
 ---
 
 <p align="center">
-  Built with ❤️ for secure web applications
+  OUTERLOOP WAF | Perimeter-Grade Web Attack Protection
 </p>

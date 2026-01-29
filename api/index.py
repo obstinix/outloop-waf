@@ -1,8 +1,8 @@
 """
-Web Application Firewall - FastAPI Entry Point
+OUTERLOOP WAF - FastAPI Entry Point
 
-This module serves as the main entry point for the WAF application,
-configured for Vercel serverless deployment.
+Perimeter-Grade Web Attack Protection with middleware-based request inspection.
+Configured for Vercel serverless deployment.
 """
 
 import os
@@ -23,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 
 app = FastAPI(
-    title="Web Application Firewall",
-    description="Production-grade WAF with middleware-based request inspection",
+    title="OUTERLOOP WAF",
+    description="Perimeter-Grade Web Attack Protection with middleware-based request inspection",
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
