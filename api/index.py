@@ -5,14 +5,22 @@ This module serves as the main entry point for the WAF application,
 configured for Vercel serverless deployment.
 """
 
-from fastapi import FastAPI
+import os
+from pathlib import Path
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse, FileResponse
 
 from api.waf.middleware import WAFMiddleware
 from api.routes import health, secure, gravity
 from api.utils.logger import get_logger
 
 logger = get_logger(__name__)
+
+# Get the directory where this file is located
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
 
 app = FastAPI(
     title="Web Application Firewall",
@@ -41,11 +49,24 @@ app.include_router(secure.router, prefix="/api", tags=["Secure"])
 app.include_router(gravity.router, prefix="/api", tags=["Gravity"])
 
 
+@app.get("/", response_class=HTMLResponse)
+async def serve_frontend():
+    """Serve the main frontend page."""
+    index_path = STATIC_DIR / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path, media_type="text/html")
+    return HTMLResponse(
+        content="<h1>WAF API</h1><p>Frontend not found. Visit <a href='/api/docs'>/api/docs</a> for API documentation.</p>",
+        status_code=200
+    )
+
+
 @app.on_event("startup")
 async def startup_event():
     """Initialize application components on startup."""
     logger.info("WAF Application starting up...")
     logger.info("Security middleware initialized")
+    logger.info(f"Static files directory: {STATIC_DIR}")
 
 
 @app.on_event("shutdown")
