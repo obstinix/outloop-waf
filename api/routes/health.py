@@ -5,12 +5,12 @@ Provides health and readiness checks for the WAF application.
 Used by load balancers, orchestrators, and monitoring systems.
 """
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Depends
 from typing import Dict, Any
 from datetime import datetime
 
 from api.core.logic import get_service
-from api.waf.engine import WAFEngine
+from api.waf.engine import WAFEngine, waf_engine
 from api.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -33,8 +33,13 @@ async def health_check() -> Dict[str, Any]:
     }
 
 
+def get_engine() -> WAFEngine:
+    """Dependency provider for the WAFEngine singleton."""
+    return waf_engine
+
+
 @router.get("/health/detailed", response_model=Dict[str, Any])
-async def detailed_health_check() -> Dict[str, Any]:
+async def detailed_health_check(engine: WAFEngine = Depends(get_engine)) -> Dict[str, Any]:
     """
     Detailed health check with component status.
     
@@ -42,7 +47,6 @@ async def detailed_health_check() -> Dict[str, Any]:
         Comprehensive health information including all components
     """
     service = get_service()
-    engine = WAFEngine()
     
     return {
         "status": "healthy",

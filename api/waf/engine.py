@@ -271,3 +271,8 @@ class WAFEngine:
                 for level in ThreatLevel
             }
         }
+
+
+# Module-level singleton — shared across the app within one process
+waf_engine = WAFEngine()
+

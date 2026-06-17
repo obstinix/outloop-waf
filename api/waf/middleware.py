@@ -33,10 +33,10 @@ class WAFMiddleware(BaseHTTPMiddleware):
         "/favicon.ico"
     }
     
-    def __init__(self, app):
-        """Initialize the WAF middleware."""
+    def __init__(self, app, engine: WAFEngine):
+        """Initialize the WAF middleware with a shared engine instance."""
         super().__init__(app)
-        self.engine = WAFEngine()
+        self.engine = engine
         logger.info("WAF Middleware initialized")
     
     async def _extract_body(self, request: Request) -> str:

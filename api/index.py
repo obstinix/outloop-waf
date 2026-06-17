@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
 
 from api.waf.middleware import WAFMiddleware
+from api.waf.engine import waf_engine
 from api.routes import health, secure, gravity
 from api.utils.logger import get_logger
 
@@ -58,7 +59,7 @@ app.add_middleware(
 )
 
 # WAF Middleware - Core security layer
-app.add_middleware(WAFMiddleware)
+app.add_middleware(WAFMiddleware, engine=waf_engine)
 
 # Route registration
 app.include_router(health.router, prefix="/api", tags=["Health"])
