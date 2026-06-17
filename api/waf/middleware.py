@@ -113,7 +113,10 @@ class WAFMiddleware(BaseHTTPMiddleware):
         client_ip = self._get_client_ip(request)
         
         # Rate limit check (before WAF analysis — cheapest gate first)
-        is_limited, limit_name = rate_limiter.is_rate_limited(client_ip)
+        # Bypassed for admin endpoints so administrators aren't locked out
+        is_limited, limit_name = False, ""
+        if not path.startswith("/api/admin"):
+            is_limited, limit_name = rate_limiter.is_rate_limited(client_ip)
         if is_limited:
             return JSONResponse(
                 status_code=429,
