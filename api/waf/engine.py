@@ -65,7 +65,7 @@ class RequestContext:
         ]
 
         # Include relevant header values
-        suspicious_headers = ["user-agent", "referer", "cookie", "x-forwarded-for"]
+        suspicious_headers = ["referer", "cookie", "x-forwarded-for"]
         for header in suspicious_headers:
             if header in self.headers:
                 parts.append(self.headers[header])

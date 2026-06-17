@@ -72,10 +72,18 @@ app.include_router(metrics.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend():
-    """Serve the main frontend page."""
+    """Serve the main frontend page with cache-busting headers."""
     index_path = STATIC_DIR / "index.html"
     if index_path.exists():
-        return FileResponse(index_path, media_type="text/html")
+        return FileResponse(
+            index_path,
+            media_type="text/html",
+            headers={
+                "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
+        )
     return HTMLResponse(
         content="<h1>WAF API</h1><p>Frontend not found. Visit <a href='/api/docs'>/api/docs</a> for API documentation.</p>",
         status_code=200
