@@ -713,8 +713,268 @@
         }
 
         .demo-container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 1024px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* WAF Sandbox & Payload Tester */
+        .sandbox-card {
+            background: rgba(10, 10, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .sandbox-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+        }
+
+        .sandbox-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .sandbox-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sandbox-title h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .sandbox-title p {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: 0.25rem;
+        }
+
+        .sandbox-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .sandbox-input {
+            width: 100%;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .sandbox-input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .presets-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .presets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 255, 255, 0.08);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+
+        .preset-btn:active {
+            transform: scale(0.97);
+        }
+
+        .sandbox-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-analyze {
+            flex: 1;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-analyze:hover {
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-analyze:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 0.875rem 1.25rem;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .sandbox-result {
+            margin-top: 0.5rem;
+            border-radius: 8px;
+            padding: 1.25rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sandbox-result.visible {
+            display: flex;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .result-badge.passed {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .result-badge.blocked {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.1);
+        }
+
+        .result-badge.limited {
+            background: rgba(255, 170, 0, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 170, 0, 0.1);
+        }
+
+        .result-latency {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .result-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 0.75rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .result-label {
+            color: var(--text-tertiary);
+        }
+
+        .result-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+            text-align: right;
+            word-break: break-all;
+            max-width: 70%;
+        }
+
+        .result-value.highlight-val {
+            color: var(--accent-cyan);
         }
 
         .terminal {
@@ -1193,6 +1453,75 @@
             <p>Watch the WAF detect and block attack attempts in real-time</p>
         </div>
         <div class="demo-container">
+            <!-- WAF Sandbox & Payload Tester -->
+            <div class="sandbox-card">
+                <div class="sandbox-header">
+                    <div class="sandbox-title">
+                        <h3>WAF Sandbox</h3>
+                        <p>Analyze custom payloads against the firewall rules</p>
+                    </div>
+                    <div class="live-indicator" style="background: rgba(0, 102, 255, 0.1); border-color: rgba(0, 102, 255, 0.2);">
+                        <div class="live-dot" style="background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan);"></div>
+                        <span class="live-text" style="color: var(--accent-cyan);">Tester</span>
+                    </div>
+                </div>
+
+                <div class="sandbox-input-wrapper">
+                    <textarea class="sandbox-input" id="textareaPayload" placeholder="Enter payload to inspect (e.g. SQL query, script tag, or normal text)..."></textarea>
+                </div>
+
+                <div>
+                    <div class="presets-label">Presets / Attack Templates</div>
+                    <div class="presets-grid">
+                        <button class="preset-btn" data-payload="SELECT * FROM users WHERE username = 'admin' OR '1'='1">SQL Injection</button>
+                        <button class="preset-btn" data-payload="<script>alert(window.origin)</script>">XSS Script</button>
+                        <button class="preset-btn" data-payload="../../../../etc/passwd">Path Traversal</button>
+                        <button class="preset-btn" data-payload="http://169.254.169.254/latest/meta-data/">SSRF Attempt</button>
+                        <button class="preset-btn" data-payload="; whoami; cat /etc/passwd">Command Inj</button>
+                        <button class="preset-btn" data-payload="Safe normal request with no special chars">Safe Request</button>
+                    </div>
+                </div>
+
+                <div class="sandbox-actions">
+                    <button class="btn btn-primary btn-analyze" id="btnAnalyze">
+                        <span id="btnText">Analyze Payload</span>
+                        <div class="loading" id="analyzeSpinner" style="display: none; width: 12px; height: 12px; border-width: 1.5px; margin-left: 0.5rem; vertical-align: middle;"></div>
+                    </button>
+                    <button class="btn btn-secondary btn-reset" id="btnReset">Reset</button>
+                </div>
+
+                <!-- Result panel -->
+                <div class="sandbox-result" id="testerResult">
+                    <div class="result-header">
+                        <div class="result-badge" id="resultBadge">Allowed</div>
+                        <div class="result-latency" id="resultLatency">0ms</div>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-row">
+                            <span class="result-label">Status</span>
+                            <span class="result-value highlight-val" id="resultStatus">200 OK</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Request ID</span>
+                            <span class="result-value" id="resultRequestId">REQ-XXXXX</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">WAF Decision</span>
+                            <span class="result-value" id="resultDecision">Passed</span>
+                        </div>
+                        <div class="result-row" id="resultRuleRow" style="display: none;">
+                            <span class="result-label">Rule Triggered</span>
+                            <span class="result-value" style="color: var(--danger);" id="resultRule">None</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">WAF Headers</span>
+                            <span class="result-value" id="resultHeaders">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Console Terminal -->
             <div class="terminal">
                 <div class="terminal-header">
                     <div class="terminal-dot red"></div>
@@ -1696,6 +2025,171 @@
             };
         }
 
+        // WAF Sandbox logic
+        function initSandbox() {
+            const textarea = document.getElementById('textareaPayload');
+            const btnAnalyze = document.getElementById('btnAnalyze');
+            const btnReset = document.getElementById('btnReset');
+            const spinner = document.getElementById('analyzeSpinner');
+            const btnText = document.getElementById('btnText');
+            const resultPanel = document.getElementById('testerResult');
+            
+            const resultBadge = document.getElementById('resultBadge');
+            const resultLatency = document.getElementById('resultLatency');
+            const resultStatus = document.getElementById('resultStatus');
+            const resultRequestId = document.getElementById('resultRequestId');
+            const resultDecision = document.getElementById('resultDecision');
+            const resultRuleRow = document.getElementById('resultRuleRow');
+            const resultRule = document.getElementById('resultRule');
+            const resultHeaders = document.getElementById('resultHeaders');
+
+            if (!textarea || !btnAnalyze || !btnReset) return;
+
+            // Presets Click Handler
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const payload = btn.getAttribute('data-payload');
+                    textarea.value = payload;
+                    analyzePayload(payload);
+                });
+            });
+
+            // Analyze Button Handler
+            btnAnalyze.addEventListener('click', () => {
+                analyzePayload(textarea.value);
+            });
+
+            // Reset Handler
+            btnReset.addEventListener('click', () => {
+                textarea.value = '';
+                resultPanel.classList.remove('visible');
+            });
+
+            async function analyzePayload(payload) {
+                // Set loading state
+                btnAnalyze.disabled = true;
+                spinner.style.display = 'inline-block';
+                btnText.textContent = 'Analyzing...';
+                
+                const startTime = performance.now();
+                
+                try {
+                    const encodedPayload = encodeURIComponent(payload);
+                    const response = await fetch(`/api/secure/test?payload=${encodedPayload}`);
+                    const duration = Math.round(performance.now() - startTime);
+                    
+                    const status = response.status;
+                    const data = await response.json();
+                    
+                    const wafRequestId = response.headers.get('x-waf-request-id') || response.headers.get('X-WAF-Request-ID') || data.request_id || 'unknown';
+                    const isBlocked = response.headers.get('x-waf-block') === 'true' || status === 403;
+                    const isRateLimited = response.headers.get('x-waf-rate-limited') === 'true' || status === 429;
+                    const isProtected = response.headers.get('x-waf-protected') === 'true';
+
+                    const wafHeadersList = [];
+                    if (isProtected) wafHeadersList.push('X-WAF-Protected: true');
+                    if (isBlocked) wafHeadersList.push('X-WAF-Block: true');
+                    if (isRateLimited) wafHeadersList.push('X-WAF-Rate-Limited: true');
+                    if (wafHeadersList.length === 0) wafHeadersList.push('None');
+
+                    resultPanel.classList.add('visible');
+                    resultLatency.textContent = `${duration}ms`;
+                    resultRequestId.textContent = wafRequestId;
+                    resultHeaders.textContent = wafHeadersList.join(', ');
+
+                    if (isBlocked) {
+                        resultBadge.className = 'result-badge blocked';
+                        resultBadge.textContent = 'Blocked';
+                        resultStatus.textContent = `${status} Forbidden`;
+                        resultStatus.style.color = 'var(--danger)';
+                        resultDecision.textContent = 'Request Blocked';
+                        resultDecision.style.color = 'var(--danger)';
+                        
+                        let triggeredRule = 'Unknown Threat Pattern';
+                        const upper = payload.toUpperCase();
+                        if (upper.includes('SELECT') || upper.includes('UNION') || upper.includes('OR \'1\'=\'1') || upper.includes('--') || upper.includes('/*')) {
+                            triggeredRule = 'SQL Injection';
+                        } else if (upper.includes('<SCRIPT>') || upper.includes('ALERT(') || upper.includes('ONMOUSEOVER=') || upper.includes('ONERROR=')) {
+                            triggeredRule = 'XSS Script';
+                        } else if (payload.includes('../') || payload.includes('etc/passwd')) {
+                            triggeredRule = 'Path Traversal';
+                        } else if (payload.includes('169.254')) {
+                            triggeredRule = 'SSRF Attempt';
+                        } else if (payload.includes('whoami') || payload.includes('cat ') || payload.includes('sh ') || payload.includes('bash ')) {
+                            triggeredRule = 'Command Injection';
+                        }
+                        
+                        resultRuleRow.style.display = 'flex';
+                        resultRule.textContent = triggeredRule;
+
+                        appendTerminalLine(`[SANDBOX BLOCK] WAF Blocked Payload: "${payload.substring(0, 30)}${payload.length > 30 ? '...' : ''}" → Rule: ${triggeredRule}`);
+                    } else if (isRateLimited) {
+                        resultBadge.className = 'result-badge limited';
+                        resultBadge.textContent = 'Rate Limited';
+                        resultStatus.textContent = `${status} Too Many Requests`;
+                        resultStatus.style.color = 'var(--warning)';
+                        resultDecision.textContent = 'Rate Limited';
+                        resultDecision.style.color = 'var(--warning)';
+                        resultRuleRow.style.display = 'none';
+
+                        appendTerminalLine(`[SANDBOX LIMIT] Rate Limiter Blocked IP`);
+                    } else {
+                        resultBadge.className = 'result-badge passed';
+                        resultBadge.textContent = 'Passed';
+                        resultStatus.textContent = `${status} OK`;
+                        resultStatus.style.color = 'var(--success)';
+                        resultDecision.textContent = 'Request Allowed';
+                        resultDecision.style.color = 'var(--success)';
+                        resultRuleRow.style.display = 'none';
+
+                        // Add line to terminal for safe sandbox request
+                        const terminalBody = document.getElementById('terminalBody');
+                        if (terminalBody) {
+                            const lineDiv = document.createElement('div');
+                            lineDiv.className = 'terminal-line';
+                            const promptSpan = document.createElement('span');
+                            promptSpan.className = 'terminal-prompt';
+                            promptSpan.textContent = '$';
+                            const cmdSpan = document.createElement('span');
+                            cmdSpan.className = 'terminal-command';
+                            cmdSpan.textContent = `test payload="${payload.substring(0, 20)}${payload.length > 20 ? '...' : ''}"`;
+                            
+                            const outDiv = document.createElement('div');
+                            outDiv.className = 'terminal-line';
+                            const contentSpan = document.createElement('span');
+                            contentSpan.className = 'terminal-output success';
+                            contentSpan.textContent = `[200 OK] PASSED - Request ID: ${wafRequestId}`;
+                            
+                            lineDiv.appendChild(promptSpan);
+                            lineDiv.appendChild(cmdSpan);
+                            outDiv.appendChild(contentSpan);
+                            
+                            terminalBody.appendChild(lineDiv);
+                            terminalBody.appendChild(outDiv);
+                            terminalBody.scrollTop = terminalBody.scrollHeight;
+                        }
+                    }
+
+                    refreshStats();
+
+                } catch (error) {
+                    console.error('Sandbox analysis error:', error);
+                    resultPanel.classList.add('visible');
+                    resultBadge.className = 'result-badge limited';
+                    resultBadge.textContent = 'Error';
+                    resultStatus.textContent = 'Network Error';
+                    resultStatus.style.color = 'var(--warning)';
+                    resultDecision.textContent = 'Failed to execute query';
+                    resultRuleRow.style.display = 'none';
+                    resultHeaders.textContent = '--';
+                } finally {
+                    btnAnalyze.disabled = false;
+                    spinner.style.display = 'none';
+                    btnText.textContent = 'Analyze Payload';
+                }
+            }
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             initThreeJS();
@@ -1705,6 +2199,7 @@
             generateRequestId();
             refreshStats();
             initThreatStream();
+            initSandbox();
             
             // Auto-refresh
             setInterval(fetchGravityStatus, 30000);
