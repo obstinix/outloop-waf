@@ -15,7 +15,7 @@ from fastapi.responses import HTMLResponse, FileResponse
 
 from api.waf.middleware import WAFMiddleware
 from api.waf.engine import waf_engine
-from api.routes import health, secure, gravity, admin, events
+from api.routes import health, secure, gravity, admin, events, metrics
 from api.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -67,6 +67,7 @@ app.include_router(secure.router, prefix="/api", tags=["Secure"])
 app.include_router(gravity.router, prefix="/api", tags=["Gravity"])
 app.include_router(admin.router)
 app.include_router(events.router)
+app.include_router(metrics.router)
 
 
 @app.get("/", response_class=HTMLResponse)

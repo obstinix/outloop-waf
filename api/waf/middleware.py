@@ -39,7 +39,8 @@ class WAFMiddleware(BaseHTTPMiddleware):
         "/api/openapi.json",
         "/api/health",
         "/favicon.ico",
-        "/api/events/threats"
+        "/api/events/threats",
+        "/api/metrics"
     }
     
     def __init__(self, app, engine: WAFEngine):
@@ -49,10 +50,10 @@ class WAFMiddleware(BaseHTTPMiddleware):
         logger.info("WAF Middleware initialized")
 
     async def __call__(self, scope, receive, send) -> None:
-        """Bypass BaseHTTPMiddleware entirely for long-lived streams to avoid Starlette bugs."""
+        """Bypass BaseHTTPMiddleware entirely for long-lived streams and metrics to avoid Starlette bugs."""
         if scope["type"] == "http":
             path = scope.get("path", "")
-            if path == "/api/events/threats":
+            if path in ("/api/events/threats", "/api/metrics"):
                 await self.app(scope, receive, send)
                 return
         await super().__call__(scope, receive, send)
@@ -115,12 +116,20 @@ class WAFMiddleware(BaseHTTPMiddleware):
         Returns:
             Response from application or block response if threat detected
         """
+        import time
+        from api.routes.metrics import requests_total, blocked_total, rule_hits, response_time
+
+        start_time = time.perf_counter()
+        
         self.engine.increment_request_counter()
         path = request.url.path
         
         # Allow bypass paths
         if self._should_bypass(path):
-            return await call_next(request)
+            response = await call_next(request)
+            requests_total.labels(method=request.method, status=str(response.status_code)).inc()
+            response_time.observe(time.perf_counter() - start_time)
+            return response
         
         client_ip = self._get_client_ip(request)
         
@@ -130,6 +139,8 @@ class WAFMiddleware(BaseHTTPMiddleware):
         if not path.startswith("/api/admin"):
             is_limited, limit_name = rate_limiter.is_rate_limited(client_ip)
         if is_limited:
+            requests_total.labels(method=request.method, status="429").inc()
+            response_time.observe(time.perf_counter() - start_time)
             return JSONResponse(
                 status_code=429,
                 content={"error": "Rate limit exceeded", "limit": limit_name},
@@ -173,6 +184,14 @@ class WAFMiddleware(BaseHTTPMiddleware):
                     "rule": rule_name,
                     "path": path
                 })
+                
+                # Prometheus metrics
+                requests_total.labels(method=request.method, status="403").inc()
+                blocked_total.labels(rule=rule_name).inc()
+                for violation in assessment.violations:
+                    rule_hits.labels(rule_name=violation["rule_name"]).inc()
+                response_time.observe(time.perf_counter() - start_time)
+
                 return JSONResponse(
                     status_code=403,
                     content={
@@ -195,5 +214,12 @@ class WAFMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         response.headers["X-WAF-Protected"] = "true"
         response.headers["X-WAF-Request-ID"] = assessment.request_id
+        
+        # Prometheus metrics
+        requests_total.labels(method=request.method, status=str(response.status_code)).inc()
+        if assessment.is_threat:
+            for violation in assessment.violations:
+                rule_hits.labels(rule_name=violation["rule_name"]).inc()
+        response_time.observe(time.perf_counter() - start_time)
         
         return response
