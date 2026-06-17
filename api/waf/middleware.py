@@ -168,17 +168,31 @@ class WAFMiddleware(BaseHTTPMiddleware):
         
         # Block if threat detected
         if assessment.is_threat:
-            # Log the block
-            logger.warning(
-                f"Request blocked | ID: {assessment.request_id} | "
-                f"IP: {context.client_ip} | Path: {path} | "
-                f"Level: {assessment.threat_level.value if assessment.threat_level else 'unknown'}"
-            )
+            rule_name = assessment.violations[0]["rule_name"] if assessment.violations else "Blocked IP"
+            
+            # Log the block (structured in prod, standard string in dev)
+            import os
+            if os.getenv("ENVIRONMENT") == "production":
+                logger.warning("request_blocked", extra={
+                    "extra": {
+                        "ip": context.client_ip,
+                        "path": path,
+                        "method": request.method,
+                        "rule": rule_name,
+                        "payload_snippet": str(request.url)[:100],
+                    }
+                })
+            else:
+                logger.warning(
+                    f"Request blocked | ID: {assessment.request_id} | "
+                    f"IP: {context.client_ip} | Path: {path} | "
+                    f"Level: {assessment.threat_level.value if assessment.threat_level else 'unknown'} | "
+                    f"Rule: {rule_name}"
+                )
             
             # Determine blocking behavior based on threat level
             if assessment.threat_level in [ThreatLevel.CRITICAL, ThreatLevel.HIGH]:
                 self.engine.increment_blocked_counter()
-                rule_name = assessment.violations[0]["rule_name"] if assessment.violations else "Blocked IP"
                 self.engine.emit_threat_event({
                     "ip": context.client_ip,
                     "rule": rule_name,

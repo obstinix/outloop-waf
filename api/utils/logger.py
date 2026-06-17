@@ -34,19 +34,27 @@ class StructuredFormatter(logging.Formatter):
     
     def format(self, record):
         """Format log record as JSON structure."""
+        import json
+        from datetime import datetime, timezone
+        
         log_data = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),
+            "module": record.module,
+            "function": record.funcName,
         }
         
         if record.exc_info:
             log_data["exception"] = self.formatException(record.exc_info)
         
-        # Simple JSON-like format without external dependencies
-        parts = [f'"{k}": "{v}"' for k, v in log_data.items()]
-        return "{" + ", ".join(parts) + "}"
+        # Merge extra fields if present
+        extra = record.__dict__.get("extra", {})
+        if extra:
+            log_data.update(extra)
+            
+        return json.dumps(log_data)
 
 
 _loggers: dict = {}
@@ -100,10 +108,13 @@ def get_logger(name: str) -> logging.Logger:
     global _configured
     
     if not _configured:
-        configure_logging()
+        import os
+        is_prod = os.getenv("ENVIRONMENT") == "production"
+        configure_logging(structured=is_prod)
     
     if name not in _loggers:
         logger = logging.getLogger(name)
         _loggers[name] = logger
     
     return _loggers[name]
+
