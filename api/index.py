@@ -70,6 +70,11 @@ app.include_router(events.router)
 app.include_router(metrics.router)
 
 
+@app.get("/api/version")
+async def get_version():
+    return {"version": "1.0.0", "build": "terminal-ui-v2"}
+
+
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend():
     """Serve the main frontend page with cache-busting headers."""
