@@ -153,6 +153,46 @@ class WAFMiddleware(BaseHTTPMiddleware):
                 }
             )
 
+        # AbuseIPDB Threat Intelligence IP lookup
+        if not path.startswith("/api/admin"):
+            from datetime import datetime
+
+            from api.core.abuseipdb import ABUSEIPDB_THRESHOLD, abuse_ipdb_client
+
+            score = await abuse_ipdb_client.get_abuse_score(client_ip)
+            if score is not None and score >= ABUSEIPDB_THRESHOLD:
+                logger.warning(
+                    f"Request blocked pre-WAF by AbuseIPDB | IP: {client_ip} | "
+                    f"Score: {score}% (Threshold: {ABUSEIPDB_THRESHOLD}%)"
+                )
+
+                self.engine.increment_blocked_counter()
+                self.engine.emit_threat_event({
+                    "ip": client_ip,
+                    "rule": f"AbuseIPDB Threat Intelligence (Score: {score}%)",
+                    "path": path
+                })
+
+                # Prometheus metrics
+                requests_total.labels(method=request.method, status="403").inc()
+                blocked_total.labels(rule="AbuseIPDB").inc()
+                response_time.observe(time.perf_counter() - start_time)
+
+                abuse_request_id = f"REQ-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-ABUSE"
+
+                return JSONResponse(
+                    status_code=403,
+                    content={
+                        "error": "Forbidden",
+                        "message": "Request blocked by Security threat intelligence",
+                        "request_id": abuse_request_id
+                    },
+                    headers={
+                        "X-WAF-Block": "true",
+                        "X-WAF-Request-ID": abuse_request_id
+                    }
+                )
+
         # Build request context for analysis
         headers = dict(request.headers)
         body = await self._extract_body(request)

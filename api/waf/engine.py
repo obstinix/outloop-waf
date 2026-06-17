@@ -5,17 +5,17 @@ Core analysis engine that processes requests through the security
 rules pipeline and generates threat assessments.
 """
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from datetime import datetime
 import asyncio
-from collections import deque
 import ipaddress
-from urllib.parse import unquote_plus as unquote, parse_qs
+from collections import deque
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Union
+from urllib.parse import unquote_plus as unquote
 
-from api.waf.rules import SecurityRules, SecurityRule, ThreatLevel
-from api.utils.logger import get_logger
 from api.core.redis_client import redis as _redis
+from api.utils.logger import get_logger
+from api.waf.rules import SecurityRules, ThreatLevel
 
 BLOCKED_IPS_KEY = "waf:blocked_ips"
 REQUEST_COUNTER_KEY = "waf:request_counter"
@@ -28,13 +28,13 @@ logger = get_logger(__name__)
 class ThreatAssessment:
     """Result of a WAF analysis on a request."""
     is_threat: bool
-    threat_level: Optional[ThreatLevel]
-    violations: List[Dict[str, Any]]
+    threat_level: Union[ThreatLevel, None]
+    violations: list[dict[str, Any]]
     timestamp: datetime
     request_id: str
     analysis_time_ms: float
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert assessment to dictionary format."""
         return {
             "is_threat": self.is_threat,
@@ -52,10 +52,10 @@ class RequestContext:
     method: str
     path: str
     query_string: str
-    headers: Dict[str, str]
-    body: Optional[str]
+    headers: dict[str, str]
+    body: Union[str, None]
     client_ip: str
-    
+
     def get_all_content(self) -> str:
         """Combine all request content for analysis."""
         parts = [
@@ -63,24 +63,24 @@ class RequestContext:
             unquote(self.query_string) if self.query_string else "",
             self.body if self.body else ""
         ]
-        
+
         # Include relevant header values
         suspicious_headers = ["user-agent", "referer", "cookie", "x-forwarded-for"]
         for header in suspicious_headers:
             if header in self.headers:
                 parts.append(self.headers[header])
-        
+
         return " ".join(parts)
 
 
 class WAFEngine:
     """
     Web Application Firewall Analysis Engine
-    
+
     Processes incoming requests through the security rules pipeline
     to detect and classify potential threats.
     """
-    
+
     def __init__(self):
         """Initialize the WAF engine with security rules and state fallbacks."""
         self.rules = SecurityRules()
@@ -124,40 +124,40 @@ class WAFEngine:
         if self._use_redis():
             return bool(_redis.sismember(BLOCKED_IPS_KEY, ip))
         return ip in self._local_blocked_ips
-    
+
     def _generate_request_id(self) -> str:
         """Generate unique request identifier."""
         self._request_id_counter += 1
         return f"REQ-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{self._request_id_counter:06d}"
-    
+
     def _decode_content(self, content: str) -> str:
         """
         Apply multiple decoding passes to catch obfuscated attacks.
-        
+
         Handles URL encoding, double encoding, and mixed encoding.
         """
         decoded = content
-        
+
         # Multiple URL decode passes
         for _ in range(3):
             new_decoded = unquote(decoded)
             if new_decoded == decoded:
                 break
             decoded = new_decoded
-        
+
         return decoded
-    
-    def _validate_headers(self, headers: Dict[str, str]) -> List[Dict[str, Any]]:
+
+    def _validate_headers(self, headers: dict[str, str]) -> list[dict[str, Any]]:
         """
         Validate request headers for anomalies.
-        
+
         Checks for:
         - Malformed content-type
         - Suspicious header values
         - Header injection attempts
         """
         violations = []
-        
+
         # Check for header injection (CRLF)
         for name, value in headers.items():
             if "\r" in value or "\n" in value:
@@ -167,7 +167,7 @@ class WAFEngine:
                     "threat_level": ThreatLevel.HIGH.value,
                     "matched_content": f"{name}: [CRLF detected]"
                 })
-        
+
         # Check for excessively long header values
         max_header_length = 8192
         for name, value in headers.items():
@@ -178,13 +178,13 @@ class WAFEngine:
                     "threat_level": ThreatLevel.MEDIUM.value,
                     "matched_content": f"{name}: [Length: {len(value)}]"
                 })
-        
+
         return violations
-    
-    def _validate_method(self, method: str, path: str) -> Optional[Dict[str, Any]]:
+
+    def _validate_method(self, method: str, path: str) -> Union[dict[str, Any], None]:
         """Validate HTTP method is appropriate for the request."""
         dangerous_methods = ["TRACE", "TRACK", "DEBUG"]
-        
+
         if method.upper() in dangerous_methods:
             return {
                 "rule_id": "MTD-001",
@@ -192,25 +192,25 @@ class WAFEngine:
                 "threat_level": ThreatLevel.MEDIUM.value,
                 "matched_content": f"{method} {path}"
             }
-        
+
         return None
-    
+
     def analyze(self, context: RequestContext) -> ThreatAssessment:
         """
         Perform comprehensive security analysis on a request.
-        
+
         Args:
             context: The request context to analyze
-            
+
         Returns:
             ThreatAssessment with detection results
         """
         start_time = datetime.utcnow()
         request_id = self._generate_request_id()
-        violations: List[Dict[str, Any]] = []
-        
+        violations: list[dict[str, Any]] = []
+
         logger.debug(f"Analyzing request {request_id}: {context.method} {context.path}")
-        
+
         # Check if IP is blocked
         if self.is_ip_blocked(context.client_ip):
             violations.append({
@@ -219,20 +219,20 @@ class WAFEngine:
                 "threat_level": ThreatLevel.CRITICAL.value,
                 "matched_content": context.client_ip
             })
-        
+
         # Validate HTTP method
         method_violation = self._validate_method(context.method, context.path)
         if method_violation:
             violations.append(method_violation)
-        
+
         # Validate headers
         header_violations = self._validate_headers(context.headers)
         violations.extend(header_violations)
-        
+
         # Get and decode all content for analysis
         raw_content = context.get_all_content()
         decoded_content = self._decode_content(raw_content)
-        
+
         # Run content through security rules
         rule_violations = self.rules.check_content(decoded_content)
         for rule, matched in rule_violations:
@@ -242,7 +242,7 @@ class WAFEngine:
                 "threat_level": rule.threat_level.value,
                 "matched_content": matched[:100]  # Truncate for safety
             })
-        
+
         # Also check raw content (some attacks rely on encoding)
         if raw_content != decoded_content:
             raw_violations = self.rules.check_content(raw_content)
@@ -255,15 +255,15 @@ class WAFEngine:
                         "threat_level": rule.threat_level.value,
                         "matched_content": matched[:100]
                     })
-        
+
         # Calculate analysis time
         end_time = datetime.utcnow()
         analysis_time = (end_time - start_time).total_seconds() * 1000
-        
+
         # Determine overall threat level
         is_threat = len(violations) > 0
         max_threat_level = None
-        
+
         if is_threat:
             threat_priority = {
                 ThreatLevel.CRITICAL.value: 4,
@@ -276,13 +276,13 @@ class WAFEngine:
                 if priority == max_priority:
                     max_threat_level = ThreatLevel(level)
                     break
-        
+
         if is_threat:
             logger.warning(
                 f"Threat detected in {request_id}: "
                 f"{len(violations)} violation(s), level: {max_threat_level}"
             )
-        
+
         return ThreatAssessment(
             is_threat=is_threat,
             threat_level=max_threat_level,
@@ -291,10 +291,9 @@ class WAFEngine:
             request_id=request_id,
             analysis_time_ms=round(analysis_time, 3)
         )
-    
+
     def block_ip(self, ip: str) -> bool:
         """Add an IP to the blocklist after validating its format."""
-        import ipaddress
         try:
             ipaddress.ip_address(ip)  # raises ValueError for invalid input
         except ValueError:
@@ -307,7 +306,7 @@ class WAFEngine:
             self._local_blocked_ips.add(ip)
         logger.info(f"IP blocked: {ip}")
         return True
-    
+
     def unblock_ip(self, ip: str) -> bool:
         """Remove an IP from the blocklist."""
         if self._use_redis():
@@ -315,7 +314,7 @@ class WAFEngine:
             if success:
                 logger.info(f"IP unblocked: {ip}")
             return success
-        
+
         if ip in self._local_blocked_ips:
             self._local_blocked_ips.remove(ip)
             logger.info(f"IP unblocked: {ip}")
@@ -335,8 +334,8 @@ class WAFEngine:
             return int(_redis.incr(BLOCKED_COUNTER_KEY) or 0)
         self._local_blocked_counter += 1
         return self._local_blocked_counter
-    
-    def get_stats(self) -> Dict[str, Any]:
+
+    def get_stats(self) -> dict[str, Any]:
         """Return engine statistics."""
         rule_count = len(self.rules.get_all_rules())
         if self._use_redis():

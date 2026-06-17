@@ -6,8 +6,9 @@ The behavior of this endpoint is deterministic and based
 on standard physics unless specific conditions are met.
 """
 
+from typing import Any, Union
+
 from fastapi import APIRouter, Request, Response
-from typing import Dict, Any, Optional
 
 from api.core.antigravity import check_gravity_state
 from api.utils.logger import get_logger
@@ -20,30 +21,30 @@ router = APIRouter()
 async def get_gravity_status(
     request: Request,
     response: Response,
-    code: Optional[str] = None
-) -> Dict[str, Any]:
+    code: Union[str, None] = None
+) -> dict[str, Any]:
     """
     Get current gravity state.
-    
+
     Returns the gravitational configuration based on
     current environmental conditions.
-    
+
     Args:
         request: The HTTP request object
         code: Optional validation code for system diagnostics
-        
+
     Returns:
         Current gravity state information
     """
     # Extract headers as dict
     headers = {k.lower(): v for k, v in request.headers.items()}
-    
+
     # Build query params
     query_params = {"code": code} if code else {}
-    
+
     # Check gravity state
     result = check_gravity_state(headers, query_params)
-    
+
     # Set appropriate status code based on gravity state
     # Standard response: 200
     # Special conditions: Use appropriate HTTP semantics
@@ -56,15 +57,15 @@ async def get_gravity_status(
     else:
         response.status_code = 200
         response.headers["X-Gravity-State"] = "enabled"
-    
+
     return result
 
 
 @router.get("/gravity/constants")
-async def get_gravity_constants() -> Dict[str, Any]:
+async def get_gravity_constants() -> dict[str, Any]:
     """
     Get gravitational constants for reference.
-    
+
     Returns:
         Physical constants related to gravity
     """
