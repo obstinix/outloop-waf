@@ -1046,20 +1046,20 @@
     <section class="stats">
         <div class="stats-container">
             <div class="stat-card">
-                <div class="stat-value">30+</div>
+                <div class="stat-value" id="stat-rules">—</div>
                 <div class="stat-label">Security Rules</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">&lt;5ms</div>
-                <div class="stat-label">Response Time</div>
+                <div class="stat-value" id="stat-requests">—</div>
+                <div class="stat-label">Requests Analyzed</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">99.9%</div>
+                <div class="stat-value" id="stat-blocked">—</div>
+                <div class="stat-label">Threats Blocked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-detection-rate">99.9%</div>
                 <div class="stat-label">Detection Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">24/7</div>
-                <div class="stat-label">Monitoring</div>
             </div>
         </div>
     </section>
@@ -1638,6 +1638,64 @@
             document.getElementById('requestId').textContent = id;
         }
 
+        // Refresh live stats from the detailed health endpoint
+        async function refreshStats() {
+            try {
+                const res = await fetch('/api/health/detailed');
+                if (!res.ok) return;
+                const data = await res.json();
+                const stats = data?.components?.waf_engine?.stats;
+                if (!stats) return;
+
+                const reqEl = document.getElementById('stat-requests');
+                const blockedEl = document.getElementById('stat-blocked');
+                const ruleEl = document.getElementById('stat-rules');
+
+                if (reqEl) reqEl.textContent = stats.requests_analyzed?.toLocaleString() ?? '—';
+                if (blockedEl) blockedEl.textContent = stats.blocked_requests?.toLocaleString() ?? '—';
+                if (ruleEl) ruleEl.textContent = stats.rule_count ?? '—';
+            } catch (e) {
+                console.warn('[WAF] Stats refresh failed:', e.message);
+            }
+        }
+
+        // Append line to the terminal
+        function appendTerminalLine(text) {
+            const terminalBody = document.getElementById('terminalBody');
+            if (!terminalBody) return;
+            
+            const lineDiv = document.createElement('div');
+            lineDiv.className = 'terminal-line';
+            
+            const contentSpan = document.createElement('span');
+            contentSpan.className = 'terminal-output error';
+            contentSpan.textContent = text;
+            
+            lineDiv.appendChild(contentSpan);
+            terminalBody.appendChild(lineDiv);
+            
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // Initialize real-time threat stream via SSE
+        function initThreatStream() {
+            const evtSource = new EventSource('/api/events/threats');
+            evtSource.onmessage = (e) => {
+                try {
+                    const event = JSON.parse(e.data);
+                    if (event.type === 'connected') return;
+                    appendTerminalLine(`[BLOCKED] ${event.ip} → ${event.rule} — ${event.path}`);
+                    // Trigger a stats refresh when a new block happens
+                    refreshStats();
+                } catch (err) {
+                    console.error('[WAF] Error parsing threat event:', err);
+                }
+            };
+            evtSource.onerror = (e) => {
+                console.warn('[WAF] Threat stream disconnected. Reconnecting...');
+            };
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             initThreeJS();
@@ -1645,11 +1703,15 @@
             fetchGravityStatus();
             fetchDemoData();
             generateRequestId();
+            refreshStats();
+            initThreatStream();
             
             // Auto-refresh
             setInterval(fetchGravityStatus, 30000);
             setInterval(generateRequestId, 60000);
+            setInterval(refreshStats, 10000);
         });
+
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
