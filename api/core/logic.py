@@ -40,7 +40,7 @@ class CoreService:
     @property
     def uptime_seconds(self) -> float:
         """Calculate service uptime in seconds."""
-        return (datetime.utcnow() - self._start_time).total_seconds()
+        return float((datetime.utcnow() - self._start_time).total_seconds())
     
     def register_component(self, name: str, status: ServiceStatus) -> None:
         """Register a component's health status."""

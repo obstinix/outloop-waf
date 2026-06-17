@@ -2,10 +2,11 @@
 Sliding window rate limiter using Redis sorted sets.
 Falls back to in-memory LRU when Redis is unavailable.
 """
-import time
 import os
+import time
 from collections import defaultdict
-from typing import Tuple
+from typing import Any
+
 from api.core.redis_client import redis as _redis
 
 RATE_LIMITS = {
@@ -18,7 +19,7 @@ class RateLimiter:
         # In-memory fallback: {ip: [(timestamp, count), ...]}
         self._windows: dict = defaultdict(list)
 
-    def is_rate_limited(self, ip: str) -> Tuple[bool, str]:
+    def is_rate_limited(self, ip: str) -> tuple[bool, str]:
         """Returns (is_limited, limit_name)."""
         now = time.time()
 
@@ -35,14 +36,14 @@ class RateLimiter:
 
     def _check_redis(self, ip: str, limit_name: str, max_req: int, window: int, now: float) -> bool:
         key = f"ratelimit:{limit_name}:{ip}"
-        pipeline = _redis.pipeline()
+        pipeline: Any = _redis.pipeline()
         pipeline.zremrangebyscore(key, 0, now - window)
         pipeline.zcard(key)
         pipeline.zadd(key, {str(now): now})
         pipeline.expire(key, window * 2)
         results = pipeline.execute()
         current_count = results[1]
-        return current_count >= max_req
+        return bool(current_count >= max_req)
 
     def _check_memory(self, ip: str, limit_name: str, max_req: int, window: int, now: float) -> bool:
         key = f"{limit_name}:{ip}"

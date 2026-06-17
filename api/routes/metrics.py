@@ -4,10 +4,8 @@ Exposes WAF performance and blocking statistics.
 """
 from fastapi import APIRouter, Depends
 from fastapi.responses import PlainTextResponse
-from prometheus_client import (
-    Counter, Gauge, Histogram,
-    generate_latest, CONTENT_TYPE_LATEST
-)
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, generate_latest
+
 from api.routes.health import get_engine
 
 router = APIRouter(tags=["metrics"])

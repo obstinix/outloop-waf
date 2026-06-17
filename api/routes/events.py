@@ -4,11 +4,12 @@ Exposes a Server-Sent Events (SSE) stream of blocked threat events.
 """
 import asyncio
 import json
+
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
-from api.waf.engine import WAFEngine
 from api.routes.health import get_engine
+from api.waf.engine import WAFEngine
 
 router = APIRouter(prefix="/api", tags=["events"])
 
@@ -25,7 +26,7 @@ async def threat_event_stream(engine: WAFEngine = Depends(get_engine), test: boo
                 try:
                     event = await asyncio.wait_for(q.get(), timeout=30.0)
                     yield f"data: {json.dumps(event)}\n\n"
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     yield ": keepalive\n\n"  # SSE keepalive comment
         finally:
             engine.unsubscribe(q)

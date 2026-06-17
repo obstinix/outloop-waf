@@ -8,15 +8,15 @@ Configured for Vercel serverless deployment.
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, FileResponse
 
-from api.waf.middleware import WAFMiddleware
-from api.waf.engine import waf_engine
-from api.routes import health, secure, gravity, admin, events, metrics
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, HTMLResponse
+
+from api.routes import admin, events, gravity, health, metrics, secure
 from api.utils.logger import get_logger
+from api.waf.engine import waf_engine
+from api.waf.middleware import WAFMiddleware
 
 logger = get_logger(__name__)
 

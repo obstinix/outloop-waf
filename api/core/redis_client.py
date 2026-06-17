@@ -3,11 +3,13 @@ Redis client singleton backed by Upstash REST API.
 Falls back to an in-memory stub when UPSTASH_REDIS_REST_URL is not set
 (local development / CI environments).
 """
-import os
 import logging
-from typing import Optional
+import os
+from typing import Any
 
 logger = logging.getLogger(__name__)
+
+redis: Any = None
 
 try:
     from upstash_redis import Redis
@@ -18,8 +20,6 @@ try:
         redis = Redis(url=_url, token=_token)
         logger.info("Redis: connected to Upstash")
     else:
-        redis = None
         logger.warning("Redis: UPSTASH env vars not set — falling back to in-memory")
 except ImportError:
-    redis = None
     logger.warning("Redis: upstash-redis not installed — falling back to in-memory")

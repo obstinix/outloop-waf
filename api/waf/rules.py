@@ -6,9 +6,9 @@ including SQL injection, XSS, and malicious payloads.
 """
 
 import re
-from typing import List, Tuple, Pattern
 from dataclasses import dataclass, field
 from enum import Enum
+from re import Pattern
 
 
 class ThreatLevel(Enum):
@@ -34,7 +34,7 @@ class SecurityRule:
 class SecurityRules:
     """
     Collection of security rules for WAF inspection.
-    
+
     Implements detection patterns for:
     - SQL Injection attacks
     - Cross-Site Scripting (XSS)
@@ -42,13 +42,13 @@ class SecurityRules:
     - Command injection
     - Header manipulation
     """
-    
-    _sql_injection_patterns: List[SecurityRule] = field(default_factory=list)
-    _xss_patterns: List[SecurityRule] = field(default_factory=list)
-    _path_traversal_patterns: List[SecurityRule] = field(default_factory=list)
-    _command_injection_patterns: List[SecurityRule] = field(default_factory=list)
-    _other_patterns: List[SecurityRule] = field(default_factory=list)
-    
+
+    _sql_injection_patterns: list[SecurityRule] = field(default_factory=list)
+    _xss_patterns: list[SecurityRule] = field(default_factory=list)
+    _path_traversal_patterns: list[SecurityRule] = field(default_factory=list)
+    _command_injection_patterns: list[SecurityRule] = field(default_factory=list)
+    _other_patterns: list[SecurityRule] = field(default_factory=list)
+
     def __post_init__(self):
         """Initialize all security rule patterns."""
         self._initialize_sql_injection_rules()
@@ -56,11 +56,11 @@ class SecurityRules:
         self._initialize_path_traversal_rules()
         self._initialize_command_injection_rules()
         self._initialize_other_rules()
-    
+
     def _initialize_sql_injection_rules(self) -> None:
         """Define SQL injection detection patterns."""
         patterns = [
-            (r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER)\b(?!.*\$[0-9]).*\b(FROM|INTO|TABLE|SET)\b)", 
+            (r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER)\b(?!.*\$[0-9]).*\b(FROM|INTO|TABLE|SET)\b)",
              "SQL keyword combination"),
             (r"(\bOR\b\s+\d+\s*=\s*\d+)", "OR-based SQL injection"),
             (r"(\bAND\b\s+\d+\s*=\s*\d+)", "AND-based SQL injection"),
@@ -81,7 +81,7 @@ class SecurityRules:
             (r"(?i)(benchmark\s*\()", "SQL benchmark injection"),
             (r"(%2527|%2522|%255[cCsS])", "Double-encoded SQL character"),
         ]
-        
+
         for i, (pattern, desc) in enumerate(patterns):
             self._sql_injection_patterns.append(SecurityRule(
                 id=f"SQLI-{i+1:03d}",
@@ -90,7 +90,7 @@ class SecurityRules:
                 threat_level=ThreatLevel.CRITICAL,
                 description=f"Detects {desc}"
             ))
-    
+
     def _initialize_xss_rules(self) -> None:
         """Define XSS detection patterns."""
         patterns = [
@@ -109,7 +109,7 @@ class SecurityRules:
             (r"<link[^>]*href\s*=\s*['\"]?javascript", "Link javascript injection"),
             (r"(?i)(alert|confirm|prompt|eval|setTimeout|setInterval)\s*\(\s*[^)]*\s*\)", "JavaScript execution"),
         ]
-        
+
         for i, (pattern, desc) in enumerate(patterns):
             self._xss_patterns.append(SecurityRule(
                 id=f"XSS-{i+1:03d}",
@@ -118,7 +118,7 @@ class SecurityRules:
                 threat_level=ThreatLevel.HIGH,
                 description=f"Detects {desc}"
             ))
-    
+
     def _initialize_path_traversal_rules(self) -> None:
         """Define path traversal detection patterns."""
         patterns = [
@@ -132,7 +132,7 @@ class SecurityRules:
             (r"c:\\windows", "Windows system path"),
             (r"%00", "Null byte injection"),
         ]
-        
+
         for i, (pattern, desc) in enumerate(patterns):
             self._path_traversal_patterns.append(SecurityRule(
                 id=f"PATH-{i+1:03d}",
@@ -141,7 +141,7 @@ class SecurityRules:
                 threat_level=ThreatLevel.HIGH,
                 description=f"Detects {desc}"
             ))
-    
+
     def _initialize_command_injection_rules(self) -> None:
         """Define command injection detection patterns with expanded command list."""
         cmd_list = (
@@ -169,7 +169,7 @@ class SecurityRules:
                 "Command injection attempt"
             ),
         ]
-        
+
         for i, (pattern, desc) in enumerate(patterns):
             self._command_injection_patterns.append(SecurityRule(
                 id=f"CMDI-{i+1:03d}",
@@ -204,8 +204,8 @@ class SecurityRules:
                 threat_level=ThreatLevel.HIGH,
                 description=f"Detects {desc}"
             ))
-    
-    def get_all_rules(self) -> List[SecurityRule]:
+
+    def get_all_rules(self) -> list[SecurityRule]:
         """Return all enabled security rules."""
         all_rules = (
             self._sql_injection_patterns +
@@ -215,18 +215,18 @@ class SecurityRules:
             self._other_patterns
         )
         return [rule for rule in all_rules if rule.enabled]
-    
-    def get_rules_by_threat_level(self, level: ThreatLevel) -> List[SecurityRule]:
+
+    def get_rules_by_threat_level(self, level: ThreatLevel) -> list[SecurityRule]:
         """Return rules filtered by threat level."""
         return [rule for rule in self.get_all_rules() if rule.threat_level == level]
-    
-    def check_content(self, content: str) -> List[Tuple[SecurityRule, str]]:
+
+    def check_content(self, content: str) -> list[tuple[SecurityRule, str]]:
         """
         Check content against all security rules.
-        
+
         Args:
             content: The string content to analyze
-            
+
         Returns:
             List of tuples containing matched rules and the matching substring
         """

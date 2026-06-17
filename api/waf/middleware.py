@@ -5,14 +5,16 @@ FastAPI middleware that intercepts and analyzes all incoming requests
 for potential security threats before they reach application handlers.
 """
 
-from typing import Callable
+from collections.abc import Callable
+from typing import cast
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from starlette.responses import Response, JSONResponse
+from starlette.responses import JSONResponse, Response
 
-from api.waf.engine import WAFEngine, RequestContext, ThreatLevel
-from api.waf.rate_limiter import rate_limiter
 from api.utils.logger import get_logger
+from api.waf.engine import RequestContext, ThreatLevel, WAFEngine
+from api.waf.rate_limiter import rate_limiter
 
 logger = get_logger(__name__)
 
@@ -27,11 +29,11 @@ TRUSTED_PROXIES = {
 class WAFMiddleware(BaseHTTPMiddleware):
     """
     Web Application Firewall Middleware
-    
+
     Inspects all incoming HTTP requests for malicious patterns
     and blocks threats before they reach application endpoints.
     """
-    
+
     # Paths that bypass WAF inspection
     BYPASS_PATHS = {
         "/api/docs",
@@ -42,7 +44,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
         "/api/events/threats",
         "/api/metrics"
     }
-    
+
     def __init__(self, app, engine: WAFEngine):
         """Initialize the WAF middleware with a shared engine instance."""
         super().__init__(app)
@@ -59,7 +61,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
         await super().__call__(scope, receive, send)
 
 
-    
+
     async def _extract_body(self, request: Request) -> str:
         """Safely extract request body content."""
         try:
@@ -69,7 +71,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
         except Exception as e:
             logger.debug(f"Could not read request body: {e}")
         return ""
-    
+
     def _get_client_ip(self, request: Request) -> str:
         forwarded = request.headers.get("x-forwarded-for")
         real_ip = request.headers.get("x-real-ip")
@@ -96,11 +98,11 @@ class WAFMiddleware(BaseHTTPMiddleware):
         except ValueError:
             pass
         return False
-    
+
     def _should_bypass(self, path: str) -> bool:
         """Check if request path should bypass WAF inspection."""
         return path in self.BYPASS_PATHS or path.startswith("/api/docs")
-    
+
     async def dispatch(
         self,
         request: Request,
@@ -108,31 +110,32 @@ class WAFMiddleware(BaseHTTPMiddleware):
     ) -> Response:
         """
         Process incoming request through WAF analysis.
-        
+
         Args:
             request: The incoming HTTP request
             call_next: The next handler in the chain
-            
+
         Returns:
             Response from application or block response if threat detected
         """
         import time
-        from api.routes.metrics import requests_total, blocked_total, rule_hits, response_time
+
+        from api.routes.metrics import blocked_total, requests_total, response_time, rule_hits
 
         start_time = time.perf_counter()
-        
+
         self.engine.increment_request_counter()
         path = request.url.path
-        
+
         # Allow bypass paths
         if self._should_bypass(path):
             response = await call_next(request)
             requests_total.labels(method=request.method, status=str(response.status_code)).inc()
             response_time.observe(time.perf_counter() - start_time)
-            return response
-        
+            return cast(Response, response)
+
         client_ip = self._get_client_ip(request)
-        
+
         # Rate limit check (before WAF analysis — cheapest gate first)
         # Bypassed for admin endpoints so administrators aren't locked out
         is_limited, limit_name = False, ""
@@ -149,11 +152,11 @@ class WAFMiddleware(BaseHTTPMiddleware):
                     "Retry-After": "60",
                 }
             )
-        
+
         # Build request context for analysis
         headers = dict(request.headers)
         body = await self._extract_body(request)
-        
+
         context = RequestContext(
             method=request.method,
             path=path,
@@ -162,14 +165,14 @@ class WAFMiddleware(BaseHTTPMiddleware):
             body=body,
             client_ip=client_ip
         )
-        
+
         # Run WAF analysis
         assessment = self.engine.analyze(context)
-        
+
         # Block if threat detected
         if assessment.is_threat:
             rule_name = assessment.violations[0]["rule_name"] if assessment.violations else "Blocked IP"
-            
+
             # Log the block (structured in prod, standard string in dev)
             import os
             if os.getenv("ENVIRONMENT") == "production":
@@ -189,7 +192,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
                     f"Level: {assessment.threat_level.value if assessment.threat_level else 'unknown'} | "
                     f"Rule: {rule_name}"
                 )
-            
+
             # Determine blocking behavior based on threat level
             if assessment.threat_level in [ThreatLevel.CRITICAL, ThreatLevel.HIGH]:
                 self.engine.increment_blocked_counter()
@@ -198,7 +201,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
                     "rule": rule_name,
                     "path": path
                 })
-                
+
                 # Prometheus metrics
                 requests_total.labels(method=request.method, status="403").inc()
                 blocked_total.labels(rule=rule_name).inc()
@@ -223,17 +226,17 @@ class WAFMiddleware(BaseHTTPMiddleware):
                 logger.info(
                     f"Low-severity threat allowed through | ID: {assessment.request_id}"
                 )
-        
+
         # Add WAF headers to response
         response = await call_next(request)
         response.headers["X-WAF-Protected"] = "true"
         response.headers["X-WAF-Request-ID"] = assessment.request_id
-        
+
         # Prometheus metrics
         requests_total.labels(method=request.method, status=str(response.status_code)).inc()
         if assessment.is_threat:
             for violation in assessment.violations:
                 rule_hits.labels(rule_name=violation["rule_name"]).inc()
         response_time.observe(time.perf_counter() - start_time)
-        
-        return response
+
+        return cast(Response, response)

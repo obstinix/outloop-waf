@@ -3,12 +3,12 @@ Admin API — protected by WAF_ADMIN_KEY header.
 All endpoints require X-Admin-Key: <WAF_ADMIN_KEY> in request headers.
 """
 import os
-from fastapi import APIRouter, Depends, HTTPException, Header
+
+from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel
 
-from api.waf.rules import SecurityRules
-from api.waf.engine import WAFEngine
 from api.routes.health import get_engine
+from api.waf.engine import WAFEngine
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 

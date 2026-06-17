@@ -5,23 +5,24 @@ Provides health and readiness checks for the WAF application.
 Used by load balancers, orchestrators, and monitoring systems.
 """
 
-from fastapi import APIRouter, Response, Depends
-from typing import Dict, Any
 from datetime import datetime
+from typing import Any
+
+from fastapi import APIRouter, Depends, Response
 
 from api.core.logic import get_service
-from api.waf.engine import WAFEngine, waf_engine
 from api.utils.logger import get_logger
+from api.waf.engine import WAFEngine, waf_engine
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
-@router.get("/health", response_model=Dict[str, Any])
-async def health_check() -> Dict[str, Any]:
+@router.get("/health", response_model=dict[str, Any])
+async def health_check() -> dict[str, Any]:
     """
     Basic health check endpoint.
-    
+
     Returns:
         Health status and basic system information
     """
@@ -38,16 +39,16 @@ def get_engine() -> WAFEngine:
     return waf_engine
 
 
-@router.get("/health/detailed", response_model=Dict[str, Any])
-async def detailed_health_check(engine: WAFEngine = Depends(get_engine)) -> Dict[str, Any]:
+@router.get("/health/detailed", response_model=dict[str, Any])
+async def detailed_health_check(engine: WAFEngine = Depends(get_engine)) -> dict[str, Any]:
     """
     Detailed health check with component status.
-    
+
     Returns:
         Comprehensive health information including all components
     """
     service = get_service()
-    
+
     return {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
@@ -68,23 +69,23 @@ async def detailed_health_check(engine: WAFEngine = Depends(get_engine)) -> Dict
 
 
 @router.get("/ready")
-async def readiness_check(response: Response) -> Dict[str, Any]:
+async def readiness_check(response: Response) -> dict[str, Any]:
     """
     Kubernetes-style readiness check.
-    
+
     Returns 200 if service is ready to accept traffic,
     503 if service is not ready.
     """
     # In a stateless WAF, we're always ready if we're running
     is_ready = True
-    
+
     if not is_ready:
         response.status_code = 503
         return {
             "ready": False,
             "reason": "Service initializing"
         }
-    
+
     return {
         "ready": True,
         "timestamp": datetime.utcnow().isoformat()
@@ -92,10 +93,10 @@ async def readiness_check(response: Response) -> Dict[str, Any]:
 
 
 @router.get("/live")
-async def liveness_check() -> Dict[str, str]:
+async def liveness_check() -> dict[str, str]:
     """
     Kubernetes-style liveness check.
-    
+
     Simple check that returns 200 if the process is alive.
     """
     return {"status": "alive"}
