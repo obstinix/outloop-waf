@@ -60,7 +60,7 @@ class SecurityRules:
     def _initialize_sql_injection_rules(self) -> None:
         """Define SQL injection detection patterns."""
         patterns = [
-            (r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER)\b.*\b(FROM|INTO|TABLE|SET)\b)", 
+            (r"(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER)\b(?!.*\$[0-9]).*\b(FROM|INTO|TABLE|SET)\b)", 
              "SQL keyword combination"),
             (r"(\bOR\b\s+\d+\s*=\s*\d+)", "OR-based SQL injection"),
             (r"(\bAND\b\s+\d+\s*=\s*\d+)", "AND-based SQL injection"),
@@ -79,6 +79,7 @@ class SecurityRules:
             (r"(?i)(\bchar\s*\(\s*\d+)", "SQL CHAR() encoding"),
             (r"(?i)(sleep\s*\(\s*\d+\s*\))", "SQL time-based blind injection"),
             (r"(?i)(benchmark\s*\()", "SQL benchmark injection"),
+            (r"(%2527|%2522|%255[cCsS])", "Double-encoded SQL character"),
         ]
         
         for i, (pattern, desc) in enumerate(patterns):
@@ -106,6 +107,7 @@ class SecurityRules:
             (r"vbscript\s*:", "VBScript protocol"),
             (r"data\s*:\s*text\/html", "Data URL injection"),
             (r"<link[^>]*href\s*=\s*['\"]?javascript", "Link javascript injection"),
+            (r"(?i)(alert|confirm|prompt|eval|setTimeout|setInterval)\s*\(\s*[^)]*\s*\)", "JavaScript execution"),
         ]
         
         for i, (pattern, desc) in enumerate(patterns):
@@ -145,8 +147,8 @@ class SecurityRules:
         cmd_list = (
             r"(ls|cat|rm|wget|curl|bash|sh|zsh|python[23]?|perl|ruby|php|node|"
             r"nc|netcat|nmap|chmod|chown|sudo|dd|tee|awk|sed|find|grep|xargs|"
-            r"base64|xxd|od|strings|strace|ltrace|gdb|env|printenv|whoami|id|"
-            r"uname|hostname|ifconfig|ip\s+addr|ps\s+aux|top|kill|pkill)"
+            r"base64|xxd|od|strings|strace|ltrace|gdb|env|printenv|whoami|"
+            r"id(?!(\s*(=|<|>|\bin\b|\bis\b)))|uname|hostname|ifconfig|ip\s+addr|ps\s+aux|top|kill|pkill)"
         )
         patterns = [
             (rf";\s*{cmd_list}\b", "Unix command chaining"),
@@ -161,8 +163,9 @@ class SecurityRules:
             (
                 r"(?i)\b(ls|cat|rm|wget|curl|bash|sh|zsh|python[23]?|perl|ruby|php|node|"
                 r"nc|netcat|nmap|chmod|chown|sudo|dd|tee|awk|sed|find|grep|xargs|"
-                r"base64|xxd|od|strings|strace|ltrace|gdb|env|printenv|whoami|id|"
-                r"uname|hostname|ifconfig|ip addr|ps aux|top|kill|pkill)\b",
+                r"base64|xxd|od|strings|strace|ltrace|gdb|env|printenv|whoami|"
+                r"id(?!(\s*(=|<|>|\bin\b|\bis\b)))|uname|hostname|ifconfig|ip addr|"
+                r"ps aux|top|kill|pkill)\b",
                 "Command injection attempt"
             ),
         ]
