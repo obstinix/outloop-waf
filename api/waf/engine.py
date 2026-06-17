@@ -8,6 +8,7 @@ rules pipeline and generates threat assessments.
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
+import ipaddress
 from urllib.parse import unquote, parse_qs
 
 from api.waf.rules import SecurityRules, SecurityRule, ThreatLevel
@@ -247,10 +248,16 @@ class WAFEngine:
             analysis_time_ms=round(analysis_time, 3)
         )
     
-    def block_ip(self, ip: str) -> None:
-        """Add an IP to the blocklist."""
+    def block_ip(self, ip: str) -> bool:
+        """Add an IP to the blocklist after validating its format."""
+        try:
+            ipaddress.ip_address(ip)  # raises ValueError for invalid input
+        except ValueError:
+            logger.warning(f"Attempted to block invalid IP: {ip!r}")
+            return False
         self._blocked_ips.add(ip)
         logger.info(f"IP blocked: {ip}")
+        return True
     
     def unblock_ip(self, ip: str) -> bool:
         """Remove an IP from the blocklist."""
