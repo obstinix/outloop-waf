@@ -7,31 +7,134 @@
     <title>OUTERLOOP WAF | Perimeter-Grade Web Attack Protection</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     
     <style>
         :root {
-            --bg-primary: #08090a;
-            --bg-secondary: #0e1013;
-            --bg-tertiary: #13161a;
-            --bg-card: rgba(22, 25, 31, 0.75);
-            --bg-card-hover: rgba(28, 32, 40, 0.9);
-            --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(0, 255, 102, 0.25);
-            --accent-primary: #00ff66;
-            --accent-secondary: #00e5ff;
-            --accent-cyan: #00f0ff;
-            --accent-glow: rgba(0, 255, 102, 0.05);
-            --text-primary: #f0f3f6;
-            --text-secondary: #b0b8c4;
-            --text-tertiary: #6c7a89;
-            --success: #00ff66;
-            --warning: #ffb300;
+            /* Void (Default Theme) */
+            --bg-primary: #030305;
+            --bg-secondary: #0b0f19;
+            --bg-tertiary: #131a2c;
+            --bg-card: rgba(11, 15, 25, 0.65);
+            --bg-card-hover: rgba(19, 26, 44, 0.85);
+            --border: rgba(0, 255, 240, 0.15);
+            --border-hover: rgba(0, 255, 240, 0.45);
+            --accent-primary: #00fff0;
+            --accent-secondary: #38bdf8;
+            --accent-cyan: #00fff0;
+            --accent-glow: rgba(0, 255, 240, 0.15);
+            --accent-rgb-raw: 0, 255, 240;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #64748b;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff4444;
+            --btn-text: #050505;
+            --bg-terminal: #070a13;
+            --bg-sandbox: rgba(11, 15, 25, 0.65);
+        }
+
+        body.theme-void {
+            --bg-primary: #030305;
+            --bg-secondary: #0b0f19;
+            --bg-tertiary: #131a2c;
+            --bg-card: rgba(11, 15, 25, 0.65);
+            --bg-card-hover: rgba(19, 26, 44, 0.85);
+            --border: rgba(0, 255, 240, 0.15);
+            --border-hover: rgba(0, 255, 240, 0.45);
+            --accent-primary: #00fff0;
+            --accent-secondary: #38bdf8;
+            --accent-cyan: #00fff0;
+            --accent-glow: rgba(0, 255, 240, 0.15);
+            --accent-rgb-raw: 0, 255, 240;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #64748b;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff4444;
+            --btn-text: #050505;
+            --bg-terminal: #070a13;
+            --bg-sandbox: rgba(11, 15, 25, 0.65);
+        }
+
+        body.theme-nebula {
+            --bg-primary: #07010f;
+            --bg-secondary: #130324;
+            --bg-tertiary: #21053c;
+            --bg-card: rgba(19, 3, 36, 0.65);
+            --bg-card-hover: rgba(33, 5, 60, 0.85);
+            --border: rgba(199, 125, 255, 0.15);
+            --border-hover: rgba(199, 125, 255, 0.45);
+            --accent-primary: #c77dff;
+            --accent-secondary: #e0aaff;
+            --accent-cyan: #c77dff;
+            --accent-glow: rgba(199, 125, 255, 0.15);
+            --accent-rgb-raw: 199, 125, 255;
+            --text-primary: #ede9fe;
+            --text-secondary: #ddd6fe;
+            --text-tertiary: #a78bfa;
+            --success: #00ffaa;
+            --warning: #ffb703;
+            --danger: #ff5c8a;
+            --btn-text: #0d0118;
+            --bg-terminal: #0e0416;
+            --bg-sandbox: rgba(19, 3, 36, 0.65);
+        }
+
+        body.theme-solar {
+            --bg-primary: #fffbf0;
+            --bg-secondary: #fff8e7;
+            --bg-tertiary: #fef3c7;
+            --bg-card: rgba(255, 251, 240, 0.85);
+            --bg-card-hover: rgba(254, 243, 199, 0.95);
+            --border: rgba(245, 158, 11, 0.25);
+            --border-hover: rgba(245, 158, 11, 0.55);
+            --accent-primary: #d97706;
+            --accent-secondary: #f59e0b;
+            --accent-cyan: #f59e0b;
+            --accent-glow: rgba(245, 158, 11, 0.1);
+            --accent-rgb-raw: 245, 158, 11;
+            --text-primary: #1c1917;
+            --text-secondary: #44403c;
+            --text-tertiary: #78716c;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --danger: #dc2626;
+            --btn-text: #fff8e7;
+            --bg-terminal: #fffbf0;
+            --bg-sandbox: rgba(255, 251, 240, 0.85);
+        }
+
+        body.theme-aurora {
+            --bg-primary: #010705;
+            --bg-secondary: #03130d;
+            --bg-tertiary: #052116;
+            --bg-card: rgba(3, 19, 13, 0.65);
+            --bg-card-hover: rgba(5, 33, 22, 0.85);
+            --border: rgba(52, 211, 153, 0.15);
+            --border-hover: rgba(52, 211, 153, 0.45);
+            --accent-primary: #34d399;
+            --accent-secondary: #6ee7b7;
+            --accent-cyan: #34d399;
+            --accent-glow: rgba(52, 211, 153, 0.15);
+            --accent-rgb-raw: 52, 211, 153;
+            --text-primary: #ecfdf5;
+            --text-secondary: #d1fae5;
+            --text-tertiary: #6ee7b7;
+            --success: #00ff88;
+            --warning: #ffaa00;
             --danger: #ff3366;
+            --btn-text: #030d0a;
+            --bg-terminal: #020a07;
+            --bg-sandbox: rgba(3, 19, 13, 0.65);
         }
 
         * {
@@ -45,11 +148,70 @@
         }
 
         body {
-            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+        }
+
+        h1, h2, h3, .logo-text {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Custom Cybernetic Cursor */
+        .custom-cursor {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: difference;
+            display: none;
+        }
+        .custom-cursor-trail {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--accent-primary);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, background-color 0.3s;
+            will-change: top, left, transform;
+            display: none;
+        }
+
+        @media (pointer: fine) {
+            body {
+                cursor: none;
+            }
+            a, button, input, textarea, .preset-btn, .nav-cta, .stat-card, .feature-card {
+                cursor: none !important;
+            }
+            .custom-cursor, .custom-cursor-trail {
+                display: block;
+            }
+        }
+
+        .custom-cursor.hover {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-secondary);
+        }
+        .custom-cursor-trail.hover {
+            width: 48px;
+            height: 48px;
+            border-color: var(--accent-primary);
+            background-color: rgba(var(--accent-rgb-raw), 0.05);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         /* Canvas Background */
@@ -105,7 +267,7 @@
             right: 0;
             z-index: 1000;
             padding: 1.25rem 3rem;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
         }
@@ -161,7 +323,7 @@
             letter-spacing: 0.02em;
             transition: all 0.2s ease;
             position: relative;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
 
         .nav-links a::after {
@@ -184,23 +346,28 @@
         }
 
         .nav-cta {
-            padding: 0.625rem 1.5rem;
-            background: transparent;
-            color: var(--accent-secondary);
-            border: 1px solid var(--accent-secondary);
+            padding: 0.6rem 1.25rem;
+            background: rgba(10, 10, 18, 0.7);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
             border-radius: 6px;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             font-family: 'JetBrains Mono', monospace;
-            transition: all 0.25s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .nav-cta:hover {
-            background: rgba(0, 229, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+            background: rgba(10, 10, 18, 0.9);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            box-shadow: 0 0 15px var(--accent-glow);
             transform: translateY(-2px);
         }
 
@@ -298,9 +465,9 @@
         }
 
         .hero h1 {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Syne', sans-serif;
             font-size: clamp(2.5rem, 5vw, 4.2rem);
-            font-weight: 700;
+            font-weight: 800;
             line-height: 1.1;
             margin-top: 1rem;
             margin-bottom: 1.5rem;
@@ -308,7 +475,21 @@
             text-transform: uppercase;
         }
 
-        .hero h1 .highlight {
+        /* Title Stagger Reveal classes */
+        .title-line {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            padding-bottom: 0.05em;
+        }
+        .title-word {
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        .highlight .title-word {
             background: linear-gradient(135deg, var(--success) 0%, var(--accent-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -321,6 +502,7 @@
             margin-bottom: 2.5rem;
             max-width: 480px;
             line-height: 1.7;
+            opacity: 0;
         }
 
         .hero-buttons {
@@ -328,53 +510,83 @@
             gap: 1rem;
         }
 
+        /* Premium Dark Buttons */
         .btn {
-            padding: 0.875rem 1.75rem;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            justify-content: center;
+            gap: 0.6rem;
             cursor: pointer;
-            border: none;
-            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+            border: 1px solid var(--border);
+            text-decoration: none;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-            color: white;
+            background: rgba(10, 10, 18, 0.85);
+            color: var(--accent-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            background: rgba(10, 10, 18, 0.95);
+            box-shadow: 0 0 25px var(--accent-glow), 0 8px 24px rgba(0, 0, 0, 0.6);
+            transform: translateY(-2px);
         }
 
         .btn-primary:active {
-            transform: translateY(-1px) scale(1);
-            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.4);
+            transform: translateY(0);
         }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border);
+            background: rgba(20, 20, 30, 0.35);
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .btn-secondary:hover {
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            background: rgba(0, 255, 255, 0.05);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
+            border-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+            background: rgba(20, 20, 30, 0.7);
+            box-shadow: 0 0 20px rgba(var(--accent-rgb-raw), 0.1), 0 4px 12px rgba(0, 0, 0, 0.4);
             transform: translateY(-2px);
         }
 
         .btn-secondary:active {
             transform: translateY(0);
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
         }
 
         /* 3D Globe Container */
@@ -766,7 +978,7 @@
 
         /* WAF Sandbox & Payload Tester */
         .sandbox-card {
-            background: rgba(10, 10, 30, 0.6);
+            background: var(--bg-sandbox);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
@@ -776,7 +988,7 @@
             flex-direction: column;
             gap: 1.5rem;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            transition: all 0.4s ease;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
 
@@ -792,7 +1004,7 @@
 
         .sandbox-card:hover {
             border-color: rgba(0, 212, 255, 0.3);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 212, 255, 0.1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 212, 255, 0.15);
         }
 
         .sandbox-header {
@@ -862,29 +1074,32 @@
         }
 
         .preset-btn {
-            background: rgba(255, 255, 255, 0.03);
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(10, 10, 18, 0.6);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 0.5rem;
+            padding: 0.6rem 0.8rem;
             color: var(--text-secondary);
             font-size: 0.75rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
         }
 
         .preset-btn:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 255, 255, 0.08);
-            color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+            border-color: var(--accent-primary);
+            background: rgba(10, 10, 18, 0.9);
+            color: var(--accent-primary);
+            box-shadow: 0 0 15px var(--accent-glow), 0 4px 8px rgba(0, 0, 0, 0.5);
+            transform: translateY(-1px);
         }
 
         .preset-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.97) translateY(0);
         }
 
         .sandbox-actions {
@@ -895,31 +1110,17 @@
         .btn-analyze {
             flex: 1;
             justify-content: center;
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-            color: white;
-            font-weight: 600;
-        }
-
-        .btn-analyze:hover {
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .btn-analyze:active {
-            transform: translateY(0);
         }
 
         .btn-reset {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            padding: 0.875rem 1.25rem;
+            padding: 0.9rem 1.8rem;
         }
 
         .btn-reset:hover {
             border-color: var(--danger);
             color: var(--danger);
-            background: rgba(255, 68, 68, 0.05);
+            background: rgba(255, 68, 68, 0.08);
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.15);
         }
 
         .sandbox-result {
@@ -1015,11 +1216,12 @@
         }
 
         .terminal {
-            background: #0d0d1a;
+            background: var(--bg-terminal);
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
         }
 
         .terminal-header {
@@ -1253,7 +1455,7 @@
             width: 16px;
             height: 16px;
             border: 2px solid var(--border);
-            border-top-color: var(--accent-cyan);
+            border-top-color: var(--accent-primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -1261,9 +1463,24 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Scroll reveal animations (Framer-like) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="custom-cursor-trail" id="customCursorTrail"></div>
     <canvas id="bg-canvas"></canvas>
     <div class="grid-overlay"></div>
     <div class="scan-line"></div>
@@ -1294,7 +1511,23 @@
                 <li><a href="#demo">Demo</a></li>
                 <li><a href="/api/docs" target="_blank">Documentation</a></li>
             </ul>
-            <a href="/api/docs" class="nav-cta" target="_blank">API Reference</a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <a href="/api/docs" class="nav-cta" target="_blank">API Reference</a>
+                <button id="themeCycleBtn" class="nav-cta" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <span id="themeNameText">VOID</span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -1309,7 +1542,10 @@
                 <div class="terminal-heading">
                     <span class="prompt-user">root@outerloop</span><span class="prompt-separator">:</span><span class="prompt-dir">~</span><span class="prompt-char">#</span> <span class="cmd-run">init-waf-shield</span><span class="cmd-cursor"></span>
                 </div>
-                <h1>OUTERLOOP WAF<br><span class="highlight">Web Application Firewall</span></h1>
+                <h1 id="heroTitle">
+                    <span class="title-line"><span class="title-word">OUTERLOOP</span> <span class="title-word">WAF</span></span><br>
+                    <span class="title-line highlight"><span class="title-word">Web</span> <span class="title-word">Application</span> <span class="title-word">Firewall</span></span>
+                </h1>
                 <p class="hero-description">
                     Perimeter-Grade Web Attack Protection with advanced pattern matching, 
                     comprehensive request analysis, and zero-latency defense.
@@ -1344,7 +1580,7 @@
 
     <!-- Stats Section -->
     <section class="stats">
-        <div class="stats-container">
+        <div class="stats-container reveal">
             <div class="stat-card">
                 <div class="stat-value" id="stat-rules">—</div>
                 <div class="stat-label">Security Rules</div>
@@ -1372,7 +1608,7 @@
             <p>Multi-layered defense against the most sophisticated web attack vectors</p>
         </div>
         <div class="features-grid">
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -1382,7 +1618,7 @@
                 <h3>SQL Injection Prevention</h3>
                 <p>Advanced detection of UNION-based, blind, and time-based SQL injection with multi-pass encoding analysis.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -1393,7 +1629,7 @@
                 <h3>XSS Protection</h3>
                 <p>Comprehensive script filtering with event handler detection and JavaScript protocol blocking.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
@@ -1404,7 +1640,7 @@
                 <h3>Path Traversal Detection</h3>
                 <p>Multi-layer URL decoding to catch obfuscated directory traversal and null byte injection attempts.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -1414,7 +1650,7 @@
                 <h3>Header Validation</h3>
                 <p>CRLF injection prevention, header overflow protection, and dangerous method blocking.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
@@ -1424,7 +1660,7 @@
                 <h3>Request Tracking</h3>
                 <p>Unique request identifiers for comprehensive security auditing and forensic analysis.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <div class="feature-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="20" x2="18" y2="10"/>
@@ -1446,7 +1682,7 @@
             <p>Real-time system monitoring and gravitational field analysis</p>
         </div>
         <div class="status-container">
-            <div class="status-card">
+            <div class="status-card reveal">
                 <div class="status-header">
                     <div class="status-title">
                         <h3>Gravitational Field Status</h3>
@@ -1492,7 +1728,7 @@
             <h2>Live Security Demo</h2>
             <p>Watch the WAF detect and block attack attempts in real-time</p>
         </div>
-        <div class="demo-container">
+        <div class="demo-container reveal">
             <!-- WAF Sandbox & Payload Tester -->
             <div class="sandbox-card">
                 <div class="sandbox-header">
@@ -1610,7 +1846,7 @@
             <h2>Architecture</h2>
             <p>Request flow through the security middleware pipeline</p>
         </div>
-        <div class="arch-diagram">
+        <div class="arch-diagram reveal">
             <div class="arch-flow">
                 <div class="arch-node request">Incoming Request</div>
                 <div class="arch-arrow">→</div>
@@ -1644,6 +1880,9 @@
         let mouseX = 0, mouseY = 0;
         let targetRotationX = 0, targetRotationY = 0;
         let floatingShapes = [];
+        
+        // References for dynamic theme switching
+        let globeMaterial, innerMaterial, ringMaterial, pointsMaterial, shapesMaterial;
 
         function initThreeJS() {
             const container = document.getElementById('globe-canvas');
@@ -1691,6 +1930,7 @@
                 transparent: true,
                 opacity: 0.08
             });
+            shapesMaterial = material;
             
             for (let i = 0; i < 30; i++) {
                 const geometry = geometries[Math.floor(Math.random() * geometries.length)];
@@ -1741,29 +1981,32 @@
                 transparent: true,
                 opacity: 0.3
             });
+            globeMaterial = sphereMaterial;
             globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
             globeScene.add(globe);
             
             // Inner glow sphere
             const innerGeometry = new THREE.IcosahedronGeometry(0.95, 1);
-            const innerMaterial = new THREE.MeshBasicMaterial({
+            const innerGlobeMaterial = new THREE.MeshBasicMaterial({
                 color: 0x0a1a10,
                 wireframe: true,
                 transparent: true,
                 opacity: 0.2
             });
-            const innerGlobe = new THREE.Mesh(innerGeometry, innerMaterial);
+            innerMaterial = innerGlobeMaterial;
+            const innerGlobe = new THREE.Mesh(innerGeometry, innerGlobeMaterial);
             globe.add(innerGlobe);
             
             // Outer ring
             const ringGeometry = new THREE.RingGeometry(1.3, 1.35, 64);
-            const ringMaterial = new THREE.MeshBasicMaterial({
+            const ringMaterialObj = new THREE.MeshBasicMaterial({
                 color: 0x00ff66,
                 side: THREE.DoubleSide,
                 transparent: true,
                 opacity: 0.2
             });
-            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+            ringMaterial = ringMaterialObj;
+            const ring = new THREE.Mesh(ringGeometry, ringMaterialObj);
             ring.rotation.x = Math.PI / 2;
             globe.add(ring);
             
@@ -1783,18 +2026,24 @@
             }
             
             pointsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const pointsMaterial = new THREE.PointsMaterial({
+            const pointsMaterialObj = new THREE.PointsMaterial({
                 color: 0x00ff66,
                 size: 0.03,
                 transparent: true,
                 opacity: 0.8
             });
+            pointsMaterial = pointsMaterialObj;
             const points = new THREE.Points(pointsGeometry, pointsMaterial);
             globe.add(points);
             
             // Attack arcs system
             const attackArcs = [];
-            const attackColors = [0xff4444, 0xff8800, 0xffcc00];
+            const attackColors = {
+                void: [0x00fff0, 0x38bdf8, 0xff4444],
+                nebula: [0xc77dff, 0xe0aaff, 0xff5c8a],
+                solar: [0xd97706, 0xf59e0b, 0xdc2626],
+                aurora: [0x34d399, 0x6ee7b7, 0xff3366]
+            };
             
             function createAttackArc() {
                 // Random start and end points on sphere
@@ -1820,8 +2069,13 @@
                 
                 const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
                 const arcGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(30));
+                
+                const currentTheme = localStorage.getItem('waf-theme') || 'void';
+                const colors = attackColors[currentTheme] || attackColors.void;
+                const arcColor = colors[Math.floor(Math.random() * colors.length)];
+                
                 const arcMaterial = new THREE.LineBasicMaterial({
-                    color: attackColors[Math.floor(Math.random() * attackColors.length)],
+                    color: arcColor,
                     transparent: true,
                     opacity: 0.8
                 });
@@ -2230,6 +2484,254 @@
             }
         }
 
+        // Theme System Logic
+        const themeColors = {
+            void: {
+                accent: 0x00fff0,
+                inner: 0x002233,
+                points: 0x00fff0
+            },
+            nebula: {
+                accent: 0xc77dff,
+                inner: 0x22053f,
+                points: 0xc77dff
+            },
+            solar: {
+                accent: 0xd97706,
+                inner: 0x5e3a00,
+                points: 0xd97706
+            },
+            aurora: {
+                accent: 0x34d399,
+                inner: 0x041a12,
+                points: 0x34d399
+            }
+        };
+
+        function updateThreeJSTheme(themeName) {
+            const colors = themeColors[themeName];
+            if (!colors) return;
+            
+            if (globeMaterial) globeMaterial.color.setHex(colors.accent);
+            if (innerMaterial) innerMaterial.color.setHex(colors.inner);
+            if (ringMaterial) ringMaterial.color.setHex(colors.accent);
+            if (pointsMaterial) pointsMaterial.color.setHex(colors.accent);
+            if (shapesMaterial) shapesMaterial.color.setHex(colors.accent);
+        }
+
+        function applyTheme(themeName) {
+            document.body.classList.remove('theme-void', 'theme-nebula', 'theme-solar', 'theme-aurora');
+            document.body.classList.add(`theme-${themeName}`);
+            
+            localStorage.setItem('waf-theme', themeName);
+            
+            const textEl = document.getElementById('themeNameText');
+            if (textEl) textEl.textContent = themeName.toUpperCase();
+            
+            updateThreeJSTheme(themeName);
+        }
+
+        function initThemeSwitcher() {
+            const themes = ['void', 'nebula', 'solar', 'aurora'];
+            const btn = document.getElementById('themeCycleBtn');
+            if (!btn) return;
+            
+            btn.addEventListener('click', () => {
+                const currentTheme = localStorage.getItem('waf-theme') || 'void';
+                const nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+                const nextTheme = themes[nextIndex];
+                applyTheme(nextTheme);
+            });
+            
+            const savedTheme = localStorage.getItem('waf-theme') || 'void';
+            applyTheme(savedTheme);
+        }
+
+        // Scroll reveal logic
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.05,
+                rootMargin: '0px 0px -20px 0px'
+            });
+            
+            reveals.forEach((el, index) => {
+                if (el.classList.contains('feature-card')) {
+                    el.style.transitionDelay = `${(index % 3) * 0.1}s`;
+                }
+                observer.observe(el);
+            });
+        }
+
+        // Custom Cybernetic Cursor Logic
+        function initCustomCursor() {
+            const cursor = document.getElementById('customCursor');
+            const trail = document.getElementById('customCursorTrail');
+            if (!cursor || !trail) return;
+
+            let mouseX = 0, mouseY = 0;
+            let trailX = 0, trailY = 0;
+            let active = false;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!active) {
+                    trailX = mouseX;
+                    trailY = mouseY;
+                    cursor.style.display = 'block';
+                    trail.style.display = 'block';
+                    active = true;
+                }
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            }, { passive: true });
+
+            function animateCursor() {
+                if (active) {
+                    const dx = mouseX - trailX;
+                    const dy = mouseY - trailY;
+                    trailX += dx * 0.15;
+                    trailY += dy * 0.15;
+                    trail.style.left = trailX + 'px';
+                    trail.style.top = trailY + 'px';
+                }
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Event delegation for mouseenter/mouseleave hover states
+            document.addEventListener('mouseover', (e) => {
+                const target = e.target.closest('a, button, input, textarea, .preset-btn, .nav-cta, .stat-card, .feature-card, .logo');
+                if (target) {
+                    cursor.classList.add('hover');
+                    trail.classList.add('hover');
+                }
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                const target = e.target.closest('a, button, input, textarea, .preset-btn, .nav-cta, .stat-card, .feature-card, .logo');
+                if (target) {
+                    cursor.classList.remove('hover');
+                    trail.classList.remove('hover');
+                }
+            });
+        }
+
+        // Magnetic Button Effect using GSAP
+        function initMagneticButtons() {
+            const isFine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+            if (!isFine) return;
+
+            const magneticEls = document.querySelectorAll('.btn, #themeCycleBtn, .nav-cta, .logo');
+            magneticEls.forEach(el => {
+                let textInner = el.querySelector('span:not(.loading)');
+                if (!textInner && el.childNodes.length > 0) {
+                    const wrapper = document.createElement('span');
+                    wrapper.style.display = 'inline-flex';
+                    wrapper.style.alignItems = 'center';
+                    wrapper.style.gap = 'inherit';
+                    wrapper.style.pointerEvents = 'none';
+                    while (el.firstChild) {
+                        wrapper.appendChild(el.firstChild);
+                    }
+                    el.appendChild(wrapper);
+                    textInner = wrapper;
+                }
+
+                const strength = 0.35;
+                
+                const handleMouseMove = (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const dx = e.clientX - cx;
+                    const dy = e.clientY - cy;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const threshold = Math.max(rect.width, rect.height) * 1.5;
+
+                    if (dist < threshold) {
+                        gsap.to(el, {
+                            x: dx * strength,
+                            y: dy * strength,
+                            duration: 0.3,
+                            ease: 'power3.out'
+                        });
+                        if (textInner) {
+                            gsap.to(textInner, {
+                                x: dx * strength * 0.25,
+                                y: dy * strength * 0.25,
+                                duration: 0.3,
+                                ease: 'power3.out'
+                            });
+                        }
+                    } else {
+                        resetEl();
+                    }
+                };
+
+                const resetEl = () => {
+                    gsap.to(el, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.6,
+                        ease: 'elastic.out(1, 0.4)'
+                    });
+                    if (textInner) {
+                        gsap.to(textInner, {
+                            x: 0,
+                            y: 0,
+                            duration: 0.6,
+                            ease: 'elastic.out(1, 0.4)'
+                        });
+                    }
+                };
+
+                window.addEventListener('mousemove', handleMouseMove, { passive: true });
+                el.addEventListener('mouseleave', resetEl);
+            });
+        }
+
+        // GSAP Hero Animations
+        function initHeroAnimations() {
+            gsap.to('.title-word', {
+                translateY: '0%',
+                opacity: 1,
+                duration: 1.2,
+                stagger: 0.08,
+                ease: 'power4.out',
+                delay: 0.2
+            });
+
+            gsap.fromTo('.hero-description', 
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.8 }
+            );
+
+            gsap.fromTo('.hero-buttons .btn',
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out', delay: 1.0 }
+            );
+
+            gsap.fromTo('.status-indicator',
+                { opacity: 0, scale: 0.9 },
+                { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', delay: 0.1 }
+            );
+
+            gsap.fromTo('.terminal-heading',
+                { opacity: 0, x: -20 },
+                { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', delay: 0.4 }
+            );
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             initThreeJS();
@@ -2240,6 +2742,11 @@
             refreshStats();
             initThreatStream();
             initSandbox();
+            initThemeSwitcher();
+            initScrollReveal();
+            initCustomCursor();
+            initMagneticButtons();
+            initHeroAnimations();
             
             // Auto-refresh
             setInterval(fetchGravityStatus, 30000);
