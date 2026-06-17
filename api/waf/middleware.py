@@ -102,6 +102,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
         Returns:
             Response from application or block response if threat detected
         """
+        self.engine.increment_request_counter()
         path = request.url.path
         
         # Allow bypass paths
@@ -135,6 +136,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
             
             # Determine blocking behavior based on threat level
             if assessment.threat_level in [ThreatLevel.CRITICAL, ThreatLevel.HIGH]:
+                self.engine.increment_blocked_counter()
                 return JSONResponse(
                     status_code=403,
                     content={

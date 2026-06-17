@@ -18,3 +18,4 @@ httpx>=0.26.0
 
 # Development
 python-dotenv>=1.0.0
+upstash-redis>=1.0.0

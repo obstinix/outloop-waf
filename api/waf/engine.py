@@ -9,10 +9,15 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 import ipaddress
-from urllib.parse import unquote, parse_qs
+from urllib.parse import unquote_plus as unquote, parse_qs
 
 from api.waf.rules import SecurityRules, SecurityRule, ThreatLevel
 from api.utils.logger import get_logger
+from api.core.redis_client import redis as _redis
+
+BLOCKED_IPS_KEY = "waf:blocked_ips"
+REQUEST_COUNTER_KEY = "waf:request_counter"
+BLOCKED_COUNTER_KEY = "waf:blocked_counter"
 
 logger = get_logger(__name__)
 
@@ -75,16 +80,29 @@ class WAFEngine:
     """
     
     def __init__(self):
-        """Initialize the WAF engine with security rules."""
+        """Initialize the WAF engine with security rules and state fallbacks."""
         self.rules = SecurityRules()
-        self._blocked_ips: set = set()
-        self._request_counter: int = 0
+        # In-memory fallback (used when Redis is unavailable)
+        self._local_blocked_ips: set = set()
+        self._local_request_counter: int = 0
+        self._local_blocked_counter: int = 0
+        self._request_id_counter: int = 0
         logger.info(f"WAF Engine initialized with {len(self.rules.get_all_rules())} rules")
+
+    def _use_redis(self) -> bool:
+        """Helper to check if Redis is configured and active."""
+        return _redis is not None
+
+    def is_ip_blocked(self, ip: str) -> bool:
+        """Check if an IP is currently blocked."""
+        if self._use_redis():
+            return bool(_redis.sismember(BLOCKED_IPS_KEY, ip))
+        return ip in self._local_blocked_ips
     
     def _generate_request_id(self) -> str:
         """Generate unique request identifier."""
-        self._request_counter += 1
-        return f"REQ-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{self._request_counter:06d}"
+        self._request_id_counter += 1
+        return f"REQ-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{self._request_id_counter:06d}"
     
     def _decode_content(self, content: str) -> str:
         """
@@ -168,7 +186,7 @@ class WAFEngine:
         logger.debug(f"Analyzing request {request_id}: {context.method} {context.path}")
         
         # Check if IP is blocked
-        if context.client_ip in self._blocked_ips:
+        if self.is_ip_blocked(context.client_ip):
             violations.append({
                 "rule_id": "IP-001",
                 "rule_name": "Blocked IP",
@@ -250,29 +268,71 @@ class WAFEngine:
     
     def block_ip(self, ip: str) -> bool:
         """Add an IP to the blocklist after validating its format."""
+        import ipaddress
         try:
             ipaddress.ip_address(ip)  # raises ValueError for invalid input
         except ValueError:
             logger.warning(f"Attempted to block invalid IP: {ip!r}")
             return False
-        self._blocked_ips.add(ip)
+
+        if self._use_redis():
+            _redis.sadd(BLOCKED_IPS_KEY, ip)
+        else:
+            self._local_blocked_ips.add(ip)
         logger.info(f"IP blocked: {ip}")
         return True
     
     def unblock_ip(self, ip: str) -> bool:
         """Remove an IP from the blocklist."""
-        if ip in self._blocked_ips:
-            self._blocked_ips.remove(ip)
+        if self._use_redis():
+            success = bool(_redis.srem(BLOCKED_IPS_KEY, ip))
+            if success:
+                logger.info(f"IP unblocked: {ip}")
+            return success
+        
+        if ip in self._local_blocked_ips:
+            self._local_blocked_ips.remove(ip)
             logger.info(f"IP unblocked: {ip}")
             return True
         return False
+
+    def increment_request_counter(self) -> int:
+        """Increment request analyzed counter."""
+        if self._use_redis():
+            return int(_redis.incr(REQUEST_COUNTER_KEY) or 0)
+        self._local_request_counter += 1
+        return self._local_request_counter
+
+    def increment_blocked_counter(self) -> int:
+        """Increment blocked requests counter."""
+        if self._use_redis():
+            return int(_redis.incr(BLOCKED_COUNTER_KEY) or 0)
+        self._local_blocked_counter += 1
+        return self._local_blocked_counter
     
     def get_stats(self) -> Dict[str, Any]:
         """Return engine statistics."""
+        rule_count = len(self.rules.get_all_rules())
+        if self._use_redis():
+            return {
+                "requests_analyzed": int(_redis.get(REQUEST_COUNTER_KEY) or 0),
+                "blocked_requests": int(_redis.get(BLOCKED_COUNTER_KEY) or 0),
+                "blocked_ips": int(_redis.scard(BLOCKED_IPS_KEY) or 0),
+                "backend": "redis",
+                "total_rules": rule_count,
+                "rule_count": rule_count,
+                "rules_by_level": {
+                    level.value: len(self.rules.get_rules_by_threat_level(level))
+                    for level in ThreatLevel
+                }
+            }
         return {
-            "total_rules": len(self.rules.get_all_rules()),
-            "blocked_ips": len(self._blocked_ips),
-            "requests_analyzed": self._request_counter,
+            "requests_analyzed": self._local_request_counter,
+            "blocked_requests": self._local_blocked_counter,
+            "blocked_ips": len(self._local_blocked_ips),
+            "backend": "memory",
+            "total_rules": rule_count,
+            "rule_count": rule_count,
             "rules_by_level": {
                 level.value: len(self.rules.get_rules_by_threat_level(level))
                 for level in ThreatLevel
