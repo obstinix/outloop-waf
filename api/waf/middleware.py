@@ -16,6 +16,13 @@ from api.utils.logger import get_logger
 logger = get_logger(__name__)
 
 
+TRUSTED_PROXIES = {
+    # Vercel's proxy ranges — update from Vercel docs if these change
+    "76.76.21.0/24",
+    "76.223.126.0/24",
+}
+
+
 class WAFMiddleware(BaseHTTPMiddleware):
     """
     Web Application Firewall Middleware
@@ -49,24 +56,32 @@ class WAFMiddleware(BaseHTTPMiddleware):
             logger.debug(f"Could not read request body: {e}")
         return ""
     
-    def _extract_client_ip(self, request: Request) -> str:
-        """Extract client IP, respecting proxy headers."""
-        # Check X-Forwarded-For first (for proxied requests)
+    def _get_client_ip(self, request: Request) -> str:
         forwarded = request.headers.get("x-forwarded-for")
-        if forwarded:
-            # Get first IP in chain
-            return forwarded.split(",")[0].strip()
-        
-        # Check X-Real-IP
         real_ip = request.headers.get("x-real-ip")
+        client_host = request.client.host if request.client else "unknown"
+
+        # Only trust X-Forwarded-For if the connecting IP is a known proxy
+        if forwarded and self._is_trusted_proxy(client_host):
+            # Take the LAST IP added by our trusted proxy, not the first
+            ips = [ip.strip() for ip in forwarded.split(",")]
+            return ips[-1]
+
         if real_ip:
-            return real_ip.strip()
-        
-        # Fall back to direct client
-        if request.client:
-            return request.client.host
-        
-        return "unknown"
+            return real_ip
+
+        return client_host
+
+    def _is_trusted_proxy(self, ip: str) -> bool:
+        import ipaddress
+        try:
+            addr = ipaddress.ip_address(ip)
+            for prefix in TRUSTED_PROXIES:
+                if addr in ipaddress.ip_network(prefix, strict=False):
+                    return True
+        except ValueError:
+            pass
+        return False
     
     def _should_bypass(self, path: str) -> bool:
         """Check if request path should bypass WAF inspection."""
@@ -103,7 +118,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
             query_string=str(request.url.query) if request.url.query else "",
             headers={k.lower(): v for k, v in headers.items()},
             body=body,
-            client_ip=self._extract_client_ip(request)
+            client_ip=self._get_client_ip(request)
         )
         
         # Run WAF analysis
