@@ -38,7 +38,8 @@ class WAFMiddleware(BaseHTTPMiddleware):
         "/api/redoc",
         "/api/openapi.json",
         "/api/health",
-        "/favicon.ico"
+        "/favicon.ico",
+        "/api/events/threats"
     }
     
     def __init__(self, app, engine: WAFEngine):
@@ -46,6 +47,17 @@ class WAFMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.engine = engine
         logger.info("WAF Middleware initialized")
+
+    async def __call__(self, scope, receive, send) -> None:
+        """Bypass BaseHTTPMiddleware entirely for long-lived streams to avoid Starlette bugs."""
+        if scope["type"] == "http":
+            path = scope.get("path", "")
+            if path == "/api/events/threats":
+                await self.app(scope, receive, send)
+                return
+        await super().__call__(scope, receive, send)
+
+
     
     async def _extract_body(self, request: Request) -> str:
         """Safely extract request body content."""
@@ -155,6 +167,12 @@ class WAFMiddleware(BaseHTTPMiddleware):
             # Determine blocking behavior based on threat level
             if assessment.threat_level in [ThreatLevel.CRITICAL, ThreatLevel.HIGH]:
                 self.engine.increment_blocked_counter()
+                rule_name = assessment.violations[0]["rule_name"] if assessment.violations else "Blocked IP"
+                self.engine.emit_threat_event({
+                    "ip": context.client_ip,
+                    "rule": rule_name,
+                    "path": path
+                })
                 return JSONResponse(
                     status_code=403,
                     content={

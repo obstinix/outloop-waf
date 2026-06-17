@@ -8,6 +8,8 @@ rules pipeline and generates threat assessments.
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
+import asyncio
+from collections import deque
 import ipaddress
 from urllib.parse import unquote_plus as unquote, parse_qs
 
@@ -87,7 +89,31 @@ class WAFEngine:
         self._local_request_counter: int = 0
         self._local_blocked_counter: int = 0
         self._request_id_counter: int = 0
+        self._event_queue: deque = deque(maxlen=100)
+        self._event_listeners: list = []
         logger.info(f"WAF Engine initialized with {len(self.rules.get_all_rules())} rules")
+
+    def emit_threat_event(self, event: dict):
+        """Emit a threat event to all active SSE subscribers."""
+        self._event_queue.append(event)
+        for listener in self._event_listeners[:]:
+            try:
+                listener.put_nowait(event)
+            except asyncio.QueueFull:
+                pass
+
+    def subscribe(self) -> asyncio.Queue:
+        """Subscribe a new listener queue to threat events."""
+        q: asyncio.Queue = asyncio.Queue(maxsize=50)
+        self._event_listeners.append(q)
+        return q
+
+    def unsubscribe(self, q: asyncio.Queue):
+        """Unsubscribe a listener queue."""
+        try:
+            self._event_listeners.remove(q)
+        except ValueError:
+            pass
 
     def _use_redis(self) -> bool:
         """Helper to check if Redis is configured and active."""
