@@ -6,6 +6,7 @@ Configured for Vercel serverless deployment.
 """
 
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,13 +23,24 @@ logger = get_logger(__name__)
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize application components on startup."""
+    logger.info("WAF Application starting up...")
+    logger.info("Security middleware initialized")
+    logger.info(f"Static files directory: {STATIC_DIR}")
+    yield
+    logger.info("WAF Application shutting down...")
+
+
 app = FastAPI(
     title="OUTERLOOP WAF",
     description="Perimeter-Grade Web Attack Protection with middleware-based request inspection",
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    openapi_url="/api/openapi.json",
+    lifespan=lifespan
 )
 
 # CORS configuration for frontend integration
@@ -64,20 +76,6 @@ async def serve_frontend():
         content="<h1>WAF API</h1><p>Frontend not found. Visit <a href='/api/docs'>/api/docs</a> for API documentation.</p>",
         status_code=200
     )
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize application components on startup."""
-    logger.info("WAF Application starting up...")
-    logger.info("Security middleware initialized")
-    logger.info(f"Static files directory: {STATIC_DIR}")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on application shutdown."""
-    logger.info("WAF Application shutting down...")
 
 
 # Vercel automatically detects the FastAPI 'app' variable for serverless functions
