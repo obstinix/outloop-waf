@@ -11,6 +11,7 @@ from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
 from api.waf.engine import WAFEngine, RequestContext, ThreatLevel
+from api.waf.rate_limiter import rate_limiter
 from api.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -109,6 +110,20 @@ class WAFMiddleware(BaseHTTPMiddleware):
         if self._should_bypass(path):
             return await call_next(request)
         
+        client_ip = self._get_client_ip(request)
+        
+        # Rate limit check (before WAF analysis — cheapest gate first)
+        is_limited, limit_name = rate_limiter.is_rate_limited(client_ip)
+        if is_limited:
+            return JSONResponse(
+                status_code=429,
+                content={"error": "Rate limit exceeded", "limit": limit_name},
+                headers={
+                    "X-WAF-Rate-Limited": "true",
+                    "Retry-After": "60",
+                }
+            )
+        
         # Build request context for analysis
         headers = dict(request.headers)
         body = await self._extract_body(request)
@@ -119,7 +134,7 @@ class WAFMiddleware(BaseHTTPMiddleware):
             query_string=str(request.url.query) if request.url.query else "",
             headers={k.lower(): v for k, v in headers.items()},
             body=body,
-            client_ip=self._get_client_ip(request)
+            client_ip=client_ip
         )
         
         # Run WAF analysis
