@@ -62,7 +62,7 @@ class SecurityRules:
              "SQL keyword combination"),
             (r"(\bOR\b\s+\d+\s*=\s*\d+)", "OR-based SQL injection"),
             (r"(\bAND\b\s+\d+\s*=\s*\d+)", "AND-based SQL injection"),
-            (r"(--|\#|\/\*)", "SQL comment injection"),
+            (r"(?i)(\s--|;--|'\s*--|\"--|\s*/\*.*?\*/)", "SQL comment injection"),
             (r"(\bUNION\b\s+\bSELECT\b)", "UNION SELECT injection"),
             (r"(\bEXEC\b|\bEXECUTE\b)\s*\(", "SQL EXEC injection"),
             (r"(\bDECLARE\b\s+@)", "SQL variable declaration"),
@@ -72,6 +72,11 @@ class SecurityRules:
             (r"(\'|\")(\s*)(OR|AND)(\s*)(\'|\"|\d)", "Quote-based injection"),
             (r"(\bINFORMATION_SCHEMA\b)", "Schema enumeration"),
             (r"(\bSYSOBJECTS\b|\bSYSTABLES\b)", "System table access"),
+            # SQL Injection — Enhanced
+            (r"(?i)(0x[0-9a-f]+)", "Hex-encoded SQL payload"),
+            (r"(?i)(\bchar\s*\(\s*\d+)", "SQL CHAR() encoding"),
+            (r"(?i)(sleep\s*\(\s*\d+\s*\))", "SQL time-based blind injection"),
+            (r"(?i)(benchmark\s*\()", "SQL benchmark injection"),
         ]
         
         for i, (pattern, desc) in enumerate(patterns):
