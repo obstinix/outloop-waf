@@ -1,2769 +1,2852 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="OUTERLOOP WAF - Perimeter-Grade Web Attack Protection with real-time threat detection">
-    <title>OUTERLOOP WAF | Perimeter-Grade Web Attack Protection</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    
-    <style>
-        :root {
-            /* Void (Default Theme) */
-            --bg-primary: #030305;
-            --bg-secondary: #0b0f19;
-            --bg-tertiary: #131a2c;
-            --bg-card: rgba(11, 15, 25, 0.65);
-            --bg-card-hover: rgba(19, 26, 44, 0.85);
-            --border: rgba(0, 255, 240, 0.15);
-            --border-hover: rgba(0, 255, 240, 0.45);
-            --accent-primary: #00fff0;
-            --accent-secondary: #38bdf8;
-            --accent-cyan: #00fff0;
-            --accent-glow: rgba(0, 255, 240, 0.15);
-            --accent-rgb-raw: 0, 255, 240;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-tertiary: #64748b;
-            --success: #00ff88;
-            --warning: #ffaa00;
-            --danger: #ff4444;
-            --btn-text: #050505;
-            --bg-terminal: #070a13;
-            --bg-sandbox: rgba(11, 15, 25, 0.65);
-        }
-
-        body.theme-void {
-            --bg-primary: #030305;
-            --bg-secondary: #0b0f19;
-            --bg-tertiary: #131a2c;
-            --bg-card: rgba(11, 15, 25, 0.65);
-            --bg-card-hover: rgba(19, 26, 44, 0.85);
-            --border: rgba(0, 255, 240, 0.15);
-            --border-hover: rgba(0, 255, 240, 0.45);
-            --accent-primary: #00fff0;
-            --accent-secondary: #38bdf8;
-            --accent-cyan: #00fff0;
-            --accent-glow: rgba(0, 255, 240, 0.15);
-            --accent-rgb-raw: 0, 255, 240;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-tertiary: #64748b;
-            --success: #00ff88;
-            --warning: #ffaa00;
-            --danger: #ff4444;
-            --btn-text: #050505;
-            --bg-terminal: #070a13;
-            --bg-sandbox: rgba(11, 15, 25, 0.65);
-        }
-
-        body.theme-nebula {
-            --bg-primary: #07010f;
-            --bg-secondary: #130324;
-            --bg-tertiary: #21053c;
-            --bg-card: rgba(19, 3, 36, 0.65);
-            --bg-card-hover: rgba(33, 5, 60, 0.85);
-            --border: rgba(199, 125, 255, 0.15);
-            --border-hover: rgba(199, 125, 255, 0.45);
-            --accent-primary: #c77dff;
-            --accent-secondary: #e0aaff;
-            --accent-cyan: #c77dff;
-            --accent-glow: rgba(199, 125, 255, 0.15);
-            --accent-rgb-raw: 199, 125, 255;
-            --text-primary: #ede9fe;
-            --text-secondary: #ddd6fe;
-            --text-tertiary: #a78bfa;
-            --success: #00ffaa;
-            --warning: #ffb703;
-            --danger: #ff5c8a;
-            --btn-text: #0d0118;
-            --bg-terminal: #0e0416;
-            --bg-sandbox: rgba(19, 3, 36, 0.65);
-        }
-
-        body.theme-solar {
-            --bg-primary: #fffbf0;
-            --bg-secondary: #fff8e7;
-            --bg-tertiary: #fef3c7;
-            --bg-card: rgba(255, 251, 240, 0.85);
-            --bg-card-hover: rgba(254, 243, 199, 0.95);
-            --border: rgba(245, 158, 11, 0.25);
-            --border-hover: rgba(245, 158, 11, 0.55);
-            --accent-primary: #d97706;
-            --accent-secondary: #f59e0b;
-            --accent-cyan: #f59e0b;
-            --accent-glow: rgba(245, 158, 11, 0.1);
-            --accent-rgb-raw: 245, 158, 11;
-            --text-primary: #1c1917;
-            --text-secondary: #44403c;
-            --text-tertiary: #78716c;
-            --success: #16a34a;
-            --warning: #ea580c;
-            --danger: #dc2626;
-            --btn-text: #fff8e7;
-            --bg-terminal: #fffbf0;
-            --bg-sandbox: rgba(255, 251, 240, 0.85);
-        }
-
-        body.theme-aurora {
-            --bg-primary: #010705;
-            --bg-secondary: #03130d;
-            --bg-tertiary: #052116;
-            --bg-card: rgba(3, 19, 13, 0.65);
-            --bg-card-hover: rgba(5, 33, 22, 0.85);
-            --border: rgba(52, 211, 153, 0.15);
-            --border-hover: rgba(52, 211, 153, 0.45);
-            --accent-primary: #34d399;
-            --accent-secondary: #6ee7b7;
-            --accent-cyan: #34d399;
-            --accent-glow: rgba(52, 211, 153, 0.15);
-            --accent-rgb-raw: 52, 211, 153;
-            --text-primary: #ecfdf5;
-            --text-secondary: #d1fae5;
-            --text-tertiary: #6ee7b7;
-            --success: #00ff88;
-            --warning: #ffaa00;
-            --danger: #ff3366;
-            --btn-text: #030d0a;
-            --bg-terminal: #020a07;
-            --bg-sandbox: rgba(3, 19, 13, 0.65);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
-        }
-
-        h1, h2, h3, .logo-text {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-        }
-
-        /* Custom Cybernetic Cursor */
-        .custom-cursor {
-            width: 6px;
-            height: 6px;
-            background-color: var(--accent-primary);
-            border-radius: 50%;
-            position: fixed;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 9999;
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-            mix-blend-mode: difference;
-            display: none;
-        }
-        .custom-cursor-trail {
-            width: 32px;
-            height: 32px;
-            border: 1px solid var(--accent-primary);
-            border-radius: 50%;
-            position: fixed;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 9998;
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, background-color 0.3s;
-            will-change: top, left, transform;
-            display: none;
-        }
-
-        @media (pointer: fine) {
-            body {
-                cursor: none;
-            }
-            a, button, input, textarea, .preset-btn, .nav-cta, .stat-card, .feature-card {
-                cursor: none !important;
-            }
-            .custom-cursor, .custom-cursor-trail {
-                display: block;
-            }
-        }
-
-        .custom-cursor.hover {
-            width: 10px;
-            height: 10px;
-            background-color: var(--accent-secondary);
-        }
-        .custom-cursor-trail.hover {
-            width: 48px;
-            height: 48px;
-            border-color: var(--accent-primary);
-            background-color: rgba(var(--accent-rgb-raw), 0.05);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        /* Canvas Background */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        /* Grid Overlay */
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: 
-                linear-gradient(rgba(0, 102, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 102, 255, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            pointer-events: none;
-        }
-
-        /* Scan Line Effect */
-        .scan-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            opacity: 0.1;
-            animation: scanLine 8s linear infinite;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        @keyframes scanLine {
-            0% { top: -2px; }
-            100% { top: 100%; }
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1.25rem 3rem;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            position: relative;
-        }
-
-        .logo-icon svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .logo-text {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: 0.1em;
-        }
-
-        .logo-text span {
-            color: var(--accent-secondary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            transition: all 0.2s ease;
-            position: relative;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--success);
-            transition: width 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--success);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-cta {
-            padding: 0.6rem 1.25rem;
-            background: rgba(10, 10, 18, 0.7);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.75rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            font-family: 'JetBrains Mono', monospace;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-cta:hover {
-            background: rgba(10, 10, 18, 0.9);
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            box-shadow: 0 0 15px var(--accent-glow);
-            transform: translateY(-2px);
-        }
-
-        .nav-cta:active {
-            transform: translateY(0);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 8rem 3rem 4rem;
-            position: relative;
-        }
-
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-content {
-            z-index: 10;
-        }
-
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.625rem;
-            padding: 0.5rem 1rem;
-            background: rgba(0, 255, 102, 0.04);
-            border: 1px solid rgba(0, 255, 102, 0.15);
-            border-radius: 6px;
-            margin-bottom: 2rem;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--success);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--success);
-            animation: statusPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .status-text {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--success);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .terminal-heading {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--text-tertiary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            width: fit-content;
-        }
-        .terminal-heading .prompt-user { color: var(--success); }
-        .terminal-heading .prompt-dir { color: var(--accent-secondary); }
-        .terminal-heading .prompt-char { color: var(--text-secondary); }
-        .terminal-heading .cmd-run { color: var(--text-primary); font-weight: 500; }
-        .terminal-heading .cmd-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 15px;
-            background: var(--success);
-            animation: cursorBlink 1s step-end infinite;
-            vertical-align: middle;
-            margin-left: 2px;
-        }
-        @keyframes cursorBlink {
-            from, to { background-color: transparent; }
-            50% { background-color: var(--success); }
-        }
-
-        .hero h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(2.5rem, 5vw, 4.2rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-top: 1rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.03em;
-            text-transform: uppercase;
-        }
-
-        /* Title Stagger Reveal classes */
-        .title-line {
-            display: inline-block;
-            overflow: hidden;
-            vertical-align: bottom;
-            padding-bottom: 0.05em;
-        }
-        .title-word {
-            display: inline-block;
-            transform: translateY(100%);
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-
-        .highlight .title-word {
-            background: linear-gradient(135deg, var(--success) 0%, var(--accent-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-            max-width: 480px;
-            line-height: 1.7;
-            opacity: 0;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* Premium Dark Buttons */
-        .btn {
-            font-family: 'JetBrains Mono', monospace;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            padding: 0.9rem 1.8rem;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-sizing: border-box;
-            border: 1px solid var(--border);
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: rgba(10, 10, 18, 0.85);
-            color: var(--accent-primary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.05),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            border-color: var(--accent-primary);
-            color: var(--text-primary);
-            background: rgba(10, 10, 18, 0.95);
-            box-shadow: 0 0 25px var(--accent-glow), 0 8px 24px rgba(0, 0, 0, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: rgba(20, 20, 30, 0.35);
-            color: var(--text-secondary);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-secondary);
-            color: var(--accent-secondary);
-            background: rgba(20, 20, 30, 0.7);
-            box-shadow: 0 0 20px rgba(var(--accent-rgb-raw), 0.1), 0 4px 12px rgba(0, 0, 0, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary:active {
-            transform: translateY(0);
-        }
-
-        /* 3D Globe Container */
-        .hero-visual {
-            position: relative;
-            height: 500px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #globe-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        #globe-canvas {
-            width: 100%;
-            height: 100%;
-        }
-
-        .globe-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        /* Stats Section */
-        .stats {
-            padding: 6rem 3rem;
-            background: linear-gradient(180deg, transparent 0%, var(--bg-tertiary) 50%, transparent 100%);
-        }
-
-        .stats-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 2rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            transition: all 0.4s ease;
-            transform-style: preserve-3d;
-            position: relative;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 8px;
-            padding: 1px;
-            background: linear-gradient(135deg, transparent 40%, var(--accent-cyan) 50%, transparent 60%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-8px) rotateX(5deg);
-            background: var(--bg-card-hover);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.15);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-
-        .stat-card:hover::before {
-            opacity: 1;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            margin-bottom: 0.5rem;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .stat-label {
-            color: var(--text-tertiary);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 8rem 3rem;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 5rem;
-        }
-
-        .section-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1.25rem;
-            letter-spacing: -0.02em;
-        }
-
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 1.0625rem;
-        }
-
-        .features-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        .feature-card {
-            padding: 2rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(0, 212, 255, 0.1);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.25rem;
-            background: rgba(0, 102, 255, 0.1);
-            border: 1px solid rgba(0, 102, 255, 0.2);
-        }
-
-        .feature-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--accent-secondary);
-        }
-
-        .feature-card h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.01em;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* Status Section */
-        .status-section {
-            padding: 8rem 3rem;
-            background: var(--bg-tertiary);
-        }
-
-        .status-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .status-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .status-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
-        }
-
-        .status-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .status-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .status-title h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.375rem 0.75rem;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 4px;
-        }
-
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: statusPulse 2s ease-in-out infinite;
-        }
-
-        .live-text {
-            font-size: 0.6875rem;
-            font-weight: 600;
-            color: var(--success);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .gravity-display {
-            text-align: center;
-            margin: 3rem 0;
-        }
-
-        .gravity-value {
-            font-size: 4rem;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: -0.02em;
-            transition: all 0.5s ease;
-        }
-
-        .gravity-value.normal {
-            color: var(--text-primary);
-        }
-
-        .gravity-value.antigravity {
-            background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: floatUp 3s ease-in-out infinite;
-        }
-
-        @keyframes floatUp {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .gravity-unit {
-            font-size: 1rem;
-            color: var(--text-tertiary);
-            margin-top: 0.5rem;
-        }
-
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .status-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.25rem;
-        }
-
-        .status-item-label {
-            font-size: 0.6875rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
-        }
-
-        .status-item-value {
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-primary);
-        }
-
-        .special-message {
-            margin-top: 2rem;
-            padding: 1.25rem;
-            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            text-align: center;
-            color: var(--accent-cyan);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            display: none;
-        }
-
-        .special-message.visible {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Demo Terminal */
-        .demo-section {
-            padding: 8rem 3rem;
-        }
-
-        .demo-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 2rem;
-            align-items: stretch;
-        }
-
-        @media (max-width: 1024px) {
-            .demo-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* WAF Sandbox & Payload Tester */
-        .sandbox-card {
-            background: var(--bg-sandbox);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-        }
-
-        .sandbox-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
-        }
-
-        .sandbox-card:hover {
-            border-color: rgba(0, 212, 255, 0.3);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 212, 255, 0.15);
-        }
-
-        .sandbox-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .sandbox-title h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.01em;
-        }
-
-        .sandbox-title p {
-            font-size: 0.8rem;
-            color: var(--text-tertiary);
-            margin-top: 0.25rem;
-        }
-
-        .sandbox-input-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        .sandbox-input {
-            width: 100%;
-            height: 120px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            color: var(--text-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            resize: none;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .sandbox-input:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        .presets-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        .presets-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-        }
-
-        @media (max-width: 480px) {
-            .presets-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .preset-btn {
-            font-family: 'JetBrains Mono', monospace;
-            background: rgba(10, 10, 18, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 0.6rem 0.8rem;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-        }
-
-        .preset-btn:hover {
-            border-color: var(--accent-primary);
-            background: rgba(10, 10, 18, 0.9);
-            color: var(--accent-primary);
-            box-shadow: 0 0 15px var(--accent-glow), 0 4px 8px rgba(0, 0, 0, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .preset-btn:active {
-            transform: scale(0.97) translateY(0);
-        }
-
-        .sandbox-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-analyze {
-            flex: 1;
-            justify-content: center;
-        }
-
-        .btn-reset {
-            padding: 0.9rem 1.8rem;
-        }
-
-        .btn-reset:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-            background: rgba(255, 68, 68, 0.08);
-            box-shadow: 0 0 15px rgba(255, 68, 68, 0.15);
-        }
-
-        .sandbox-result {
-            margin-top: 0.5rem;
-            border-radius: 8px;
-            padding: 1.25rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-            display: none;
-            animation: fadeIn 0.4s ease-out;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .sandbox-result.visible {
-            display: flex;
-        }
-
-        .result-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .result-badge {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.35rem 0.75rem;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-
-        .result-badge.passed {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
-        }
-
-        .result-badge.blocked {
-            background: rgba(255, 68, 68, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(255, 68, 68, 0.2);
-            box-shadow: 0 0 15px rgba(255, 68, 68, 0.1);
-        }
-
-        .result-badge.limited {
-            background: rgba(255, 170, 0, 0.1);
-            color: var(--warning);
-            border: 1px solid rgba(255, 170, 0, 0.2);
-            box-shadow: 0 0 15px rgba(255, 170, 0, 0.1);
-        }
-
-        .result-latency {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .result-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 0.75rem;
-        }
-
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .result-label {
-            color: var(--text-tertiary);
-        }
-
-        .result-value {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-primary);
-            text-align: right;
-            word-break: break-all;
-            max-width: 70%;
-        }
-
-        .result-value.highlight-val {
-            color: var(--accent-cyan);
-        }
-
-        .terminal {
-            background: var(--bg-terminal);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
-        }
-
-        .terminal-header {
-            padding: 1rem 1.5rem;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .terminal-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .terminal-dot.red { background: #ff5f56; }
-        .terminal-dot.yellow { background: #ffbd2e; }
-        .terminal-dot.green { background: #27ca40; }
-
-        .terminal-title {
-            margin-left: 1rem;
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .terminal-body {
-            padding: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8125rem;
-            line-height: 1.8;
-            max-height: 350px;
-            overflow-y: auto;
-        }
-
-        .terminal-line {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 0.5rem;
-        }
-
-        .terminal-prompt {
-            color: var(--accent-cyan);
-            margin-right: 0.5rem;
-        }
-
-        .terminal-command {
-            color: var(--text-primary);
-        }
-
-        .terminal-output {
-            color: var(--text-secondary);
-            margin-left: 1rem;
-            word-break: break-all;
-        }
-
-        .terminal-output.success { color: var(--success); }
-        .terminal-output.error { color: var(--danger); }
-
-        /* Architecture Section */
-        .architecture {
-            padding: 8rem 3rem;
-            background: var(--bg-tertiary);
-        }
-
-        .arch-diagram {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 3rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-        }
-
-        .arch-flow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .arch-node {
-            padding: 1rem 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .arch-node:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        }
-
-        .arch-node.request { color: var(--success); border-color: rgba(0, 255, 136, 0.3); }
-        .arch-node.waf { color: var(--accent-secondary); border-color: rgba(0, 212, 255, 0.3); }
-        .arch-node.engine { color: var(--accent-primary); border-color: rgba(0, 102, 255, 0.3); }
-        .arch-node.decision { color: var(--warning); border-color: rgba(255, 170, 0, 0.3); }
-
-        .arch-arrow {
-            color: var(--text-tertiary);
-            font-size: 1.5rem;
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem 3rem 2rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--text-tertiary);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-cyan);
-        }
-
-        .footer-copy {
-            color: var(--text-tertiary);
-            font-size: 0.8125rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-description {
-                margin: 0 auto 2.5rem;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .hero-visual {
-                height: 350px;
-            }
-
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero, .features, .demo-section, .status-section, .architecture {
-                padding-left: 1.5rem;
-                padding-right: 1.5rem;
-            }
-
-            .features-grid, .stats-container {
-                grid-template-columns: 1fr;
-            }
-
-            .status-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .arch-flow {
-                flex-direction: column;
-            }
-
-            .arch-arrow {
-                transform: rotate(90deg);
-            }
-
-            .footer-container {
-                flex-direction: column;
-                gap: 1.5rem;
-                text-align: center;
-            }
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-tertiary);
-        }
-
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Scroll reveal animations (Framer-like) */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform, opacity;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OUTERLOOP WAF - Perimeter-Grade Web Attack Protection with real-time threat detection and analytics">
+  <title>OUTLOOP WAF // SOC Dashboard</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ── DESIGN SYSTEM & COLOR TOKENS ──────────────────────────────── */
+    :root {
+      --bg-base:     #0A0A0B;
+      --bg-panel:    #0F0F13;
+      --bg-raised:   #161620;
+      --bg-terminal: #080810;
+      --border:      rgba(255,255,255,0.06);
+      --border-lit:  rgba(0, 210, 106, 0.18);
+      --border-warn: rgba(245, 166, 35, 0.25);
+      --border-danger: rgba(255, 69, 58, 0.25);
+
+      --green:       #00D26A;
+      --green-dim:   #00A854;
+      --amber:       #F5A623;
+      --red:         #FF453A;
+      --blue:        #5E8EEC;
+      --purple:      #A78BFA;
+
+      --text-1:      #EBEBF5;
+      --text-2:      #9898A8;
+      --text-3:      #5A5A6A;
+      --text-green:  #00D26A;
+      --text-amber:  #F5A623;
+      --text-red:    #FF453A;
+
+      --font-mono: 'JetBrains Mono', 'Cascadia Code', 'SF Mono', monospace;
+      --font-body: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    }
+
+    /* ── BASE STYLES ─────────────────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-2);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 32px; /* space for status bar */
+    }
+
+    h1, h2, h3, h4, h5, h6,
+    input, textarea, button, select,
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      margin: 1.5rem 0;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-base);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-raised);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-3);
+    }
+
+    /* ── GENERAL LAYOUT ──────────────────────────────────────────── */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 4vw, 3rem);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--green);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-desc {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--text-2);
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    section {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── COMPONENTS ──────────────────────────────────────────────── */
+    /* Panels (btop/man page aesthetic) */
+    .panel {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.2s, background-color 0.2s, transform 0.15s;
+    }
+
+    .panel.interactive:hover {
+      border-color: var(--border-lit);
+      background-color: var(--bg-raised);
+      transform: translateY(-2px);
+    }
+
+    .panel-header {
+      height: 36px;
+      background-color: var(--bg-raised);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+
+    .panel-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .panel-meta {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-body {
+      padding: 1.25rem;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-critical { background-color: rgba(255, 69, 58, 0.12); color: var(--red); border: 1px solid rgba(255, 69, 58, 0.25); }
+    .badge-high { background-color: rgba(255, 69, 58, 0.12); color: var(--red); border: 1px solid rgba(255, 69, 58, 0.2); }
+    .badge-medium { background-color: rgba(245, 166, 35, 0.12); color: var(--amber); border: 1px solid rgba(245, 166, 35, 0.2); }
+    .badge-low { background-color: rgba(167, 139, 250, 0.12); color: var(--purple); border: 1px solid rgba(167, 139, 250, 0.2); }
+    .badge-ok { background-color: rgba(0, 210, 106, 0.12); color: var(--green); border: 1px solid rgba(0, 210, 106, 0.2); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background-color: var(--green);
+      color: #000;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: transparent;
+      border-color: var(--border);
+      color: var(--text-2);
+    }
+    .btn-secondary:hover {
+      border-color: var(--border-lit);
+      color: var(--text-1);
+    }
+
+    /* System Status Dot */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      display: inline-block;
+    }
+    .status-dot.danger {
+      background-color: var(--red);
+      box-shadow: 0 0 8px var(--red);
+    }
+    .status-dot.warn {
+      background-color: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    /* ── 4.1 BOOT SEQUENCE ───────────────────────────────────────── */
+    #boot-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-base);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .boot-content {
+      width: 100%;
+      max-width: 600px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .boot-logo {
+      color: var(--text-1);
+      white-space: pre;
+      margin-bottom: 2rem;
+      font-size: clamp(0.5rem, 1.5vw, 0.85rem);
+      line-height: 1.2;
+    }
+
+    .boot-log-lines {
+      color: var(--text-2);
+    }
+
+    .boot-line {
+      margin-bottom: 0.4rem;
+      opacity: 0;
+      transform: translateY(4px);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .text-green { color: var(--green); }
+    .text-red { color: var(--red); }
+    .text-amber { color: var(--amber); }
+
+    /* ── 4.2 NAVIGATION ──────────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 52px;
+      background-color: var(--bg-base);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      transition: background-color 0.2s, backdrop-filter 0.2s;
+    }
+
+    header.scrolled {
+      background-color: rgba(10, 10, 11, 0.95);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-1);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-1);
+    }
+
+    .btn-github {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-github:hover {
+      border-color: var(--border-lit);
+      color: var(--green);
+    }
+
+    /* Mobile Hamburger Menu */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-1);
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 52px;
+      left: 0;
+      width: 100%;
+      height: calc(100vh - 52px);
+      background-color: var(--bg-base);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      border-top: 1px solid var(--border);
+    }
+
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .mobile-links a {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── 4.3 HERO SECTION ────────────────────────────────────────── */
+    #hero {
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-h1 {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+      line-height: 1.05;
+      color: var(--text-1);
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-h1 span.underline {
+      text-decoration: underline;
+      text-decoration-color: var(--green-dim);
+      text-underline-offset: 8px;
+    }
+
+    .hero-desc {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-2);
+      max-width: 460px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* Live Terminal Pane */
+    .terminal-pane {
+      height: 380px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-body {
+      flex: 1;
+      background-color: var(--bg-terminal);
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.8;
+      overflow-y: auto;
+      color: var(--text-2);
+    }
+
+    .terminal-line {
+      margin-bottom: 0.4rem;
+      white-space: pre-wrap;
+    }
+
+    .terminal-prompt {
+      color: var(--green-dim);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background-color: var(--text-1);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ── 4.4 LIVE STATS BAR ──────────────────────────────────────── */
+    #stats {
+      padding: 0;
+      background-color: var(--bg-panel);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-panel {
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-panel:last-child {
+      border-right: none;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--text-3);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 2.8rem;
+      line-height: 1.1;
+      color: var(--text-1);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-delta {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .stat-delta.active-delta {
+      color: var(--amber);
+    }
+
+    /* ── 4.5 WAF SANDBOX ─────────────────────────────────────────── */
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .preset-btn {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background-color: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 4px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--border-lit);
+      color: var(--text-1);
+      background-color: var(--bg-raised);
+    }
+
+    .sandbox-input-panel {
+      background-color: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sandbox-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .sandbox-prompt {
+      color: var(--green-dim);
+      white-space: nowrap;
+      user-select: none;
+      margin-top: 1px;
+    }
+
+    .sandbox-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-1);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      resize: none;
+      line-height: 1.4;
+      caret-color: var(--green);
+      padding: 0;
+      height: auto;
+      min-height: 24px;
+    }
+
+    .sandbox-submit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+    }
+
+    /* Sandbox Results Container */
+    .sandbox-result-container {
+      display: none;
+    }
+
+    .result-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      background-color: var(--bg-terminal);
+      overflow: hidden;
+    }
+
+    .result-box.passed {
+      border-color: var(--border-lit);
+    }
+
+    .result-box.blocked {
+      border-color: var(--border-danger);
+    }
+
+    .result-header {
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-box.passed .result-header {
+      background-color: rgba(0, 210, 106, 0.05);
+      color: var(--green);
+      border-bottom-color: rgba(0, 210, 106, 0.12);
+    }
+
+    .result-box.blocked .result-header {
+      background-color: rgba(255, 69, 58, 0.05);
+      color: var(--red);
+      border-bottom-color: rgba(255, 69, 58, 0.12);
+    }
+
+    .result-content {
+      padding: 1.25rem;
+      white-space: pre-wrap;
+      color: var(--text-2);
+    }
+
+    .result-detail-line {
+      display: flex;
+      margin-bottom: 0.4rem;
+    }
+
+    .result-detail-label {
+      width: 130px;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+
+    .result-detail-val {
+      color: var(--text-1);
+    }
+
+    .violation-card {
+      margin-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding-top: 1rem;
+    }
+
+    .violation-item {
+      margin-bottom: 1rem;
+      padding-left: 1.25rem;
+      border-left: 2px solid var(--blue);
+    }
+
+    .violation-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .violation-id {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .violation-name {
+      color: var(--text-1);
+    }
+
+    .violation-match {
+      color: var(--text-2);
+      font-size: 0.78rem;
+      margin-top: 0.2rem;
+      background-color: rgba(255, 255, 255, 0.02);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* ── 4.6 LIVE THREAT FEED ────────────────────────────────────── */
+    .threat-grid {
+      display: grid;
+      grid-template-columns: 65% 35%;
+      gap: 2rem;
+    }
+
+    .threat-feed-pane {
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+    }
+
+    .threat-stream-body {
+      flex: 1;
+      background-color: var(--bg-terminal);
+      padding: 1.25rem;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .threat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      padding-bottom: 0.4rem;
+    }
+
+    .threat-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .threat-time {
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+
+    .threat-badge {
+      flex-shrink: 0;
+    }
+
+    .threat-info {
+      color: var(--text-1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .threat-ip {
+      color: var(--text-3);
+      font-weight: 500;
+      text-align: right;
+      padding-left: 1rem;
+      flex-shrink: 0;
+    }
+
+    .threat-system-msg {
+      color: var(--green-dim);
+      border-left: 2px solid var(--green);
+      padding-left: 0.75rem;
+      margin: 0.25rem 0;
+    }
+
+    .threat-system-msg.error {
+      color: var(--amber);
+      border-left-color: var(--amber);
+    }
+
+    /* Pulse Dot animation */
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--green);
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    /* Stats breakdown right panel */
+    .stats-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .breakdown-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-2);
+    }
+
+    .breakdown-label {
+      font-weight: 500;
+      color: var(--text-3);
+    }
+
+    .breakdown-val {
+      font-weight: 600;
+      color: var(--text-1);
+    }
+
+    .progress-track {
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.04);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fill-critical { background-color: var(--red); }
+    .fill-high { background-color: var(--red); }
+    .fill-medium { background-color: var(--amber); }
+    .fill-low { background-color: var(--purple); }
+    .fill-other { background-color: var(--blue); }
+
+    /* ── 4.7 PROTECTION LAYERS (RULES) ───────────────────────────── */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .rule-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rule-card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .rule-card-icon {
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rule-card-title {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-1);
+    }
+
+    .rule-card-bottom {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .rule-card-num {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1;
+    }
+
+    /* Expandable Rule Details */
+    .rules-table-container {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+      display: none;
+    }
+
+    .rules-table-scroll {
+      overflow-x: auto;
+      max-height: 400px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .rules-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-align: left;
+    }
+
+    .rules-table th, .rules-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .rules-table th {
+      background-color: var(--bg-raised);
+      color: var(--text-2);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rules-table tr:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .rules-table td {
+      color: var(--text-1);
+    }
+
+    .rules-table td.rule-pattern {
+      color: var(--text-3);
+      font-size: 0.7rem;
+    }
+
+    .admin-req-msg {
+      text-align: center;
+      padding: 2rem;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    /* ── 4.8 ARCHITECTURE DIAGRAM ────────────────────────────────── */
+    .arch-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 0;
+    }
+
+    .arch-svg-container {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .arch-svg text {
+      fill: var(--text-1);
+    }
+    .arch-svg text.dim {
+      fill: var(--text-2);
+    }
+    .arch-svg text.meta {
+      fill: var(--text-3);
+    }
+
+    .arch-callout-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+      width: 100%;
+    }
+
+    .arch-callout-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .arch-callout-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .arch-callout-desc {
+      font-size: 0.85rem;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    /* ── 4.9 ADMIN PANEL ─────────────────────────────────────────── */
+    .admin-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-1);
+      user-select: none;
+      transition: background-color 0.15s;
+    }
+
+    .admin-trigger:hover {
+      background-color: var(--bg-raised);
+    }
+
+    .admin-content {
+      display: none;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      background-color: var(--bg-panel);
+      padding: 1.5rem;
+    }
+
+    .admin-trigger.expanded {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-color: transparent;
+    }
+
+    .admin-form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-form-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-2);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .key-input-row {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 500px;
+    }
+
+    .text-input {
+      flex: 1;
+      background-color: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-1);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 8px 12px;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--border-lit);
+    }
+
+    .btn-toggle-key {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-2);
+      padding: 0 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-toggle-key:hover {
+      border-color: var(--text-3);
+      color: var(--text-1);
+    }
+
+    .admin-key-status {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      margin-top: 0.4rem;
+    }
+
+    .admin-controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .admin-subpanel-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .admin-action-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-output-pane {
+      background-color: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-2);
+      max-height: 250px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .blocklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .blocklist-table th, .blocklist-table td {
+      padding: 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .blocklist-table th {
+      color: var(--text-3);
+      font-weight: 500;
+    }
+
+    .blocklist-table td {
+      color: var(--text-1);
+    }
+
+    .btn-unblock {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--red);
+      padding: 2px 6px;
+      cursor: pointer;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+    }
+
+    .btn-unblock:hover {
+      background-color: rgba(255, 69, 58, 0.08);
+      border-color: rgba(255, 69, 58, 0.2);
+    }
+
+    .ip-block-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 400px;
+    }
+
+    .ip-block-form .text-input {
+      padding: 6px 10px;
+    }
+
+    /* ── 4.10 FOOTER ─────────────────────────────────────────────── */
+    footer {
+      padding: 4rem 0 2.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-3);
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-logo {
+      color: var(--text-1);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 3rem;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-col-title {
+      color: var(--text-2);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-col a {
+      transition: color 0.15s;
+    }
+
+    .footer-col a:hover {
+      color: var(--text-1);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.02);
+      padding-top: 1.5rem;
+    }
+
+    /* ── 4.11 STATUS BAR ─────────────────────────────────────────── */
+    #status-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 32px;
+      z-index: 500;
+      background-color: #0D0D12;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-2);
+      user-select: none;
+    }
+
+    .sb-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .sb-active-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      display: inline-block;
+    }
+
+    .sb-center {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--text-2);
+    }
+
+    .sb-center span {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .sb-right {
+      color: var(--text-3);
+    }
+
+    /* ── 7. RESPONSIVE BREAKPOINTS ───────────────────────────────── */
+    /* Tablet: 768px – 1024px */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .terminal-pane {
+        height: 320px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .stat-panel {
+        border-bottom: 1px solid var(--border);
+      }
+      .stat-panel:nth-child(even) {
+        border-right: none;
+      }
+      .stat-panel:nth-child(3), .stat-panel:nth-child(4) {
+        border-bottom: none;
+      }
+      .threat-grid {
+        grid-template-columns: 1fr;
+      }
+      .rules-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .arch-callout-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .admin-controls-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    /* Mobile: < 768px */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .menu-toggle {
+        display: block;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .stat-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .stat-panel:last-child {
+        border-bottom: none;
+      }
+      .rules-grid {
+        grid-template-columns: 1fr;
+      }
+      /* Status bar responsive updates */
+      .sb-center {
+        display: none;
+      }
+      .sb-right {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="custom-cursor" id="customCursor"></div>
-    <div class="custom-cursor-trail" id="customCursorTrail"></div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="grid-overlay"></div>
-    <div class="scan-line"></div>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 3L4 9V18C4 26.5 10 33 18 35C26 33 32 26.5 32 18V9L18 3Z" 
-                              stroke="url(#logoGrad)" stroke-width="2" fill="none"/>
-                        <path d="M12 18L16 22L24 14" 
-                              stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <defs>
-                            <linearGradient id="logoGrad" x1="4" y1="3" x2="32" y2="35">
-                                <stop offset="0%" stop-color="#0066ff"/>
-                                <stop offset="100%" stop-color="#00ffff"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
-                <span class="logo-text">OUTERLOOP<span>.</span></span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#status">Status</a></li>
-                <li><a href="#demo">Demo</a></li>
-                <li><a href="/api/docs" target="_blank">Documentation</a></li>
-            </ul>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <a href="/api/docs" class="nav-cta" target="_blank">API Reference</a>
-                <button id="themeCycleBtn" class="nav-cta" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"/>
-                        <line x1="12" y1="1" x2="12" y2="3"/>
-                        <line x1="12" y1="21" x2="12" y2="23"/>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                        <line x1="1" y1="12" x2="3" y2="12"/>
-                        <line x1="21" y1="12" x2="23" y2="12"/>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                    <span id="themeNameText">VOID</span>
-                </button>
-            </div>
-        </div>
-    </nav>
+  <!-- 4.1 BOOT SEQUENCE -->
+  <div id="boot-loader">
+    <div class="boot-content">
+      <div class="boot-logo">
+ ___  _  _ ___ _    ___   ___  ___  
+/ _ \| | |  | | |  / _ \ / _ \|  _ \ 
+| | | | | |  | | |__| | | | | | |_) |
+\___/ \___/  |_|_____\___/ \___/| .__/ 
+                                |_|    </div>
+      <div class="boot-log-lines" id="boot-lines"></div>
+    </div>
+  </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="status-indicator">
-                    <div class="status-dot"></div>
-                    <span class="status-text">All Systems Operational</span>
-                </div>
-                <div class="terminal-heading">
-                    <span class="prompt-user">root@outerloop</span><span class="prompt-separator">:</span><span class="prompt-dir">~</span><span class="prompt-char">#</span> <span class="cmd-run">init-waf-shield</span><span class="cmd-cursor"></span>
-                </div>
-                <h1 id="heroTitle">
-                    <span class="title-line"><span class="title-word">OUTERLOOP</span> <span class="title-word">WAF</span></span><br>
-                    <span class="title-line highlight"><span class="title-word">Web</span> <span class="title-word">Application</span> <span class="title-word">Firewall</span></span>
-                </h1>
-                <p class="hero-description">
-                    Perimeter-Grade Web Attack Protection with advanced pattern matching, 
-                    comprehensive request analysis, and zero-latency defense.
-                </p>
-                <div class="hero-buttons">
-                    <a href="/api/docs" class="btn btn-primary" target="_blank">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <path d="M14 2v6h6"/>
-                            <path d="M16 13H8"/>
-                            <path d="M16 17H8"/>
-                            <path d="M10 9H8"/>
-                        </svg>
-                        Documentation
-                    </a>
-                    <a href="#demo" class="btn btn-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        View Demo
-                    </a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="globe-glow"></div>
-                <div id="globe-container">
-                    <canvas id="globe-canvas"></canvas>
-                </div>
-            </div>
+  <!-- 4.2 NAVIGATION -->
+  <header id="main-header">
+    <div class="container nav-wrapper">
+      <a href="#hero" class="logo-container">
+        [OUTLOOP WAF]
+      </a>
+      <ul class="nav-links">
+        <li><a href="#stats">Features</a></li>
+        <li><a href="#sandbox">Sandbox</a></li>
+        <li><a href="#threat-feed">Threats</a></li>
+        <li><a href="#rules">Rules</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#admin">Admin</a></li>
+        <li><a href="https://github.com/obstinix/outloop-waf" target="_blank" class="btn-github">GitHub ↗</a></li>
+      </ul>
+      <button class="menu-toggle" id="menu-toggle-btn">[≡]</button>
+    </div>
+  </header>
+
+  <!-- Mobile nav overlay -->
+  <div class="mobile-overlay" id="mobile-nav-overlay">
+    <ul class="mobile-links">
+      <li><a href="#stats" onclick="toggleMobileMenu()">Features</a></li>
+      <li><a href="#sandbox" onclick="toggleMobileMenu()">Sandbox</a></li>
+      <li><a href="#threat-feed" onclick="toggleMobileMenu()">Threats</a></li>
+      <li><a href="#rules" onclick="toggleMobileMenu()">Rules</a></li>
+      <li><a href="#architecture" onclick="toggleMobileMenu()">Architecture</a></li>
+      <li><a href="#admin" onclick="toggleMobileMenu()">Admin</a></li>
+      <li><a href="https://github.com/obstinix/outloop-waf" target="_blank" class="btn-github" onclick="toggleMobileMenu()">GitHub ↗</a></li>
+    </ul>
+  </div>
+
+  <div class="container" id="main-content">
+    
+    <!-- 4.3 HERO SECTION -->
+    <section id="hero">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="section-eyebrow">&gt; PERIMETER-GRADE WAF</span>
+          <h1 class="hero-h1">Web Attack<br>Protection<br><span class="underline">At The Edge.</span></h1>
+          <p class="hero-desc">
+            OUTERLOOP WAF inspects every request through a multi-layer rule engine — detecting SQL injection, XSS, command injection, and path traversal before they reach your application.
+          </p>
+          <div class="hero-actions">
+            <a href="#sandbox" class="btn btn-primary">[→ Try the Sandbox]</a>
+            <a href="#architecture" class="btn btn-secondary">[↗ API Docs]</a>
+          </div>
         </div>
+        
+        <div class="panel terminal-pane" data-reveal>
+          <div class="panel-header">
+            <span class="panel-title">bash — waf-engine — 80x24</span>
+            <div class="panel-meta">
+              <span class="status-dot" id="hero-status-dot"></span>
+            </div>
+          </div>
+          <div class="terminal-body" id="hero-terminal">
+            <div class="terminal-line"><span class="terminal-prompt">root@outloop-waf:~$</span> <span id="hero-command">waf status</span></div>
+            <div id="hero-output" class="terminal-line">Loading live status indicators...</div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-container reveal">
-            <div class="stat-card">
-                <div class="stat-value" id="stat-rules">—</div>
-                <div class="stat-label">Security Rules</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="stat-requests">—</div>
-                <div class="stat-label">Requests Analyzed</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="stat-blocked">—</div>
-                <div class="stat-label">Threats Blocked</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="stat-detection-rate">99.9%</div>
-                <div class="stat-label">Detection Rate</div>
-            </div>
+    <!-- 4.4 LIVE STATS BAR -->
+    <section id="stats" data-reveal>
+      <div class="stats-grid">
+        <div class="stat-panel">
+          <span class="stat-label">REQUESTS ANALYZED</span>
+          <span class="stat-val" id="stat-req-val">0</span>
+          <span class="stat-delta" id="stat-req-delta">Waiting for sync...</span>
         </div>
+        <div class="stat-panel">
+          <span class="stat-label">THREATS BLOCKED</span>
+          <span class="stat-val" id="stat-blocked-val">0</span>
+          <span class="stat-delta" id="stat-blocked-delta">Waiting for sync...</span>
+        </div>
+        <div class="stat-panel">
+          <span class="stat-label">ACTIVE RULES</span>
+          <span class="stat-val" id="stat-rules-val">57</span>
+          <span class="stat-delta">Static loaded</span>
+        </div>
+        <div class="stat-panel">
+          <span class="stat-label">BLOCKED IPS</span>
+          <span class="stat-val" id="stat-ips-val">0</span>
+          <span class="stat-delta" id="stat-ips-delta">Waiting for sync...</span>
+        </div>
+      </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-header">
-            <div class="section-label">Security Features</div>
-            <h2>Comprehensive Protection</h2>
-            <p>Multi-layered defense against the most sophisticated web attack vectors</p>
+    <!-- 4.5 WAF SANDBOX -->
+    <section id="sandbox">
+      <span class="section-eyebrow">&gt; PAYLOAD SANDBOX</span>
+      <h2 class="section-title">Test The WAF</h2>
+      <p class="section-desc">
+        Send any string through the WAF engine. Clean requests pass. Malicious payloads are blocked with a full violation report.
+      </p>
+
+      <div class="preset-row" data-reveal>
+        <button class="preset-btn" onclick="loadPayload('sqli')">[SQL Injection]</button>
+        <button class="preset-btn" onclick="loadPayload('xss')">[XSS Attack]</button>
+        <button class="preset-btn" onclick="loadPayload('path')">[Path Traversal]</button>
+        <button class="preset-btn" onclick="loadPayload('cmd')">[Cmd Injection]</button>
+        <button class="preset-btn" onclick="loadPayload('clean')">[Clean Request]</button>
+        <button class="preset-btn" onclick="loadPayload('custom')">[Custom...]</button>
+      </div>
+
+      <div class="sandbox-input-panel" data-reveal>
+        <div class="sandbox-line">
+          <span class="sandbox-prompt">root@waf-sandbox:~$ waf analyze --payload "</span>
+          <textarea id="sandbox-input" class="sandbox-textarea" rows="1" oninput="autoExpandTextarea(this)">Hello, this is a legitimate message.</textarea>
+          <span class="sandbox-prompt">"</span>
         </div>
-        <div class="features-grid">
-            <div class="feature-card reveal">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                    </svg>
-                </div>
-                <h3>SQL Injection Prevention</h3>
-                <p>Advanced detection of UNION-based, blind, and time-based SQL injection with multi-pass encoding analysis.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
-                </div>
-                <h3>XSS Protection</h3>
-                <p>Comprehensive script filtering with event handler detection and JavaScript protocol blocking.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-                        <line x1="12" y1="11" x2="12" y2="17"/>
-                        <line x1="9" y1="14" x2="15" y2="14"/>
-                    </svg>
-                </div>
-                <h3>Path Traversal Detection</h3>
-                <p>Multi-layer URL decoding to catch obfuscated directory traversal and null byte injection attempts.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                </div>
-                <h3>Header Validation</h3>
-                <p>CRLF injection prevention, header overflow protection, and dangerous method blocking.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </div>
-                <h3>Request Tracking</h3>
-                <p>Unique request identifiers for comprehensive security auditing and forensic analysis.</p>
-            </div>
-            <div class="feature-card reveal">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="20" x2="18" y2="10"/>
-                        <line x1="12" y1="20" x2="12" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                </div>
-                <h3>Real-time Analytics</h3>
-                <p>Structured logging with threat classification and detailed violation reports.</p>
-            </div>
+      </div>
+
+      <div class="sandbox-submit-row" data-reveal>
+        <button class="btn btn-primary" onclick="submitSandbox()">[→ ANALYZE]</button>
+      </div>
+
+      <!-- Result pane -->
+      <div class="sandbox-result-container" id="sandbox-result-wrapper">
+        <div class="result-box" id="sandbox-result-box">
+          <div class="result-header" id="sandbox-result-header">
+            <!-- Dynamic header text & status indicator -->
+          </div>
+          <div class="result-content" id="sandbox-result-content">
+            <!-- Dynamic result detail lines -->
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Status Section -->
-    <section class="status-section" id="status">
-        <div class="section-header">
-            <div class="section-label">System Monitor</div>
-            <h2>Live Status</h2>
-            <p>Real-time system monitoring and gravitational field analysis</p>
-        </div>
-        <div class="status-container">
-            <div class="status-card reveal">
-                <div class="status-header">
-                    <div class="status-title">
-                        <h3>Gravitational Field Status</h3>
-                    </div>
-                    <div class="live-indicator">
-                        <div class="live-dot"></div>
-                        <span class="live-text">Live</span>
-                    </div>
-                </div>
-                <div class="gravity-display">
-                    <div class="gravity-value normal" id="gravityStatus">
-                        <div class="loading"></div>
-                    </div>
-                    <div class="gravity-unit" id="gravityUnit">Loading system data...</div>
-                </div>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <div class="status-item-label">Constant</div>
-                        <div class="status-item-value" id="gravityConstant">--</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-item-label">Source</div>
-                        <div class="status-item-value" id="gravitySource">--</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-item-label">Last Update</div>
-                        <div class="status-item-value" id="gravityTimestamp">--</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-item-label">Request ID</div>
-                        <div class="status-item-value" id="requestId">--</div>
-                    </div>
-                </div>
-                <div class="special-message" id="specialMessage"></div>
+    <!-- 4.6 LIVE THREAT FEED -->
+    <section id="threat-feed">
+      <span class="section-eyebrow">&gt; LIVE THREAT STREAM</span>
+      <h2 class="section-title">Real-Time Attack Detection</h2>
+      <p class="section-desc">
+        Connect to the WAF's Server-Sent Event stream. Every blocked request appears here in real time.
+      </p>
+
+      <div class="threat-grid">
+        <div class="panel threat-feed-pane" data-reveal>
+          <div class="panel-header">
+            <span class="panel-title">tail -f /var/log/waf/threats.log</span>
+            <div class="panel-meta">
+              <span class="pulse-dot"></span>
+              <span>LIVE</span>
             </div>
+          </div>
+          <div class="threat-stream-body" id="threat-feed-container">
+            <div class="threat-system-msg">[establishing stream connection...]</div>
+          </div>
         </div>
+
+        <div class="stats-breakdown" data-reveal>
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Threat Level Breakdown</span>
+            </div>
+            <div class="panel-body">
+              <div class="breakdown-row">
+                <div class="breakdown-label-row">
+                  <span class="breakdown-label">CRITICAL</span>
+                  <span class="breakdown-val" id="breakdown-val-critical">0</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill fill-critical" id="breakdown-bar-critical" style="width: 0%"></div>
+                </div>
+              </div>
+              
+              <hr>
+
+              <div class="breakdown-row">
+                <div class="breakdown-label-row">
+                  <span class="breakdown-label">HIGH</span>
+                  <span class="breakdown-val" id="breakdown-val-high">0</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill fill-high" id="breakdown-bar-high" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <hr>
+
+              <div class="breakdown-row">
+                <div class="breakdown-label-row">
+                  <span class="breakdown-label">MEDIUM</span>
+                  <span class="breakdown-val" id="breakdown-val-medium">0</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill fill-medium" id="breakdown-bar-medium" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <hr>
+
+              <div class="breakdown-row">
+                <div class="breakdown-label-row">
+                  <span class="breakdown-label">LOW</span>
+                  <span class="breakdown-val" id="breakdown-val-low">0</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill fill-low" id="breakdown-bar-low" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <hr>
+
+              <div class="breakdown-row">
+                <div class="breakdown-label-row">
+                  <span class="breakdown-label">OTHER</span>
+                  <span class="breakdown-val" id="breakdown-val-other">0</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill fill-other" id="breakdown-bar-other" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Demo Section -->
-    <section class="demo-section" id="demo">
-        <div class="section-header">
-            <div class="section-label">Interactive</div>
-            <h2>Live Security Demo</h2>
-            <p>Watch the WAF detect and block attack attempts in real-time</p>
-        </div>
-        <div class="demo-container reveal">
-            <!-- WAF Sandbox & Payload Tester -->
-            <div class="sandbox-card">
-                <div class="sandbox-header">
-                    <div class="sandbox-title">
-                        <h3>WAF Sandbox</h3>
-                        <p>Analyze custom payloads against the firewall rules</p>
-                    </div>
-                    <div class="live-indicator" style="background: rgba(0, 102, 255, 0.1); border-color: rgba(0, 102, 255, 0.2);">
-                        <div class="live-dot" style="background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan);"></div>
-                        <span class="live-text" style="color: var(--accent-cyan);">Tester</span>
-                    </div>
-                </div>
+    <!-- 4.7 PROTECTION LAYERS (RULES) -->
+    <section id="rules">
+      <span class="section-eyebrow">&gt; PROTECTION LAYERS</span>
+      <h2 class="section-title">Security Rule Engine</h2>
+      <p class="section-desc">
+        57 regex-based detection patterns across 5 attack categories, processed on every inbound request.
+      </p>
 
-                <div class="sandbox-input-wrapper">
-                    <textarea class="sandbox-input" id="textareaPayload" placeholder="Enter payload to inspect (e.g. SQL query, script tag, or normal text)..."></textarea>
-                </div>
-
-                <div>
-                    <div class="presets-label">Presets / Attack Templates</div>
-                    <div class="presets-grid">
-                        <button class="preset-btn" data-payload="SELECT * FROM users WHERE username = 'admin' OR '1'='1">SQL Injection</button>
-                        <button class="preset-btn" data-payload="<script>alert(window.origin)</script>">XSS Script</button>
-                        <button class="preset-btn" data-payload="../../../../etc/passwd">Path Traversal</button>
-                        <button class="preset-btn" data-payload="http://169.254.169.254/latest/meta-data/">SSRF Attempt</button>
-                        <button class="preset-btn" data-payload="; whoami; cat /etc/passwd">Command Inj</button>
-                        <button class="preset-btn" data-payload="Safe normal request with no special chars">Safe Request</button>
-                    </div>
-                </div>
-
-                <div class="sandbox-actions">
-                    <button class="btn btn-primary btn-analyze" id="btnAnalyze">
-                        <span id="btnText">Analyze Payload</span>
-                        <div class="loading" id="analyzeSpinner" style="display: none; width: 12px; height: 12px; border-width: 1.5px; margin-left: 0.5rem; vertical-align: middle;"></div>
-                    </button>
-                    <button class="btn btn-secondary btn-reset" id="btnReset">Reset</button>
-                </div>
-
-                <!-- Result panel -->
-                <div class="sandbox-result" id="testerResult">
-                    <div class="result-header">
-                        <div class="result-badge" id="resultBadge">Allowed</div>
-                        <div class="result-latency" id="resultLatency">0ms</div>
-                    </div>
-                    <div class="result-details">
-                        <div class="result-row">
-                            <span class="result-label">Status</span>
-                            <span class="result-value highlight-val" id="resultStatus">200 OK</span>
-                        </div>
-                        <div class="result-row">
-                            <span class="result-label">Request ID</span>
-                            <span class="result-value" id="resultRequestId">REQ-XXXXX</span>
-                        </div>
-                        <div class="result-row">
-                            <span class="result-label">WAF Decision</span>
-                            <span class="result-value" id="resultDecision">Passed</span>
-                        </div>
-                        <div class="result-row" id="resultRuleRow" style="display: none;">
-                            <span class="result-label">Rule Triggered</span>
-                            <span class="result-value" style="color: var(--danger);" id="resultRule">None</span>
-                        </div>
-                        <div class="result-row">
-                            <span class="result-label">WAF Headers</span>
-                            <span class="result-value" id="resultHeaders">--</span>
-                        </div>
-                    </div>
-                </div>
+      <div class="rules-grid">
+        <!-- SQLi Card -->
+        <div class="panel rule-card interactive" data-reveal>
+          <div class="panel-body">
+            <div class="rule-card-top">
+              <span class="rule-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 2" />
+                  <path d="M12 7v10M8 12h8" />
+                  <circle cx="12" cy="12" r="3" fill="var(--bg-panel)" />
+                </svg>
+              </span>
+              <span class="rule-card-title">SQL Injection</span>
             </div>
-
-            <!-- Security Console Terminal -->
-            <div class="terminal">
-                <div class="terminal-header">
-                    <div class="terminal-dot red"></div>
-                    <div class="terminal-dot yellow"></div>
-                    <div class="terminal-dot green"></div>
-                    <span class="terminal-title">outerloop-security-console</span>
-                </div>
-                <div class="terminal-body" id="terminalBody">
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">$</span>
-                        <span class="terminal-command">curl /api/health</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output success" id="healthOutput">Connecting...</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">$</span>
-                        <span class="terminal-command">curl "/api/secure/test?payload=normal_input"</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output success" id="safeOutput">Analyzing...</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">$</span>
-                        <span class="terminal-command">curl "/api/secure/test?payload=SELECT * FROM users"</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output error" id="sqlOutput">Scanning...</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">$</span>
-                        <span class="terminal-command">curl "/api/secure/test?payload=&lt;script&gt;alert(1)&lt;/script&gt;"</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output error" id="xssOutput">Analyzing...</span>
-                    </div>
-                </div>
+            <div class="rule-card-bottom">
+              <span class="rule-card-num">18</span>
+              <span class="badge badge-critical">CRITICAL</span>
             </div>
+          </div>
         </div>
+
+        <!-- XSS Card -->
+        <div class="panel rule-card interactive" data-reveal>
+          <div class="panel-body">
+            <div class="rule-card-top">
+              <span class="rule-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M10 8L6 12l4 4M14 8l4 4-4 4" />
+                  <line x1="13" y1="7" x2="11" y2="17" />
+                </svg>
+              </span>
+              <span class="rule-card-title">Cross-Site Scripting</span>
+            </div>
+            <div class="rule-card-bottom">
+              <span class="rule-card-num">14</span>
+              <span class="badge badge-high">HIGH</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Path Traversal Card -->
+        <div class="panel rule-card interactive" data-reveal>
+          <div class="panel-body">
+            <div class="rule-card-top">
+              <span class="rule-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2-2H5a2 2 0 0 0-2 2z" />
+                  <path d="M8 14h8M12 10l-4 4 4 4" />
+                </svg>
+              </span>
+              <span class="rule-card-title">Path Traversal</span>
+            </div>
+            <div class="rule-card-bottom">
+              <span class="rule-card-num">9</span>
+              <span class="badge badge-high">HIGH</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Command Injection Card -->
+        <div class="panel rule-card interactive" data-reveal>
+          <div class="panel-body">
+            <div class="rule-card-top">
+              <span class="rule-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M4 17l6-5-6-5M12 16h8" />
+                </svg>
+              </span>
+              <span class="rule-card-title">Command Injection</span>
+            </div>
+            <div class="rule-card-bottom">
+              <span class="rule-card-num">9</span>
+              <span class="badge badge-critical">CRITICAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SSRF Card -->
+        <div class="panel rule-card interactive" data-reveal>
+          <div class="panel-body">
+            <div class="rule-card-top">
+              <span class="rule-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="2" />
+                  <circle cx="5" cy="19" r="2" />
+                  <circle cx="19" cy="19" r="2" />
+                  <path d="M5 17l6-10M19 17l-6-10" />
+                </svg>
+              </span>
+              <span class="rule-card-title">SSRF / Pollution</span>
+            </div>
+            <div class="rule-card-bottom">
+              <span class="rule-card-num">7</span>
+              <span class="badge badge-high">HIGH</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header Validation Card -->
+        <div class="panel rule-card interactive" data-reveal>
+          <div class="panel-body">
+            <div class="rule-card-top">
+              <span class="rule-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M12 3v18M3 12h18" />
+                  <rect x="5" y="5" width="14" height="14" rx="1" />
+                </svg>
+              </span>
+              <span class="rule-card-title">Header Validation</span>
+            </div>
+            <div class="rule-card-bottom">
+              <span class="rule-card-num">Runtime</span>
+              <span class="badge badge-medium">MEDIUM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expandable Rule Details -->
+      <div id="rules-details-trigger" class="admin-trigger" onclick="toggleRulesTable()" data-reveal>
+        <span>[+] SHOW INDIVIDUAL DETECTION PATTERNS</span>
+        <span id="rules-expand-indicator">Expand ▼</span>
+      </div>
+
+      <div class="rules-table-container" id="rules-table-wrapper">
+        <div id="rules-table-placeholder" class="admin-req-msg">
+          [Admin key required to view rule details. Configure key in admin section below.]
+        </div>
+        <div class="rules-table-scroll" id="rules-table-data" style="display: none;">
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Rule Name</th>
+                <th>Threat Level</th>
+                <th>Pattern regex</th>
+              </tr>
+            </thead>
+            <tbody id="rules-table-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
-    <!-- Architecture Section -->
-    <section class="architecture" id="architecture">
-        <div class="section-header">
-            <div class="section-label">System Design</div>
-            <h2>Architecture</h2>
-            <p>Request flow through the security middleware pipeline</p>
+    <!-- 4.8 ARCHITECTURE SECTION -->
+    <section id="architecture">
+      <span class="section-eyebrow">&gt; HOW IT WORKS</span>
+      <h2 class="section-title">Request Inspection Pipeline</h2>
+      <p class="section-desc">
+        High-performance proxy filter that acts as the front gateway to FastAPI routes.
+      </p>
+
+      <div class="panel arch-panel" data-reveal>
+        <div class="arch-svg-container">
+          <svg viewBox="0 0 700 520" class="arch-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:auto;">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#5A5A6A"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#00D26A"/>
+              </marker>
+              <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF453A"/>
+              </marker>
+            </defs>
+
+            <!-- INCOMING REQUEST -->
+            <text x="350" y="35" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" letter-spacing="1">INCOMING HTTP REQUEST</text>
+            <line x1="350" y1="45" x2="350" y2="80" stroke="#5A5A6A" stroke-dasharray="2 2" marker-end="url(#arrow)" />
+
+            <!-- WAF MIDDLEWARE -->
+            <rect x="230" y="80" width="240" height="90" rx="6" fill="#0F0F13" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
+            <text x="350" y="105" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#EBEBF5">WAF MIDDLEWARE</text>
+            <text x="260" y="130" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● rate_limiter</text>
+            <text x="260" y="150" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● ip_blocklist</text>
+            <text x="380" y="130" font-family="var(--font-mono)" font-size="10" fill="#5A5A6A" class="meta">[Rate limits / IP checks]</text>
+
+            <line x1="350" y1="170" x2="350" y2="205" stroke="#5A5A6A" stroke-width="1.2" marker-end="url(#arrow)" />
+
+            <!-- WAF ENGINE -->
+            <rect x="230" y="205" width="240" height="95" rx="6" fill="#0F0F13" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
+            <text x="350" y="230" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#EBEBF5">WAF ENGINE</text>
+            <text x="260" y="255" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● analyze()</text>
+            <text x="260" y="275" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● rule_pipeline</text>
+            <text x="380" y="255" font-family="var(--font-mono)" font-size="10" fill="#5A5A6A" class="meta">[Multi-pass decoder]</text>
+
+            <!-- SPLIT DECISION -->
+            <!-- Block Arrow (Left) -->
+            <path d="M 310 300 C 310 330, 190 330, 190 355" stroke="#FF453A" stroke-width="1.2" fill="none" marker-end="url(#arrow-red)" />
+            <text x="210" y="325" font-family="var(--font-mono)" font-size="10" fill="#FF453A">Blocked (403)</text>
+
+            <!-- Pass Arrow (Right) -->
+            <path d="M 390 300 C 390 330, 510 330, 510 355" stroke="#00D26A" stroke-width="1.2" fill="none" marker-end="url(#arrow-green)" />
+            <text x="495" y="325" font-family="var(--font-mono)" font-size="10" fill="#00D26A">Passed (200)</text>
+
+            <!-- BLOCK PANEL -->
+            <rect x="100" y="360" width="180" height="100" rx="6" fill="#0F0F13" stroke="rgba(255, 69, 58, 0.15)" stroke-width="1.5" />
+            <text x="190" y="385" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#FF453A">BLOCK ROUTE</text>
+            <text x="120" y="415" font-family="var(--font-mono)" font-size="10" fill="#9898A8">HTTP 403 Forbidden</text>
+            <text x="120" y="435" font-family="var(--font-mono)" font-size="10" fill="#9898A8">Log to threat stream</text>
+
+            <!-- PASS PANEL -->
+            <rect x="420" y="360" width="180" height="100" rx="6" fill="#0F0F13" stroke="rgba(0, 210, 106, 0.15)" stroke-width="1.5" />
+            <text x="510" y="385" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#00D26A">FORWARD ROUTE</text>
+            <text x="440" y="415" font-family="var(--font-mono)" font-size="10" fill="#9898A8">Accept request</text>
+            <text x="440" y="435" font-family="var(--font-mono)" font-size="10" fill="#9898A8">Invoke FastAPI controller</text>
+          </svg>
         </div>
-        <div class="arch-diagram reveal">
-            <div class="arch-flow">
-                <div class="arch-node request">Incoming Request</div>
-                <div class="arch-arrow">→</div>
-                <div class="arch-node waf">OUTERLOOP Middleware</div>
-                <div class="arch-arrow">→</div>
-                <div class="arch-node engine">Analysis Engine</div>
-                <div class="arch-arrow">→</div>
-                <div class="arch-node decision">Allow / Block</div>
-            </div>
+
+        <div class="arch-callout-grid">
+          <div class="arch-callout-card">
+            <h4 class="arch-callout-title">REQUEST_ID</h4>
+            <p class="arch-callout-desc">Every request gets a unique REQ-YYYYMMDD-NNNNNN identifier for traceability.</p>
+          </div>
+          <div class="arch-callout-card">
+            <h4 class="arch-callout-title">MULTI-DECODE</h4>
+            <p class="arch-callout-desc">3-pass URL decoding catches base64, hex, and double-encoded obfuscation evasion techniques.</p>
+          </div>
+          <div class="arch-callout-card">
+            <h4 class="arch-callout-title">SSE_EVENTS</h4>
+            <p class="arch-callout-desc">Blocked requests emit real-time events immediately to all connected monitoring dashboard clients.</p>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="/api/health">Health Check</a>
-                <a href="/api/docs" target="_blank">API Documentation</a>
-                <a href="/api/gravity">System Status</a>
-                <a href="https://github.com/obstinix/Web-Application-Firewall-WAF-" target="_blank">Source Code</a>
-            </div>
-            <div class="footer-copy">
-                OUTERLOOP WAF | Perimeter-Grade Web Attack Protection
-            </div>
+    <!-- 4.9 ADMIN PANEL -->
+    <section id="admin">
+      <div id="admin-panel-trigger" class="admin-trigger" onclick="toggleAdminPanel()" data-reveal>
+        <span>[⚙] WAF ADMIN CONTROL CENTER</span>
+        <span id="admin-expand-indicator">Expand ▼</span>
+      </div>
+
+      <div class="admin-content" id="admin-content-wrapper">
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="admin-key-field">X-Admin-Key configuration</label>
+          <div class="key-input-row">
+            <input type="password" id="admin-key-field" class="text-input" placeholder="Enter WAF_ADMIN_KEY...">
+            <button class="btn-toggle-key" onclick="toggleKeyVisibility()" type="button">Show</button>
+            <button class="btn btn-primary" onclick="saveAdminKey()" style="padding: 8px 16px;">[Set Key]</button>
+          </div>
+          <div id="key-status-msg" class="admin-key-status text-amber">No admin key configured in browser local storage.</div>
         </div>
+
+        <div class="admin-controls-grid" id="admin-operations-panel" style="opacity: 0.4; pointer-events: none;">
+          <div>
+            <h3 class="admin-subpanel-title">System Commands</h3>
+            
+            <div class="admin-action-row">
+              <button class="btn btn-secondary" onclick="fetchAdminStats()">[waf admin stats]</button>
+              <button class="btn btn-secondary" onclick="fetchAdminBlocklist()">[waf blocklist show]</button>
+            </div>
+
+            <div class="admin-output-pane" id="admin-output-log">$ system ready. execute query.</div>
+          </div>
+
+          <div>
+            <h3 class="admin-subpanel-title">Perimeter Security Controls</h3>
+            
+            <div style="margin-bottom: 2rem;">
+              <h4 class="admin-form-label">Block Host IP Address</h4>
+              <div class="ip-block-form">
+                <input type="text" id="block-ip-addr" class="text-input" placeholder="IP Address (e.g. 192.168.1.100)">
+                <input type="text" id="block-ip-reason" class="text-input" placeholder="Reason (e.g. Rate limit burst)">
+                <button class="btn btn-primary" onclick="submitBlockIP()" style="align-self: flex-start;">[Block IP]</button>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="admin-form-label">Active Blocklist</h4>
+              <div style="max-height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: 4px;">
+                <table class="blocklist-table">
+                  <thead>
+                    <tr>
+                      <th>IP</th>
+                      <th>Reason</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="blocklist-table-body">
+                    <tr>
+                      <td colspan="3" style="text-align: center; color: var(--text-3);">No blocked IPs</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4.10 FOOTER -->
+    <footer data-reveal>
+      <div class="footer-grid">
+        <div class="footer-left">
+          <span class="footer-logo">[OUTLOOP WAF]</span>
+          <span>MIT License &copy; 2026 obstinix</span>
+          <span>FastAPI + Python engine. Deployed on Vercel infrastructure.</span>
+        </div>
+        <div class="footer-right">
+          <div class="footer-col">
+            <span class="footer-col-title">Documentation</span>
+            <a href="/api/docs" target="_blank">Swagger OpenAPI</a>
+            <a href="/api/redoc" target="_blank">ReDoc</a>
+          </div>
+          <div class="footer-col">
+            <span class="footer-col-title">Endpoints</span>
+            <a href="/api/health" target="_blank">/api/health</a>
+            <a href="/api/metrics" target="_blank">/api/metrics</a>
+            <a href="/api/ready" target="_blank">/api/ready</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Build: <span class="text-green" id="footer-build">terminal-ui-v2</span></span>
+        <span>Version: <span class="text-green" id="footer-ver">v1.0.0</span></span>
+      </div>
     </footer>
 
-    <script>
-        // Three.js Scene Setup
-        let scene, camera, renderer, globe, particles;
-        let mouseX = 0, mouseY = 0;
-        let targetRotationX = 0, targetRotationY = 0;
-        let floatingShapes = [];
+  </div>
+
+  <!-- 4.11 STATUS BAR -->
+  <div id="status-bar">
+    <span class="sb-left">[OUTLOOP WAF v1.0.0] &nbsp;<span class="sb-active-dot"></span>&nbsp; ACTIVE</span>
+    <span class="sb-center">REQ: <span id="sb-req">00000</span> &nbsp;│&nbsp; BLOCKED: <span id="sb-blocked">00000</span> &nbsp;│&nbsp; RULES: <span id="sb-rules">57</span></span>
+    <span class="sb-right" id="sb-time">00:00:00 UTC</span>
+  </div>
+
+  <!-- ── JAVASCRIPT ARCHITECTURE ──────────────────────────────────── -->
+  <script>
+    // Global State & Cache
+    const WAF_STATE = {
+      requestsAnalyzed: 0,
+      blockedRequests: 0,
+      blockedIps: 0,
+      rulesCount: 57,
+      rulesByLevel: { critical: 0, high: 0, medium: 0, low: 0 },
+      isWafHealthy: true,
+      lastFetchTime: 0
+    };
+
+    // Helper: Headers with CORS identifier
+    const apiHeaders = () => {
+      const headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      };
+      const key = localStorage.getItem('waf_admin_key');
+      if (key) {
+        headers['X-Admin-Key'] = key;
+      }
+      return headers;
+    };
+
+    // ── BOOT SEQUENCE ─────────────────────────────────────────────────
+    (function() {
+      const bootLines = [
+        { text: "Initializing WAF engine...", wait: 200, status: "OK" },
+        { text: "Loading security rule set (57)...", wait: 350, status: "OK" },
+        { text: "Connecting to threat database...", wait: 250, status: "OK" },
+        { text: "Mounting middleware stack...", wait: 300, status: "OK" },
+        { text: "Starting SSE event bus...", wait: 400, status: "OK" },
+        { text: "System ready. Perimeter active.", wait: 150, status: "" }
+      ];
+
+      const container = document.getElementById("boot-lines");
+      let lineIndex = 0;
+
+      function printBootLine() {
+        if (lineIndex < bootLines.length) {
+          const item = bootLines[lineIndex];
+          const row = document.createElement("div");
+          row.className = "boot-line";
+          
+          const label = document.createElement("span");
+          label.textContent = item.text;
+          row.appendChild(label);
+
+          if (item.status) {
+            const statusSpan = document.createElement("span");
+            statusSpan.className = "text-green";
+            statusSpan.textContent = `[${item.status}]`;
+            row.appendChild(statusSpan);
+          }
+
+          container.appendChild(row);
+          
+          gsap.to(row, { opacity: 1, y: 0, duration: 0.3 });
+          lineIndex++;
+          setTimeout(printBootLine, item.wait + 80);
+        } else {
+          // Finished. Fade out loading overlay
+          setTimeout(() => {
+            gsap.to("#boot-loader", {
+              opacity: 0,
+              duration: 0.5,
+              onComplete: () => {
+                document.getElementById("boot-loader").style.display = "none";
+                initAfterBoot();
+              }
+            });
+          }, 450);
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(printBootLine, 100);
+      });
+    })();
+
+    // ── NAVIGATION ────────────────────────────────────────────────────
+    const header = document.getElementById("main-header");
+    const menuToggle = document.getElementById("menu-toggle-btn");
+    const mobileOverlay = document.getElementById("mobile-nav-overlay");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 60) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+
+    menuToggle.addEventListener("click", () => {
+      const active = mobileOverlay.classList.toggle("active");
+      menuToggle.textContent = active ? "[X]" : "[≡]";
+    });
+
+    function toggleMobileMenu() {
+      mobileOverlay.classList.remove("active");
+      menuToggle.textContent = "[≡]";
+    }
+
+    // ── STATUS BAR ────────────────────────────────────────────────────
+    (function() {
+      // UTC Clock
+      setInterval(() => {
+        const now = new Date();
+        const hrs = String(now.getUTCHours()).padStart(2, '0');
+        const mins = String(now.getUTCMinutes()).padStart(2, '0');
+        const secs = String(now.getUTCSeconds()).padStart(2, '0');
+        document.getElementById("sb-time").textContent = `${hrs}:${mins}:${secs} UTC`;
+      }, 1000);
+
+      // Periodic health sync (every 15s)
+      setInterval(syncSystemStats, 15000);
+    })();
+
+    // ── HERO TERMINAL ─────────────────────────────────────────────────
+    (function() {
+      const outputEl = document.getElementById("hero-output");
+      const commandEl = document.getElementById("hero-command");
+      const statusDot = document.getElementById("hero-status-dot");
+
+      window.typewriteCommand = function(cmdText, callback) {
+        commandEl.innerHTML = "";
+        let charIndex = 0;
+        const cursor = document.createElement("span");
+        cursor.className = "cursor";
+        commandEl.appendChild(cursor);
+
+        const typing = setInterval(() => {
+          if (charIndex < cmdText.length) {
+            cursor.before(cmdText[charIndex]);
+            charIndex++;
+          } else {
+            clearInterval(typing);
+            if (callback) callback();
+          }
+        }, 45);
+      };
+
+      window.updateHeroTerminal = function(stats) {
+        const uptimeStr = formatUptime(stats.uptime_seconds || 0);
+        outputEl.innerHTML = `root@outloop-waf:~$ waf status
+● WAF Engine       <span class="text-green">${stats.status || 'operational'}</span>
+● Redis Backend    <span class="text-green">[connected / ${stats.backend || 'memory'}]</span>
+● Total Rules      ${stats.total_rules || 57}
+● Uptime           ${uptimeStr}
+● Requests         ${(stats.requests_analyzed || 0).toLocaleString()}
+● Blocked          ${(stats.blocked_requests || 0).toLocaleString()}
+
+root@outloop-waf:~$ <span class="cursor"></span>`;
+        statusDot.className = "status-dot";
+      };
+
+      window.showHeroTerminalError = function(err) {
+        outputEl.innerHTML = `root@outloop-waf:~$ waf status
+<span class="text-amber">[ERROR] Could not reach WAF engine: ${err.message || 'connection failed'}</span>
+
+root@outloop-waf:~$ <span class="cursor"></span>`;
+        statusDot.className = "status-dot warn";
+      };
+
+      function formatUptime(sec) {
+        const h = Math.floor(sec / 3600);
+        const m = Math.floor((sec % 3600) / 60);
+        const s = Math.floor(sec % 60);
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+    })();
+
+    // ── STATS BAR ─────────────────────────────────────────────────────
+    (function() {
+      window.refreshStatsBar = function(stats, previousStats) {
+        const reqVal = document.getElementById("stat-req-val");
+        const blockedVal = document.getElementById("stat-blocked-val");
+        const rulesVal = document.getElementById("stat-rules-val");
+        const ipsVal = document.getElementById("stat-ips-val");
+
+        // Simple check if ScrollTrigger has fired yet, or do incremental update
+        animateCounter(reqVal, stats.requests_analyzed || 0);
+        animateCounter(blockedVal, stats.blocked_requests || 0);
+        animateCounter(ipsVal, stats.blocked_ips || 0);
+        rulesVal.textContent = stats.total_rules || 57;
+
+        // Calculate delta
+        if (previousStats) {
+          const reqDiff = (stats.requests_analyzed || 0) - (previousStats.requests_analyzed || 0);
+          const blockedDiff = (stats.blocked_requests || 0) - (previousStats.blocked_requests || 0);
+          const ipsDiff = (stats.blocked_ips || 0) - (previousStats.blocked_ips || 0);
+
+          updateDeltaLabel("stat-req-delta", reqDiff);
+          updateDeltaLabel("stat-blocked-delta", blockedDiff);
+          updateDeltaLabel("stat-ips-delta", ipsDiff);
+        } else {
+          document.getElementById("stat-req-delta").textContent = "+0 / last 15s";
+          document.getElementById("stat-blocked-delta").textContent = "+0 / last 15s";
+          document.getElementById("stat-ips-delta").textContent = "+0 / last 15s";
+        }
+      };
+
+      function updateDeltaLabel(elId, diff) {
+        const el = document.getElementById(elId);
+        if (diff > 0) {
+          el.textContent = `+${diff} / last 15s`;
+          el.classList.add("active-delta");
+        } else {
+          el.textContent = `+0 / last 15s`;
+          el.classList.remove("active-delta");
+        }
+      }
+
+      function animateCounter(el, target) {
+        const startVal = parseInt(el.textContent.replace(/,/g, '')) || 0;
+        if (startVal === target) return;
+
+        gsap.fromTo({ val: startVal }, {
+          val: target,
+          duration: 1.2,
+          ease: 'power2.out',
+          onUpdate: function() {
+            el.textContent = Math.round(this.targets()[0].val).toLocaleString();
+          }
+        });
+      }
+    })();
+
+    // ── WAF SANDBOX ───────────────────────────────────────────────────
+    const sandboxInput = document.getElementById("sandbox-input");
+    const resultWrapper = document.getElementById("sandbox-result-wrapper");
+    const resultBox = document.getElementById("sandbox-result-box");
+    const resultHeader = document.getElementById("sandbox-result-header");
+    const resultContent = document.getElementById("sandbox-result-content");
+
+    const payloads = {
+      sqli: "'; DROP TABLE users; --",
+      xss: "<script>alert(document.cookie)</script>",
+      path: "../../etc/passwd",
+      cmd: "; cat /etc/shadow",
+      clean: "Hello, this is a legitimate message.",
+      custom: ""
+    };
+
+    function loadPayload(key) {
+      const text = payloads[key];
+      sandboxInput.value = text;
+      autoExpandTextarea(sandboxInput);
+      sandboxInput.focus();
+
+      if (key !== 'custom') {
+        submitSandbox();
+      }
+    }
+
+    function autoExpandTextarea(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    async function submitSandbox() {
+      const text = sandboxInput.value;
+      if (!text.trim()) return;
+
+      try {
+        const response = await fetch(`/api/secure/test?payload=${encodeURIComponent(text)}`, {
+          method: 'GET',
+          headers: apiHeaders()
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+          showSandboxResult(true, data);
+        } else if (response.status === 403) {
+          showSandboxResult(false, data);
+        } else {
+          throw new Error(data.detail || 'Inspection failed');
+        }
+      } catch (err) {
+        showSandboxError(err.message);
+      }
+    }
+
+    function showSandboxResult(passed, data) {
+      resultWrapper.style.display = 'block';
+      
+      if (passed) {
+        resultBox.className = "result-box passed";
+        resultHeader.innerHTML = `✓  REQUEST PASSED WAF INSPECTION`;
+        resultContent.innerHTML = `
+<div class="result-detail-line"><span class="result-detail-label">Request ID</span><span class="result-detail-val">${data.waf_request_id || 'REQ-UNKNOWN'}</span></div>
+<div class="result-detail-line"><span class="result-detail-label">Status</span><span class="result-detail-val text-green">CLEAN</span></div>
+<div class="result-detail-line"><span class="result-detail-label">Payload</span><span class="result-detail-val">${escapeHtml(data.received_payload || sandboxInput.value)}</span></div>
+        `;
+      } else {
+        resultBox.className = "result-box blocked";
+        resultHeader.innerHTML = `✗  REQUEST BLOCKED BY WAF`;
         
-        // References for dynamic theme switching
-        let globeMaterial, innerMaterial, ringMaterial, pointsMaterial, shapesMaterial;
-
-        function initThreeJS() {
-            const container = document.getElementById('globe-canvas');
-            const bgCanvas = document.getElementById('bg-canvas');
-            
-            // Main scene for background particles
-            scene = new THREE.Scene();
-            
-            // Camera
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
-            
-            // Background renderer
-            renderer = new THREE.WebGLRenderer({ 
-                canvas: bgCanvas, 
-                alpha: true, 
-                antialias: true 
-            });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            
-            // Create floating low-poly shapes
-            createFloatingShapes();
-            
-            // Create globe in separate container
-            createGlobe(container);
-            
-            // Mouse movement listener
-            document.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('resize', onWindowResize);
-            
-            animate();
+        let violationsHtml = '';
+        if (data.violations && data.violations.length > 0) {
+          violationsHtml = `
+            <div class="violation-card">
+              ${data.violations.map(v => `
+                <div class="violation-item">
+                  <div class="violation-title-row">
+                    <span class="violation-id">${escapeHtml(v.rule_id)}</span>
+                    <span class="violation-name">${escapeHtml(v.rule_name)}</span>
+                    <span class="badge ${getLevelBadgeClass(v.threat_level)}">${escapeHtml(v.threat_level)}</span>
+                  </div>
+                  <div class="violation-match">Matched: "${escapeHtml(v.matched_content)}"</div>
+                </div>
+              `).join('')}
+            </div>
+          `;
         }
 
-        function createFloatingShapes() {
-            const geometries = [
-                new THREE.TetrahedronGeometry(0.1),
-                new THREE.OctahedronGeometry(0.08),
-                new THREE.IcosahedronGeometry(0.06)
-            ];
-            
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x00ff66,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.08
-            });
-            shapesMaterial = material;
-            
-            for (let i = 0; i < 30; i++) {
-                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
-                const shape = new THREE.Mesh(geometry, material.clone());
-                
-                shape.position.set(
-                    (Math.random() - 0.5) * 10,
-                    (Math.random() - 0.5) * 10,
-                    (Math.random() - 0.5) * 5 - 2
-                );
-                
-                shape.userData = {
-                    originalPosition: shape.position.clone(),
-                    rotationSpeed: {
-                        x: (Math.random() - 0.5) * 0.005,
-                        y: (Math.random() - 0.5) * 0.005
-                    },
-                    floatSpeed: 0.0005 + Math.random() * 0.001,
-                    floatOffset: Math.random() * Math.PI * 2
-                };
-                
-                scene.add(shape);
-                floatingShapes.push(shape);
-            }
+        const threatLevel = data.violations && data.violations.length > 0
+          ? data.violations[0].threat_level.toUpperCase() 
+          : 'CRITICAL';
+
+        resultContent.innerHTML = `
+<div class="result-detail-line"><span class="result-detail-label">Request ID</span><span class="result-detail-val">${data.request_id || 'REQ-UNKNOWN'}</span></div>
+<div class="result-detail-line"><span class="result-detail-label">Threat Level</span><span class="result-detail-val text-red">${threatLevel}</span></div>
+<div class="result-detail-line"><span class="result-detail-label">Violations</span><span class="result-detail-val">${data.violations ? data.violations.length : 1} rule(s) triggered</span></div>
+${violationsHtml}
+        `;
+      }
+
+      gsap.fromTo(resultBox, 
+        { opacity: 0, y: 8 }, 
+        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
+      );
+    }
+
+    function showSandboxError(message) {
+      resultWrapper.style.display = 'block';
+      resultBox.className = "result-box blocked";
+      resultHeader.innerHTML = `[ERROR] WAF inspection error`;
+      resultHeader.style.color = "var(--amber)";
+      resultHeader.style.backgroundColor = "rgba(245, 166, 35, 0.05)";
+      resultContent.innerHTML = `<span class="text-amber">[ERROR] WAF endpoint unreachable. Is the server running? (${message})</span>`;
+      
+      gsap.fromTo(resultBox, 
+        { opacity: 0, y: 8 }, 
+        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
+      );
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getLevelBadgeClass(lvl) {
+      lvl = lvl ? lvl.toLowerCase() : '';
+      if (lvl === 'critical') return 'badge-critical';
+      if (lvl === 'high') return 'badge-high';
+      if (lvl === 'medium') return 'badge-medium';
+      return 'badge-low';
+    }
+
+    // ── THREAT STREAM (SSE) ───────────────────────────────────────────
+    (function() {
+      const feedContainer = document.getElementById("threat-feed-container");
+      let es = null;
+      let reconnectDelay = 1000;
+      let lastEventTime = Date.now();
+      let streamCheckInterval = null;
+
+      function connectThreatStream() {
+        if (es) {
+          es.close();
         }
 
-        function createGlobe(container) {
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            const globeScene = new THREE.Scene();
-            const globeCamera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-            globeCamera.position.z = 2.5;
-            
-            const globeRenderer = new THREE.WebGLRenderer({
-                canvas: container,
-                alpha: true,
-                antialias: true
-            });
-            globeRenderer.setSize(width, height);
-            globeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            
-            // Create wireframe sphere (globe)
-            const sphereGeometry = new THREE.IcosahedronGeometry(1, 2);
-            const sphereMaterial = new THREE.MeshBasicMaterial({
-                color: 0x00ff66,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.3
-            });
-            globeMaterial = sphereMaterial;
-            globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            globeScene.add(globe);
-            
-            // Inner glow sphere
-            const innerGeometry = new THREE.IcosahedronGeometry(0.95, 1);
-            const innerGlobeMaterial = new THREE.MeshBasicMaterial({
-                color: 0x0a1a10,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.2
-            });
-            innerMaterial = innerGlobeMaterial;
-            const innerGlobe = new THREE.Mesh(innerGeometry, innerGlobeMaterial);
-            globe.add(innerGlobe);
-            
-            // Outer ring
-            const ringGeometry = new THREE.RingGeometry(1.3, 1.35, 64);
-            const ringMaterialObj = new THREE.MeshBasicMaterial({
-                color: 0x00ff66,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.2
-            });
-            ringMaterial = ringMaterialObj;
-            const ring = new THREE.Mesh(ringGeometry, ringMaterialObj);
-            ring.rotation.x = Math.PI / 2;
-            globe.add(ring);
-            
-            // Points on globe surface
-            const pointsGeometry = new THREE.BufferGeometry();
-            const pointsCount = 100;
-            const positions = new Float32Array(pointsCount * 3);
-            
-            for (let i = 0; i < pointsCount; i++) {
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
-                const radius = 1;
-                
-                positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-                positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                positions[i * 3 + 2] = radius * Math.cos(phi);
-            }
-            
-            pointsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const pointsMaterialObj = new THREE.PointsMaterial({
-                color: 0x00ff66,
-                size: 0.03,
-                transparent: true,
-                opacity: 0.8
-            });
-            pointsMaterial = pointsMaterialObj;
-            const points = new THREE.Points(pointsGeometry, pointsMaterial);
-            globe.add(points);
-            
-            // Attack arcs system
-            const attackArcs = [];
-            const attackColors = {
-                void: [0x00fff0, 0x38bdf8, 0xff4444],
-                nebula: [0xc77dff, 0xe0aaff, 0xff5c8a],
-                solar: [0xd97706, 0xf59e0b, 0xdc2626],
-                aurora: [0x34d399, 0x6ee7b7, 0xff3366]
-            };
-            
-            function createAttackArc() {
-                // Random start and end points on sphere
-                const startTheta = Math.random() * Math.PI * 2;
-                const startPhi = Math.acos(2 * Math.random() - 1);
-                const endTheta = Math.random() * Math.PI * 2;
-                const endPhi = Math.acos(2 * Math.random() - 1);
-                
-                const start = new THREE.Vector3(
-                    Math.sin(startPhi) * Math.cos(startTheta),
-                    Math.sin(startPhi) * Math.sin(startTheta),
-                    Math.cos(startPhi)
-                );
-                const end = new THREE.Vector3(
-                    Math.sin(endPhi) * Math.cos(endTheta),
-                    Math.sin(endPhi) * Math.sin(endTheta),
-                    Math.cos(endPhi)
-                );
-                
-                // Create arc curve with height
-                const mid = start.clone().add(end).multiplyScalar(0.5);
-                mid.normalize().multiplyScalar(1.5);
-                
-                const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-                const arcGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(30));
-                
-                const currentTheme = localStorage.getItem('waf-theme') || 'void';
-                const colors = attackColors[currentTheme] || attackColors.void;
-                const arcColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                const arcMaterial = new THREE.LineBasicMaterial({
-                    color: arcColor,
-                    transparent: true,
-                    opacity: 0.8
-                });
-                const arc = new THREE.Line(arcGeometry, arcMaterial);
-                
-                arc.userData = {
-                    progress: 0,
-                    speed: 0.01 + Math.random() * 0.02,
-                    curve: curve
-                };
-                
-                globe.add(arc);
-                attackArcs.push(arc);
-                
-                // Remove arc after animation
-                setTimeout(() => {
-                    globe.remove(arc);
-                    const idx = attackArcs.indexOf(arc);
-                    if (idx > -1) attackArcs.splice(idx, 1);
-                }, 3000);
-            }
-            
-            // Create attack arcs periodically
-            setInterval(createAttackArc, 800);
-            
-            // Animation for globe
-            function animateGlobe() {
-                requestAnimationFrame(animateGlobe);
-                
-                // Slow rotation
-                globe.rotation.y += 0.002;
-                
-                // Mouse interaction
-                globe.rotation.x += (targetRotationX - globe.rotation.x) * 0.05;
-                
-                // Ring animation
-                ring.rotation.z += 0.001;
-                
-                globeRenderer.render(globeScene, globeCamera);
-            }
-            
-            animateGlobe();
-            
-            // Handle resize for globe
-            window.addEventListener('resize', () => {
-                const newWidth = container.clientWidth;
-                const newHeight = container.clientHeight;
-                globeCamera.aspect = newWidth / newHeight;
-                globeCamera.updateProjectionMatrix();
-                globeRenderer.setSize(newWidth, newHeight);
-            });
-        }
+        es = new EventSource('/api/events/threats');
 
-        function onMouseMove(event) {
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-            
-            targetRotationX = mouseY * 0.3;
-            targetRotationY = mouseX * 0.3;
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            const time = Date.now() * 0.001;
-            
-            // Animate floating shapes with parallax
-            floatingShapes.forEach((shape, index) => {
-                // Slow floating motion
-                shape.position.y = shape.userData.originalPosition.y + 
-                    Math.sin(time * shape.userData.floatSpeed * 1000 + shape.userData.floatOffset) * 0.3;
-                
-                // Rotation
-                shape.rotation.x += shape.userData.rotationSpeed.x;
-                shape.rotation.y += shape.userData.rotationSpeed.y;
-                
-                // Parallax effect
-                shape.position.x = shape.userData.originalPosition.x + mouseX * 0.1 * (index % 3 + 1);
-                shape.position.z = shape.userData.originalPosition.z + mouseY * 0.05;
-            });
-            
-            renderer.render(scene, camera);
-        }
-
-        // Card tilt effect
-        function initCardTilt() {
-            const cards = document.querySelectorAll('.feature-card, .stat-card');
-            
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-                });
-            });
-        }
-
-        // Fetch gravity status
-        async function fetchGravityStatus() {
-            try {
-                const response = await fetch('/api/gravity');
-                const data = await response.json();
-                
-                const isAntigravity = data.status && data.status.includes('disabled');
-                
-                const statusEl = document.getElementById('gravityStatus');
-                statusEl.textContent = data.status || 'Unknown';
-                statusEl.className = `gravity-value ${isAntigravity ? 'antigravity' : 'normal'}`;
-                
-                document.getElementById('gravityUnit').textContent = 
-                    `${data.gravity_constant || '--'} ${data.unit || 'm/s²'}`;
-                document.getElementById('gravityConstant').textContent = 
-                    `${data.gravity_constant || '--'} ${data.unit || ''}`;
-                document.getElementById('gravitySource').textContent = data.source || 'System';
-                document.getElementById('gravityTimestamp').textContent = 
-                    data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '--';
-                
-                const specialMsg = document.getElementById('specialMessage');
-                if (data.message) {
-                    specialMsg.textContent = data.message;
-                    specialMsg.className = 'special-message visible';
-                } else {
-                    specialMsg.className = 'special-message';
-                }
-            } catch (error) {
-                document.getElementById('gravityStatus').textContent = 'Connection Error';
-            }
-        }
-
-        // Fetch demo data
-        async function fetchDemoData() {
-            try {
-                // Health check
-                const healthRes = await fetch('/api/health');
-                const healthData = await healthRes.json();
-                document.getElementById('healthOutput').textContent = 
-                    `[200 OK] ${JSON.stringify(healthData)}`;
-                
-                // Safe request
-                const safeRes = await fetch('/api/secure/test?payload=normal_input');
-                const safeData = await safeRes.json();
-                document.getElementById('safeOutput').textContent = 
-                    `[200 OK] PASSED - ${JSON.stringify(safeData)}`;
-                
-                // SQL injection
-                const sqlRes = await fetch('/api/secure/test?payload=' + encodeURIComponent("SELECT * FROM users"));
-                const sqlData = await sqlRes.json();
-                document.getElementById('sqlOutput').textContent = 
-                    `[403 BLOCKED] SQL Injection Detected - ${JSON.stringify(sqlData)}`;
-                
-                // XSS
-                const xssRes = await fetch('/api/secure/test?payload=' + encodeURIComponent('<script>alert(1)</s' + 'cript>'));
-                const xssData = await xssRes.json();
-                document.getElementById('xssOutput').textContent = 
-                    `[403 BLOCKED] XSS Attack Detected - ${JSON.stringify(xssData)}`;
-                    
-            } catch (error) {
-                console.error('Demo fetch error:', error);
-            }
-        }
-
-        // Generate request ID
-        function generateRequestId() {
-            const id = 'REQ-' + Date.now().toString(36).toUpperCase();
-            document.getElementById('requestId').textContent = id;
-        }
-
-        // Refresh live stats from the detailed health endpoint
-        async function refreshStats() {
-            try {
-                const res = await fetch('/api/health/detailed');
-                if (!res.ok) return;
-                const data = await res.json();
-                const stats = data?.components?.waf_engine?.stats;
-                if (!stats) return;
-
-                const reqEl = document.getElementById('stat-requests');
-                const blockedEl = document.getElementById('stat-blocked');
-                const ruleEl = document.getElementById('stat-rules');
-
-                if (reqEl) reqEl.textContent = stats.requests_analyzed?.toLocaleString() ?? '—';
-                if (blockedEl) blockedEl.textContent = stats.blocked_requests?.toLocaleString() ?? '—';
-                if (ruleEl) ruleEl.textContent = stats.rule_count ?? '—';
-            } catch (e) {
-                console.warn('[WAF] Stats refresh failed:', e.message);
-            }
-        }
-
-        // Append line to the terminal
-        function appendTerminalLine(text) {
-            const terminalBody = document.getElementById('terminalBody');
-            if (!terminalBody) return;
-            
-            const lineDiv = document.createElement('div');
-            lineDiv.className = 'terminal-line';
-            
-            const contentSpan = document.createElement('span');
-            contentSpan.className = 'terminal-output error';
-            contentSpan.textContent = text;
-            
-            lineDiv.appendChild(contentSpan);
-            terminalBody.appendChild(lineDiv);
-            
-            terminalBody.scrollTop = terminalBody.scrollHeight;
-        }
-
-        // Initialize real-time threat stream via SSE
-        function initThreatStream() {
-            const evtSource = new EventSource('/api/events/threats');
-            evtSource.onmessage = (e) => {
-                try {
-                    const event = JSON.parse(e.data);
-                    if (event.type === 'connected') return;
-                    appendTerminalLine(`[BLOCKED] ${event.ip} → ${event.rule} — ${event.path}`);
-                    // Trigger a stats refresh when a new block happens
-                    refreshStats();
-                } catch (err) {
-                    console.error('[WAF] Error parsing threat event:', err);
-                }
-            };
-            evtSource.onerror = (e) => {
-                console.warn('[WAF] Threat stream disconnected. Reconnecting...');
-            };
-        }
-
-        // WAF Sandbox logic
-        function initSandbox() {
-            const textarea = document.getElementById('textareaPayload');
-            const btnAnalyze = document.getElementById('btnAnalyze');
-            const btnReset = document.getElementById('btnReset');
-            const spinner = document.getElementById('analyzeSpinner');
-            const btnText = document.getElementById('btnText');
-            const resultPanel = document.getElementById('testerResult');
-            
-            const resultBadge = document.getElementById('resultBadge');
-            const resultLatency = document.getElementById('resultLatency');
-            const resultStatus = document.getElementById('resultStatus');
-            const resultRequestId = document.getElementById('resultRequestId');
-            const resultDecision = document.getElementById('resultDecision');
-            const resultRuleRow = document.getElementById('resultRuleRow');
-            const resultRule = document.getElementById('resultRule');
-            const resultHeaders = document.getElementById('resultHeaders');
-
-            if (!textarea || !btnAnalyze || !btnReset) return;
-
-            // Presets Click Handler
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const payload = btn.getAttribute('data-payload');
-                    textarea.value = payload;
-                    analyzePayload(payload);
-                });
-            });
-
-            // Analyze Button Handler
-            btnAnalyze.addEventListener('click', () => {
-                analyzePayload(textarea.value);
-            });
-
-            // Reset Handler
-            btnReset.addEventListener('click', () => {
-                textarea.value = '';
-                resultPanel.classList.remove('visible');
-            });
-
-            async function analyzePayload(payload) {
-                // Set loading state
-                btnAnalyze.disabled = true;
-                spinner.style.display = 'inline-block';
-                btnText.textContent = 'Analyzing...';
-                
-                const startTime = performance.now();
-                
-                try {
-                    const encodedPayload = encodeURIComponent(payload);
-                    const response = await fetch(`/api/secure/test?payload=${encodedPayload}`);
-                    const duration = Math.round(performance.now() - startTime);
-                    
-                    const status = response.status;
-                    const data = await response.json();
-                    
-                    const wafRequestId = response.headers.get('x-waf-request-id') || response.headers.get('X-WAF-Request-ID') || data.request_id || 'unknown';
-                    const isBlocked = response.headers.get('x-waf-block') === 'true' || status === 403;
-                    const isRateLimited = response.headers.get('x-waf-rate-limited') === 'true' || status === 429;
-                    const isProtected = response.headers.get('x-waf-protected') === 'true';
-
-                    const wafHeadersList = [];
-                    if (isProtected) wafHeadersList.push('X-WAF-Protected: true');
-                    if (isBlocked) wafHeadersList.push('X-WAF-Block: true');
-                    if (isRateLimited) wafHeadersList.push('X-WAF-Rate-Limited: true');
-                    if (wafHeadersList.length === 0) wafHeadersList.push('None');
-
-                    resultPanel.classList.add('visible');
-                    resultLatency.textContent = `${duration}ms`;
-                    resultRequestId.textContent = wafRequestId;
-                    resultHeaders.textContent = wafHeadersList.join(', ');
-
-                    if (isBlocked) {
-                        resultBadge.className = 'result-badge blocked';
-                        resultBadge.textContent = 'Blocked';
-                        resultStatus.textContent = `${status} Forbidden`;
-                        resultStatus.style.color = 'var(--danger)';
-                        resultDecision.textContent = 'Request Blocked';
-                        resultDecision.style.color = 'var(--danger)';
-                        
-                        let triggeredRule = 'Unknown Threat Pattern';
-                        const upper = payload.toUpperCase();
-                        if (upper.includes('SELECT') || upper.includes('UNION') || upper.includes('OR \'1\'=\'1') || upper.includes('--') || upper.includes('/*')) {
-                            triggeredRule = 'SQL Injection';
-                        } else if (upper.includes('<SCRIPT>') || upper.includes('ALERT(') || upper.includes('ONMOUSEOVER=') || upper.includes('ONERROR=')) {
-                            triggeredRule = 'XSS Script';
-                        } else if (payload.includes('../') || payload.includes('etc/passwd')) {
-                            triggeredRule = 'Path Traversal';
-                        } else if (payload.includes('169.254')) {
-                            triggeredRule = 'SSRF Attempt';
-                        } else if (payload.includes('whoami') || payload.includes('cat ') || payload.includes('sh ') || payload.includes('bash ')) {
-                            triggeredRule = 'Command Injection';
-                        }
-                        
-                        resultRuleRow.style.display = 'flex';
-                        resultRule.textContent = triggeredRule;
-
-                        appendTerminalLine(`[SANDBOX BLOCK] WAF Blocked Payload: "${payload.substring(0, 30)}${payload.length > 30 ? '...' : ''}" → Rule: ${triggeredRule}`);
-                    } else if (isRateLimited) {
-                        resultBadge.className = 'result-badge limited';
-                        resultBadge.textContent = 'Rate Limited';
-                        resultStatus.textContent = `${status} Too Many Requests`;
-                        resultStatus.style.color = 'var(--warning)';
-                        resultDecision.textContent = 'Rate Limited';
-                        resultDecision.style.color = 'var(--warning)';
-                        resultRuleRow.style.display = 'none';
-
-                        appendTerminalLine(`[SANDBOX LIMIT] Rate Limiter Blocked IP`);
-                    } else {
-                        resultBadge.className = 'result-badge passed';
-                        resultBadge.textContent = 'Passed';
-                        resultStatus.textContent = `${status} OK`;
-                        resultStatus.style.color = 'var(--success)';
-                        resultDecision.textContent = 'Request Allowed';
-                        resultDecision.style.color = 'var(--success)';
-                        resultRuleRow.style.display = 'none';
-
-                        // Add line to terminal for safe sandbox request
-                        const terminalBody = document.getElementById('terminalBody');
-                        if (terminalBody) {
-                            const lineDiv = document.createElement('div');
-                            lineDiv.className = 'terminal-line';
-                            const promptSpan = document.createElement('span');
-                            promptSpan.className = 'terminal-prompt';
-                            promptSpan.textContent = '$';
-                            const cmdSpan = document.createElement('span');
-                            cmdSpan.className = 'terminal-command';
-                            cmdSpan.textContent = `test payload="${payload.substring(0, 20)}${payload.length > 20 ? '...' : ''}"`;
-                            
-                            const outDiv = document.createElement('div');
-                            outDiv.className = 'terminal-line';
-                            const contentSpan = document.createElement('span');
-                            contentSpan.className = 'terminal-output success';
-                            contentSpan.textContent = `[200 OK] PASSED - Request ID: ${wafRequestId}`;
-                            
-                            lineDiv.appendChild(promptSpan);
-                            lineDiv.appendChild(cmdSpan);
-                            outDiv.appendChild(contentSpan);
-                            
-                            terminalBody.appendChild(lineDiv);
-                            terminalBody.appendChild(outDiv);
-                            terminalBody.scrollTop = terminalBody.scrollHeight;
-                        }
-                    }
-
-                    refreshStats();
-
-                } catch (error) {
-                    console.error('Sandbox analysis error:', error);
-                    resultPanel.classList.add('visible');
-                    resultBadge.className = 'result-badge limited';
-                    resultBadge.textContent = 'Error';
-                    resultStatus.textContent = 'Network Error';
-                    resultStatus.style.color = 'var(--warning)';
-                    resultDecision.textContent = 'Failed to execute query';
-                    resultRuleRow.style.display = 'none';
-                    resultHeaders.textContent = '--';
-                } finally {
-                    btnAnalyze.disabled = false;
-                    spinner.style.display = 'none';
-                    btnText.textContent = 'Analyze Payload';
-                }
-            }
-        }
-
-        // Theme System Logic
-        const themeColors = {
-            void: {
-                accent: 0x00fff0,
-                inner: 0x002233,
-                points: 0x00fff0
-            },
-            nebula: {
-                accent: 0xc77dff,
-                inner: 0x22053f,
-                points: 0xc77dff
-            },
-            solar: {
-                accent: 0xd97706,
-                inner: 0x5e3a00,
-                points: 0xd97706
-            },
-            aurora: {
-                accent: 0x34d399,
-                inner: 0x041a12,
-                points: 0x34d399
-            }
+        es.onopen = () => {
+          reconnectDelay = 1000;
+          lastEventTime = Date.now();
+          appendSystemMessage("[connected to threat stream]");
         };
 
-        function updateThreeJSTheme(themeName) {
-            const colors = themeColors[themeName];
-            if (!colors) return;
-            
-            if (globeMaterial) globeMaterial.color.setHex(colors.accent);
-            if (innerMaterial) innerMaterial.color.setHex(colors.inner);
-            if (ringMaterial) ringMaterial.color.setHex(colors.accent);
-            if (pointsMaterial) pointsMaterial.color.setHex(colors.accent);
-            if (shapesMaterial) shapesMaterial.color.setHex(colors.accent);
+        es.onerror = (err) => {
+          appendSystemMessage(`[stream disconnected — retrying in ${reconnectDelay/1000}s]`, true);
+          es.close();
+          setTimeout(connectThreatStream, reconnectDelay);
+          reconnectDelay = Math.min(reconnectDelay * 2, 30000);
+        };
+
+        es.onmessage = (event) => {
+          lastEventTime = Date.now();
+          let data;
+          try {
+            data = JSON.parse(event.data);
+          } catch (e) {
+            return;
+          }
+
+          if (data.type === 'connected') return;
+
+          appendThreat(data);
+        };
+      }
+
+      function appendSystemMessage(msg, isErr = false) {
+        // Remove old system loading alerts if any
+        const rows = feedContainer.querySelectorAll(".threat-system-msg");
+        rows.forEach(r => r.remove());
+
+        const div = document.createElement("div");
+        div.className = "threat-system-msg" + (isErr ? " error" : "");
+        div.textContent = msg;
+        feedContainer.prepend(div);
+      }
+
+      function appendThreat(threat) {
+        // Clear empty placeholder if exists
+        const ph = document.getElementById("threat-placeholder");
+        if (ph) ph.remove();
+
+        const row = document.createElement("div");
+        row.className = "threat-row";
+        row.style.opacity = "0";
+
+        const timeStr = formatThreatTime(threat.timestamp || new Date().toISOString());
+        const level = (threat.threat_level || 'critical').toLowerCase();
+        const ruleId = threat.rule_id || 'RULE';
+        const ruleName = threat.rule_name || 'Threat Detected';
+        const ip = threat.client_ip || 'unknown';
+
+        row.innerHTML = `
+          <div class="threat-left">
+            <span class="threat-time">[${timeStr}]</span>
+            <span class="badge ${getLevelBadgeClass(level)} threat-badge">${level}</span>
+            <span class="threat-info"><span class="text-blue">${escapeHtml(ruleId)}</span> &nbsp;${escapeHtml(ruleName)}</span>
+          </div>
+          <span class="threat-ip">→ &nbsp;${escapeHtml(ip)}</span>
+        `;
+
+        feedContainer.prepend(row);
+
+        gsap.fromTo(row,
+          { opacity: 0, x: 16 },
+          { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }
+        );
+
+        // Keep container clean of excessive elements
+        while (feedContainer.children.length > 50) {
+          feedContainer.lastElementChild.remove();
+        }
+      }
+
+      function formatThreatTime(iso) {
+        try {
+          const d = new Date(iso);
+          return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')} ${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`;
+        } catch(e) {
+          return '';
+        }
+      }
+
+      // Check for silent periods
+      streamCheckInterval = setInterval(() => {
+        if (Date.now() - lastEventTime > 60000) {
+          if (!document.getElementById("threat-placeholder")) {
+            const div = document.createElement("div");
+            div.className = "threat-system-msg";
+            div.id = "threat-placeholder";
+            div.textContent = "[no threats detected — system clean ✓]";
+            feedContainer.prepend(div);
+          }
+        }
+      }, 10000);
+
+      window.initThreatStream = connectThreatStream;
+    })();
+
+    // ── ADMIN PANEL ───────────────────────────────────────────────────
+    const adminTrigger = document.getElementById("admin-panel-trigger");
+    const adminWrapper = document.getElementById("admin-content-wrapper");
+    const keyField = document.getElementById("admin-key-field");
+    const keyStatusMsg = document.getElementById("key-status-msg");
+    const opsPanel = document.getElementById("admin-operations-panel");
+    const outputLog = document.getElementById("admin-output-log");
+    const blocklistBody = document.getElementById("blocklist-table-body");
+
+    function toggleAdminPanel() {
+      const expanded = adminTrigger.classList.toggle("expanded");
+      document.getElementById("admin-expand-indicator").textContent = expanded ? "Collapse ▲" : "Expand ▼";
+      adminWrapper.style.display = expanded ? "block" : "none";
+      if (expanded) {
+        loadAdminState();
+      }
+    }
+
+    function toggleKeyVisibility() {
+      const show = keyField.type === "password";
+      keyField.type = show ? "text" : "password";
+      document.querySelector(".btn-toggle-key").textContent = show ? "Hide" : "Show";
+    }
+
+    function saveAdminKey() {
+      const val = keyField.value.trim();
+      if (val) {
+        localStorage.setItem('waf_admin_key', val);
+        loadAdminState();
+      } else {
+        localStorage.removeItem('waf_admin_key');
+        loadAdminState();
+      }
+    }
+
+    function loadAdminState() {
+      const key = localStorage.getItem('waf_admin_key');
+      if (key) {
+        keyField.value = key;
+        keyStatusMsg.textContent = "✓ Admin key loaded from browser local storage.";
+        keyStatusMsg.className = "admin-key-status text-green";
+        opsPanel.style.opacity = "1";
+        opsPanel.style.pointerEvents = "auto";
+        // Also sync admin features
+        syncAdminRuleList();
+      } else {
+        keyField.value = "";
+        keyStatusMsg.textContent = "No admin key configured in browser local storage.";
+        keyStatusMsg.className = "admin-key-status text-amber";
+        opsPanel.style.opacity = "0.4";
+        opsPanel.style.pointerEvents = "none";
+        // Revert rules table placeholder
+        document.getElementById("rules-table-placeholder").style.display = "block";
+        document.getElementById("rules-table-data").style.display = "none";
+      }
+    }
+
+    async function fetchAdminStats() {
+      writeAdminLog("$ waf admin stats\nfetching database stats...\n");
+      try {
+        const res = await fetch('/api/admin/stats', {
+          headers: apiHeaders()
+        });
+
+        if (res.status === 401) {
+          clearInvalidKey();
+          return;
         }
 
-        function applyTheme(themeName) {
-            document.body.classList.remove('theme-void', 'theme-nebula', 'theme-solar', 'theme-aurora');
-            document.body.classList.add(`theme-${themeName}`);
-            
-            localStorage.setItem('waf-theme', themeName);
-            
-            const textEl = document.getElementById('themeNameText');
-            if (textEl) textEl.textContent = themeName.toUpperCase();
-            
-            updateThreeJSTheme(themeName);
+        const data = await res.json();
+        writeAdminLog(`$ waf admin stats\n` + JSON.stringify(data, null, 2));
+      } catch(err) {
+        writeAdminLog(`[ERROR] stats fetch failed: ${err.message}`);
+      }
+    }
+
+    async function fetchAdminBlocklist() {
+      writeAdminLog("$ waf blocklist show\nretrieving active IP bans...\n");
+      try {
+        const res = await fetch('/api/admin/blocklist', {
+          headers: apiHeaders()
+        });
+
+        if (res.status === 401) {
+          clearInvalidKey();
+          return;
         }
 
-        function initThemeSwitcher() {
-            const themes = ['void', 'nebula', 'solar', 'aurora'];
-            const btn = document.getElementById('themeCycleBtn');
-            if (!btn) return;
-            
-            btn.addEventListener('click', () => {
-                const currentTheme = localStorage.getItem('waf-theme') || 'void';
-                const nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-                const nextTheme = themes[nextIndex];
-                applyTheme(nextTheme);
-            });
-            
-            const savedTheme = localStorage.getItem('waf-theme') || 'void';
-            applyTheme(savedTheme);
+        const data = await res.json();
+        writeAdminLog(`$ waf blocklist show\n` + JSON.stringify(data, null, 2));
+        renderBlocklist(data.blocked_ips);
+      } catch(err) {
+        writeAdminLog(`[ERROR] blocklist fetch failed: ${err.message}`);
+      }
+    }
+
+    async function submitBlockIP() {
+      const ip = document.getElementById("block-ip-addr").value.trim();
+      const reason = document.getElementById("block-ip-reason").value.trim();
+      if (!ip) return;
+
+      writeAdminLog(`$ waf blocklist add ${ip}\nadding to active perimeter ban...`);
+      try {
+        const res = await fetch('/api/admin/blocklist', {
+          method: 'POST',
+          headers: apiHeaders(),
+          body: JSON.stringify({ ip, reason })
+        });
+
+        if (res.status === 401) {
+          clearInvalidKey();
+          return;
         }
 
-        // Scroll reveal logic
-        function initScrollReveal() {
-            const reveals = document.querySelectorAll('.reveal');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.05,
-                rootMargin: '0px 0px -20px 0px'
-            });
-            
-            reveals.forEach((el, index) => {
-                if (el.classList.contains('feature-card')) {
-                    el.style.transitionDelay = `${(index % 3) * 0.1}s`;
-                }
-                observer.observe(el);
-            });
+        if (res.status === 422) {
+          writeAdminLog(`[ERROR] IP validation failed. Invalid format.`);
+          return;
         }
 
-        // Custom Cybernetic Cursor Logic
-        function initCustomCursor() {
-            const cursor = document.getElementById('customCursor');
-            const trail = document.getElementById('customCursorTrail');
-            if (!cursor || !trail) return;
+        const data = await res.json();
+        writeAdminLog(`$ waf blocklist add ${ip}\nIP blocked successfully.\n` + JSON.stringify(data, null, 2));
+        document.getElementById("block-ip-addr").value = "";
+        document.getElementById("block-ip-reason").value = "";
+        fetchAdminBlocklist();
+        syncSystemStats();
+      } catch(err) {
+        writeAdminLog(`[ERROR] block ip failed: ${err.message}`);
+      }
+    }
 
-            let mouseX = 0, mouseY = 0;
-            let trailX = 0, trailY = 0;
-            let active = false;
+    async function unblockIP(ip) {
+      writeAdminLog(`$ waf blocklist remove ${ip}\nremoving ban rule...`);
+      try {
+        const res = await fetch(`/api/admin/blocklist/${encodeURIComponent(ip)}`, {
+          method: 'DELETE',
+          headers: apiHeaders()
+        });
 
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                if (!active) {
-                    trailX = mouseX;
-                    trailY = mouseY;
-                    cursor.style.display = 'block';
-                    trail.style.display = 'block';
-                    active = true;
-                }
-                cursor.style.left = mouseX + 'px';
-                cursor.style.top = mouseY + 'px';
-            }, { passive: true });
+        if (res.status === 401) {
+          clearInvalidKey();
+          return;
+        }
 
-            function animateCursor() {
-                if (active) {
-                    const dx = mouseX - trailX;
-                    const dy = mouseY - trailY;
-                    trailX += dx * 0.15;
-                    trailY += dy * 0.15;
-                    trail.style.left = trailX + 'px';
-                    trail.style.top = trailY + 'px';
-                }
-                requestAnimationFrame(animateCursor);
+        const data = await res.json();
+        writeAdminLog(`$ waf blocklist remove ${ip}\nIP unblocked.\n` + JSON.stringify(data, null, 2));
+        fetchAdminBlocklist();
+        syncSystemStats();
+      } catch(err) {
+        writeAdminLog(`[ERROR] unblock ip failed: ${err.message}`);
+      }
+    }
+
+    function clearInvalidKey() {
+      writeAdminLog("[INVALID KEY] WAF admin authorization failed. Key cleared.");
+      localStorage.removeItem('waf_admin_key');
+      loadAdminState();
+    }
+
+    function writeAdminLog(text) {
+      outputLog.textContent = text;
+      outputLog.scrollTop = outputLog.scrollHeight;
+    }
+
+    function renderBlocklist(ips) {
+      blocklistBody.innerHTML = "";
+      if (!ips || ips.length === 0) {
+        blocklistBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-3);">No blocked IPs</td></tr>`;
+        return;
+      }
+
+      ips.forEach(ip => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(ip)}</td>
+          <td>Manual Ban</td>
+          <td><button class="btn-unblock" onclick="unblockIP('${escapeHtml(ip)}')">Unblock</button></td>
+        `;
+        blocklistBody.appendChild(tr);
+      });
+    }
+
+    // ── RULES TABLE INTEGRATION ───────────────────────────────────────
+    let rulesExpanded = false;
+    const rulesTrigger = document.getElementById("rules-details-trigger");
+    const rulesWrapper = document.getElementById("rules-table-wrapper");
+
+    function toggleRulesTable() {
+      rulesExpanded = !rulesExpanded;
+      document.getElementById("rules-expand-indicator").textContent = rulesExpanded ? "Collapse ▲" : "Expand ▼";
+      rulesWrapper.style.display = rulesExpanded ? "block" : "none";
+      if (rulesExpanded) {
+        syncAdminRuleList();
+      }
+    }
+
+    async function syncAdminRuleList() {
+      const key = localStorage.getItem('waf_admin_key');
+      if (!key) {
+        document.getElementById("rules-table-placeholder").style.display = "block";
+        document.getElementById("rules-table-data").style.display = "none";
+        return;
+      }
+
+      document.getElementById("rules-table-placeholder").style.display = "none";
+      document.getElementById("rules-table-data").style.display = "block";
+
+      const body = document.getElementById("rules-table-body");
+      if (body.children.length > 0) return; // already loaded
+
+      try {
+        const res = await fetch('/api/admin/rules', {
+          headers: apiHeaders()
+        });
+
+        if (res.status === 401) {
+          clearInvalidKey();
+          return;
+        }
+
+        const data = await res.json();
+        body.innerHTML = "";
+        data.rules.forEach(rule => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${escapeHtml(rule.id)}</td>
+            <td>${escapeHtml(rule.name)}</td>
+            <td><span class="badge ${getLevelBadgeClass(rule.threat_level)}">${escapeHtml(rule.threat_level)}</span></td>
+            <td class="rule-pattern">${escapeHtml(rule.pattern)}</td>
+          `;
+          body.appendChild(tr);
+        });
+      } catch(err) {
+        body.innerHTML = `<tr><td colspan="4" style="color: var(--amber);">[ERROR] Failed to fetch rule details: ${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    // ── SYSTEM STATS SYNC ─────────────────────────────────────────────
+    async function syncSystemStats() {
+      try {
+        const response = await fetch('/api/health/detailed', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (!response.ok) throw new Error('Status check failed');
+
+        const data = await response.json();
+        
+        // Check if structure matches
+        if (data.components && data.components.waf_engine && data.components.waf_engine.stats) {
+          const stats = data.components.waf_engine.stats;
+          const systemUptime = data.uptime_seconds || 0;
+          
+          const prev = { ...WAF_STATE };
+
+          WAF_STATE.requestsAnalyzed = stats.requests_analyzed || 0;
+          WAF_STATE.blockedRequests = stats.blocked_requests || 0;
+          WAF_STATE.blockedIps = stats.blocked_ips || 0;
+          WAF_STATE.rulesCount = stats.total_rules || 57;
+          WAF_STATE.rulesByLevel = stats.rules_by_level || { critical: 0, high: 0, medium: 0, low: 0 };
+          WAF_STATE.isWafHealthy = true;
+          WAF_STATE.uptime = systemUptime;
+
+          // Update Status bar numbers
+          document.getElementById("sb-req").textContent = WAF_STATE.requestsAnalyzed.toLocaleString();
+          document.getElementById("sb-blocked").textContent = WAF_STATE.blockedRequests.toLocaleString();
+          document.getElementById("sb-rules").textContent = WAF_STATE.rulesCount;
+
+          // Update Hero
+          updateHeroTerminal({
+            status: data.components.waf_engine.status || 'operational',
+            backend: stats.backend,
+            total_rules: stats.total_rules,
+            uptime_seconds: systemUptime,
+            requests_analyzed: WAF_STATE.requestsAnalyzed,
+            blocked_requests: WAF_STATE.blockedRequests
+          });
+
+          // Refresh Stats bar (will trigger count animations if differences found)
+          if (prev.requestsAnalyzed > 0) {
+            refreshStatsBar(stats, prev);
+          } else {
+            // First time load
+            refreshStatsBar(stats, null);
+          }
+
+          // Update breakdown bars
+          updateBreakdownBars(stats.rules_by_level || {});
+        }
+      } catch(err) {
+        WAF_STATE.isWafHealthy = false;
+        showHeroTerminalError(err);
+      }
+    }
+
+    function updateBreakdownBars(levels) {
+      const crit = levels.critical || 0;
+      const high = levels.high || 0;
+      const med = levels.medium || 0;
+      const low = levels.low || 0;
+      const other = levels.other || 0;
+
+      const total = crit + high + med + low + other || 1;
+
+      updateBar("critical", crit, total);
+      updateBar("high", high, total);
+      updateBar("medium", med, total);
+      updateBar("low", low, total);
+      updateBar("other", other, total);
+    }
+
+    function updateBar(lvl, count, total) {
+      document.getElementById(`breakdown-val-${lvl}`).textContent = count;
+      const pct = (count / total) * 100;
+      document.getElementById(`breakdown-bar-${lvl}`).style.width = `${pct}%`;
+    }
+
+    // ── SCROLL ANIMATIONS (GSAP) ──────────────────────────────────────
+    function initScrollAnimations() {
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.utils.toArray('[data-reveal]').forEach(el => {
+        gsap.fromTo(el,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+              once: true
             }
-            animateCursor();
+          }
+        );
+      });
+    }
 
-            // Event delegation for mouseenter/mouseleave hover states
-            document.addEventListener('mouseover', (e) => {
-                const target = e.target.closest('a, button, input, textarea, .preset-btn, .nav-cta, .stat-card, .feature-card, .logo');
-                if (target) {
-                    cursor.classList.add('hover');
-                    trail.classList.add('hover');
-                }
-            });
+    // ── INIT ──────────────────────────────────────────────────────────
+    function initAfterBoot() {
+      // Fetch version info
+      fetch('/api/version')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("footer-build").textContent = data.build || 'terminal-ui-v2';
+          document.getElementById("footer-ver").textContent = data.version || 'v1.0.0';
+        })
+        .catch(() => {});
 
-            document.addEventListener('mouseout', (e) => {
-                const target = e.target.closest('a, button, input, textarea, .preset-btn, .nav-cta, .stat-card, .feature-card, .logo');
-                if (target) {
-                    cursor.classList.remove('hover');
-                    trail.classList.remove('hover');
-                }
-            });
-        }
-
-        // Magnetic Button Effect using GSAP
-        function initMagneticButtons() {
-            const isFine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-            if (!isFine) return;
-
-            const magneticEls = document.querySelectorAll('.btn, #themeCycleBtn, .nav-cta, .logo');
-            magneticEls.forEach(el => {
-                let textInner = el.querySelector('span:not(.loading)');
-                if (!textInner && el.childNodes.length > 0) {
-                    const wrapper = document.createElement('span');
-                    wrapper.style.display = 'inline-flex';
-                    wrapper.style.alignItems = 'center';
-                    wrapper.style.gap = 'inherit';
-                    wrapper.style.pointerEvents = 'none';
-                    while (el.firstChild) {
-                        wrapper.appendChild(el.firstChild);
-                    }
-                    el.appendChild(wrapper);
-                    textInner = wrapper;
-                }
-
-                const strength = 0.35;
-                
-                const handleMouseMove = (e) => {
-                    const rect = el.getBoundingClientRect();
-                    const cx = rect.left + rect.width / 2;
-                    const cy = rect.top + rect.height / 2;
-                    const dx = e.clientX - cx;
-                    const dy = e.clientY - cy;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const threshold = Math.max(rect.width, rect.height) * 1.5;
-
-                    if (dist < threshold) {
-                        gsap.to(el, {
-                            x: dx * strength,
-                            y: dy * strength,
-                            duration: 0.3,
-                            ease: 'power3.out'
-                        });
-                        if (textInner) {
-                            gsap.to(textInner, {
-                                x: dx * strength * 0.25,
-                                y: dy * strength * 0.25,
-                                duration: 0.3,
-                                ease: 'power3.out'
-                            });
-                        }
-                    } else {
-                        resetEl();
-                    }
-                };
-
-                const resetEl = () => {
-                    gsap.to(el, {
-                        x: 0,
-                        y: 0,
-                        duration: 0.6,
-                        ease: 'elastic.out(1, 0.4)'
-                    });
-                    if (textInner) {
-                        gsap.to(textInner, {
-                            x: 0,
-                            y: 0,
-                            duration: 0.6,
-                            ease: 'elastic.out(1, 0.4)'
-                        });
-                    }
-                };
-
-                window.addEventListener('mousemove', handleMouseMove, { passive: true });
-                el.addEventListener('mouseleave', resetEl);
-            });
-        }
-
-        // GSAP Hero Animations
-        function initHeroAnimations() {
-            gsap.to('.title-word', {
-                translateY: '0%',
-                opacity: 1,
-                duration: 1.2,
-                stagger: 0.08,
-                ease: 'power4.out',
-                delay: 0.2
-            });
-
-            gsap.fromTo('.hero-description', 
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.8 }
-            );
-
-            gsap.fromTo('.hero-buttons .btn',
-                { opacity: 0, y: 15 },
-                { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out', delay: 1.0 }
-            );
-
-            gsap.fromTo('.status-indicator',
-                { opacity: 0, scale: 0.9 },
-                { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', delay: 0.1 }
-            );
-
-            gsap.fromTo('.terminal-heading',
-                { opacity: 0, x: -20 },
-                { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', delay: 0.4 }
-            );
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            initThreeJS();
-            initCardTilt();
-            fetchGravityStatus();
-            fetchDemoData();
-            generateRequestId();
-            refreshStats();
-            initThreatStream();
-            initSandbox();
-            initThemeSwitcher();
-            initScrollReveal();
-            initCustomCursor();
-            initMagneticButtons();
-            initHeroAnimations();
-            
-            // Auto-refresh
-            setInterval(fetchGravityStatus, 30000);
-            setInterval(generateRequestId, 60000);
-            setInterval(refreshStats, 10000);
+      // Initial stats sync
+      typewriteCommand("waf status", () => {
+        syncSystemStats().then(() => {
+          // Trigger animations after elements have received values
+          initScrollAnimations();
         });
+      });
 
+      // Stream init
+      initThreatStream();
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+      // Admin load
+      loadAdminState();
+    }
+  </script>
 </body>
 </html>
