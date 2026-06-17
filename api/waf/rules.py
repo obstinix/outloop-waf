@@ -47,6 +47,7 @@ class SecurityRules:
     _xss_patterns: List[SecurityRule] = field(default_factory=list)
     _path_traversal_patterns: List[SecurityRule] = field(default_factory=list)
     _command_injection_patterns: List[SecurityRule] = field(default_factory=list)
+    _other_patterns: List[SecurityRule] = field(default_factory=list)
     
     def __post_init__(self):
         """Initialize all security rule patterns."""
@@ -54,6 +55,7 @@ class SecurityRules:
         self._initialize_xss_rules()
         self._initialize_path_traversal_rules()
         self._initialize_command_injection_rules()
+        self._initialize_other_rules()
     
     def _initialize_sql_injection_rules(self) -> None:
         """Define SQL injection detection patterns."""
@@ -139,16 +141,30 @@ class SecurityRules:
             ))
     
     def _initialize_command_injection_rules(self) -> None:
-        """Define command injection detection patterns."""
+        """Define command injection detection patterns with expanded command list."""
+        cmd_list = (
+            r"(ls|cat|rm|wget|curl|bash|sh|zsh|python[23]?|perl|ruby|php|node|"
+            r"nc|netcat|nmap|chmod|chown|sudo|dd|tee|awk|sed|find|grep|xargs|"
+            r"base64|xxd|od|strings|strace|ltrace|gdb|env|printenv|whoami|id|"
+            r"uname|hostname|ifconfig|ip\s+addr|ps\s+aux|top|kill|pkill)"
+        )
         patterns = [
-            (r";\s*(ls|cat|rm|wget|curl)\b", "Unix command chaining"),
-            (r"\|\s*(ls|cat|rm|wget|curl)\b", "Unix pipe injection"),
+            (rf";\s*{cmd_list}\b", "Unix command chaining"),
+            (rf"\|\s*{cmd_list}\b", "Unix pipe injection"),
             (r"`[^`]+`", "Backtick command execution"),
             (r"\$\([^)]+\)", "Subshell execution"),
-            (r"&&\s*(ls|cat|rm|wget|curl)\b", "AND command chaining"),
-            (r"\|\|\s*(ls|cat|rm|wget|curl)\b", "OR command chaining"),
+            (rf"&&\s*{cmd_list}\b", "AND command chaining"),
+            (rf"\|\|\s*{cmd_list}\b", "OR command chaining"),
             (r">\s*\/", "Output redirection to root"),
             (r"<\s*\/", "Input redirection from root"),
+            # Standalone commands pattern
+            (
+                r"(?i)\b(ls|cat|rm|wget|curl|bash|sh|zsh|python[23]?|perl|ruby|php|node|"
+                r"nc|netcat|nmap|chmod|chown|sudo|dd|tee|awk|sed|find|grep|xargs|"
+                r"base64|xxd|od|strings|strace|ltrace|gdb|env|printenv|whoami|id|"
+                r"uname|hostname|ifconfig|ip addr|ps aux|top|kill|pkill)\b",
+                "Command injection attempt"
+            ),
         ]
         
         for i, (pattern, desc) in enumerate(patterns):
@@ -159,6 +175,32 @@ class SecurityRules:
                 threat_level=ThreatLevel.CRITICAL,
                 description=f"Detects {desc}"
             ))
+
+    def _initialize_other_rules(self) -> None:
+        """Define SSRF, Template Injection, and Prototype Pollution detection patterns."""
+        patterns = [
+            # SSRF — Server-Side Request Forgery
+            (r"(?i)(169\.254\.169\.254)", "AWS metadata endpoint SSRF"),
+            (r"(?i)(metadata\.google\.internal)", "GCP metadata endpoint SSRF"),
+            (r"(?i)(http://169\.254)", "Cloud metadata SSRF"),
+            (r"(?i)\b(10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})\b", "Private IP SSRF"),
+
+            # Template injection (SSTI)
+            (r"(?i)(\{\{.*?\}\}|\{%.*?%\})", "Template injection (Jinja2/Twig)"),
+            (r"(?i)(\$\{.*?\})", "Template injection (EL/Freemarker)"),
+
+            # JSON prototype pollution
+            (r"(?i)(__proto__|constructor\.prototype|Object\.prototype)", "Prototype pollution"),
+        ]
+
+        for i, (pattern, desc) in enumerate(patterns):
+            self._other_patterns.append(SecurityRule(
+                id=f"OTH-{i+1:03d}",
+                name=f"Security Policy: {desc}",
+                pattern=re.compile(pattern, re.IGNORECASE),
+                threat_level=ThreatLevel.HIGH,
+                description=f"Detects {desc}"
+            ))
     
     def get_all_rules(self) -> List[SecurityRule]:
         """Return all enabled security rules."""
@@ -166,7 +208,8 @@ class SecurityRules:
             self._sql_injection_patterns +
             self._xss_patterns +
             self._path_traversal_patterns +
-            self._command_injection_patterns
+            self._command_injection_patterns +
+            self._other_patterns
         )
         return [rule for rule in all_rules if rule.enabled]
     
