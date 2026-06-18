@@ -36,3 +36,4 @@ This document registers all visual, behavioral, and structural changes introduce
 6. **Rule Intelligence Explorer:** Replaced simple HTML tables with a searchable rules index. Added input search (matching ID, name, regex pattern) and severity dropdown filters.
 7. **SVG Pipeline Diagram:** Cleaned styling to match gray color tokens. Subtly highlighted flow pathways (Allow path in emerald, Block path in crimson).
 8. **Administrative Workspace:** Revamped credentials manager panel (X-Admin-Key visibility toggle), system telemetry output, and perimeter ban/unban controls.
+9. **Antigravity Diagnostics Toggle:** Added interactive gravity field in the status bar. Triggering the click calls the hidden `/api/gravity` signature endpoint, activating visual zero-g floating drift animations across all dashboard sections.

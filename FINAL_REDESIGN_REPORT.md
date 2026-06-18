@@ -34,6 +34,7 @@ API fetch operations were refactored into a single client helper (`WAF_API`). It
 * **Enterprise Visual Identity:** Swapped out the retro hacker theme for a dark, high-density dashboard inspired by Datadog and Linear. It utilizes a grid-aligned layered neutral gray palette and subtle blue/indigo accents.
 * **Data-First Focus:** Telemetry metrics are grouped and placed at the top of the viewport. Real-time updates utilize smooth GSAP count-up values to emphasize traffic flow without introducing layout shifts.
 * **Playground Audit logs:** The payload simulator includes a 5-node timeline mapping exactly where request packets travel (Inbound -> Decoder -> Match Engine -> Policy Layer -> Response Verdict). The adjacent Request Inspector prints HTTP headers and WAF signature metadata side-by-side, giving instant, diagnostic clarity.
+* **Antigravity Diagnostics Easter Egg:** Integrated a physics diagnostics toggle in the status bar (`GRAVITY: 9.8 m/s²`). When clicked, it requests a gravity status override from `/api/gravity`. If successful, the WAF dashboard goes into zero-gravity, executing slow floating drift animations across all layout elements to reflect the physics state.
 
 ---
 
