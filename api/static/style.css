@@ -1482,3 +1482,55 @@ footer {
     display: none;
   }
 }
+
+/* ── 11. ANTIGRAVITY FLOATING EFFECTS ──────────────────────────────── */
+body.zero-gravity {
+  animation: zero-g-drift 10s ease-in-out infinite alternate;
+}
+
+body.zero-gravity .panel,
+body.zero-gravity header,
+body.zero-gravity section,
+body.zero-gravity footer {
+  transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.zero-gravity #hero .panel { animation: zero-g-float-1 8s ease-in-out infinite alternate 0.2s; }
+body.zero-gravity #playground { animation: zero-g-float-2 9s ease-in-out infinite alternate 0.5s; }
+body.zero-gravity #threats { animation: zero-g-float-3 10s ease-in-out infinite alternate 0.1s; }
+body.zero-gravity #rules { animation: zero-g-float-1 11s ease-in-out infinite alternate 0.3s; }
+body.zero-gravity #pipeline { animation: zero-g-float-2 12s ease-in-out infinite alternate 0.7s; }
+body.zero-gravity #admin { animation: zero-g-float-3 13s ease-in-out infinite alternate 0.4s; }
+
+@keyframes zero-g-drift {
+  0% { background-color: var(--gray-950); }
+  100% { background-color: #0b0a12; }
+}
+
+@keyframes zero-g-float-1 {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(0.15deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes zero-g-float-2 {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-9px) rotate(-0.1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes zero-g-float-3 {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(0.08deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.sb-gravity-toggle {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.sb-gravity-toggle:hover {
+  color: var(--color-accent);
+}
+

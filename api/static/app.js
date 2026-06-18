@@ -984,3 +984,45 @@ function updateAdminKeyState() {
   }
   syncAdminState();
 }
+
+// ── 11. ANTIGRAVITY CONTROLLER ───────────────────────────────────────
+async function toggleGravityState() {
+  const body = document.body;
+  const isZeroG = body.classList.contains("zero-gravity");
+  
+  if (isZeroG) {
+    body.classList.remove("zero-gravity");
+    const gravVal = document.getElementById("sb-gravity-val");
+    if (gravVal) {
+      gravVal.textContent = "9.8 m/s²";
+      gravVal.className = "";
+    }
+    logAdminOutput("waf gravity --enable\nGravity restored to Earth Standard (9.80665 m/s²).");
+  } else {
+    logAdminOutput("waf gravity --disable\nRequesting physics override signature...");
+    try {
+      const data = await fetch('/api/gravity?code=1807', {
+        headers: {
+          'X-Antigravity': 'true',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      }).then(res => res.json());
+
+      if (data.status === "disabled 🚀") {
+        body.classList.add("zero-gravity");
+        const gravVal = document.getElementById("sb-gravity-val");
+        if (gravVal) {
+          gravVal.textContent = "ZERO-G 🚀";
+          gravVal.className = "text-green";
+        }
+        logAdminOutput(`waf gravity --disable\n[SUCCESS] Antigravity activated.\nMessage: "${data.message}"\nReference: ${data.reference}`);
+      }
+    } catch (err) {
+      logAdminOutput(`[ERROR] Antigravity authorization failed: ${err.message}`);
+    }
+  }
+}
+
+// Expose toggleGravityState to the HTML markup context
+window.toggleGravityState = toggleGravityState;
+
