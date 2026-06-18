@@ -1,1657 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- OUTERLOOP WAF - Perimeter-Grade Web Attack Protection with terminal theme SOC dashboard -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="OUTERLOOP WAF - Perimeter-Grade Web Attack Protection with real-time threat detection and analytics">
-  <title>OUTLOOP WAF // SOC Dashboard</title>
+  <meta name="description" content="OUTLOOP WAF — Enterprise-grade Web Application Firewall and SOC dashboard.">
+  <title>OUTLOOP WAF // Security Operations Center</title>
 
-  <!-- Fonts -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- GSAP + ScrollTrigger -->
+  <!-- GSAP & ScrollTrigger (Allowed by Vercel CSP via cdnjs) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <style>
-    /* ── DESIGN SYSTEM & COLOR TOKENS ──────────────────────────────── */
-    :root {
-      --bg-base:     #0A0A0B;
-      --bg-panel:    #0F0F13;
-      --bg-raised:   #161620;
-      --bg-terminal: #080810;
-      --border:      rgba(255,255,255,0.06);
-      --border-lit:  rgba(0, 210, 106, 0.18);
-      --border-warn: rgba(245, 166, 35, 0.25);
-      --border-danger: rgba(255, 69, 58, 0.25);
-
-      --green:       #00D26A;
-      --green-dim:   #00A854;
-      --amber:       #F5A623;
-      --red:         #FF453A;
-      --blue:        #5E8EEC;
-      --purple:      #A78BFA;
-
-      --text-1:      #EBEBF5;
-      --text-2:      #9898A8;
-      --text-3:      #5A5A6A;
-      --text-green:  #00D26A;
-      --text-amber:  #F5A623;
-      --text-red:    #FF453A;
-
-      --font-mono: 'JetBrains Mono', 'Cascadia Code', 'SF Mono', monospace;
-      --font-body: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-    }
-
-    /* ── BASE STYLES ─────────────────────────────────────────────── */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-base);
-      color: var(--text-2);
-      font-family: var(--font-body);
-      font-size: 0.9375rem;
-      line-height: 1.6;
-      overflow-x: hidden;
-      padding-bottom: 32px; /* space for status bar */
-    }
-
-    h1, h2, h3, h4, h5, h6,
-    input, textarea, button, select,
-    .mono {
-      font-family: var(--font-mono);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    hr {
-      border: 0;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.05);
-      margin: 1.5rem 0;
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-base);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--bg-raised);
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-3);
-    }
-
-    /* ── GENERAL LAYOUT ──────────────────────────────────────────── */
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 clamp(1.5rem, 4vw, 3rem);
-    }
-
-    .section-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--green);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .section-title {
-      font-family: var(--font-mono);
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text-1);
-      margin-bottom: 0.75rem;
-    }
-
-    .section-desc {
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      color: var(--text-2);
-      max-width: 600px;
-      margin-bottom: 2rem;
-    }
-
-    section {
-      padding: 5rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* ── COMPONENTS ──────────────────────────────────────────────── */
-    /* Panels (btop/man page aesthetic) */
-    .panel {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      transition: border-color 0.2s, background-color 0.2s, transform 0.15s;
-    }
-
-    .panel.interactive:hover {
-      border-color: var(--border-lit);
-      background-color: var(--bg-raised);
-      transform: translateY(-2px);
-    }
-
-    .panel-header {
-      height: 36px;
-      background-color: var(--bg-raised);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-    }
-
-    .panel-title {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-2);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .panel-meta {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-3);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .panel-body {
-      padding: 1.25rem;
-    }
-
-    /* Badges */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 8px;
-      border-radius: 3px;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .badge-critical { background-color: rgba(255, 69, 58, 0.12); color: var(--red); border: 1px solid rgba(255, 69, 58, 0.25); }
-    .badge-high { background-color: rgba(255, 69, 58, 0.12); color: var(--red); border: 1px solid rgba(255, 69, 58, 0.2); }
-    .badge-medium { background-color: rgba(245, 166, 35, 0.12); color: var(--amber); border: 1px solid rgba(245, 166, 35, 0.2); }
-    .badge-low { background-color: rgba(167, 139, 250, 0.12); color: var(--purple); border: 1px solid rgba(167, 139, 250, 0.2); }
-    .badge-ok { background-color: rgba(0, 210, 106, 0.12); color: var(--green); border: 1px solid rgba(0, 210, 106, 0.2); }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      border: 1px solid transparent;
-    }
-    .btn-primary {
-      background-color: var(--green);
-      color: #000;
-    }
-    .btn-primary:hover {
-      filter: brightness(1.1);
-      transform: translateY(-1px);
-    }
-    .btn-secondary {
-      background-color: transparent;
-      border-color: var(--border);
-      color: var(--text-2);
-    }
-    .btn-secondary:hover {
-      border-color: var(--border-lit);
-      color: var(--text-1);
-    }
-
-    /* System Status Dot */
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--green);
-      box-shadow: 0 0 8px var(--green);
-      display: inline-block;
-    }
-    .status-dot.danger {
-      background-color: var(--red);
-      box-shadow: 0 0 8px var(--red);
-    }
-    .status-dot.warn {
-      background-color: var(--amber);
-      box-shadow: 0 0 8px var(--amber);
-    }
-
-    /* ── 4.1 BOOT SEQUENCE ───────────────────────────────────────── */
-    #boot-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--bg-base);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .boot-content {
-      width: 100%;
-      max-width: 600px;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
-
-    .boot-logo {
-      color: var(--text-1);
-      white-space: pre;
-      margin-bottom: 2rem;
-      font-size: clamp(0.5rem, 1.5vw, 0.85rem);
-      line-height: 1.2;
-    }
-
-    .boot-log-lines {
-      color: var(--text-2);
-    }
-
-    .boot-line {
-      margin-bottom: 0.4rem;
-      opacity: 0;
-      transform: translateY(4px);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .text-green { color: var(--green); }
-    .text-red { color: var(--red); }
-    .text-amber { color: var(--amber); }
-
-    /* ── 4.2 NAVIGATION ──────────────────────────────────────────── */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 52px;
-      background-color: var(--bg-base);
-      border-bottom: 1px solid var(--border);
-      z-index: 100;
-      transition: background-color 0.2s, backdrop-filter 0.2s;
-    }
-
-    header.scrolled {
-      background-color: rgba(10, 10, 11, 0.95);
-      backdrop-filter: blur(8px);
-    }
-
-    .nav-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-1);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-2);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .nav-links a:hover {
-      color: var(--text-1);
-    }
-
-    .btn-github {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      border: 1px solid var(--border);
-      padding: 5px 12px;
-      border-radius: 4px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .btn-github:hover {
-      border-color: var(--border-lit);
-      color: var(--green);
-    }
-
-    /* Mobile Hamburger Menu */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text-1);
-      font-family: var(--font-mono);
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    .mobile-overlay {
-      position: fixed;
-      top: 52px;
-      left: 0;
-      width: 100%;
-      height: calc(100vh - 52px);
-      background-color: var(--bg-base);
-      z-index: 90;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-      border-top: 1px solid var(--border);
-    }
-
-    .mobile-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-    }
-
-    .mobile-links a {
-      font-family: var(--font-mono);
-      font-size: 1.25rem;
-      color: var(--text-2);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    /* ── 4.3 HERO SECTION ────────────────────────────────────────── */
-    #hero {
-      padding-top: 7rem;
-      padding-bottom: 4rem;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 55% 45%;
-      gap: 2.5rem;
-      align-items: center;
-    }
-
-    .hero-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .hero-h1 {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
-      line-height: 1.05;
-      color: var(--text-1);
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-h1 span.underline {
-      text-decoration: underline;
-      text-decoration-color: var(--green-dim);
-      text-underline-offset: 8px;
-    }
-
-    .hero-desc {
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: var(--text-2);
-      max-width: 460px;
-      margin-bottom: 2rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-    }
-
-    /* Live Terminal Pane */
-    .terminal-pane {
-      height: 380px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .terminal-body {
-      flex: 1;
-      background-color: var(--bg-terminal);
-      padding: 1.25rem;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      line-height: 1.8;
-      overflow-y: auto;
-      color: var(--text-2);
-    }
-
-    .terminal-line {
-      margin-bottom: 0.4rem;
-      white-space: pre-wrap;
-    }
-
-    .terminal-prompt {
-      color: var(--green-dim);
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 15px;
-      background-color: var(--text-1);
-      margin-left: 2px;
-      animation: blink 1s step-end infinite;
-      vertical-align: middle;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* ── 4.4 LIVE STATS BAR ──────────────────────────────────────── */
-    #stats {
-      padding: 0;
-      background-color: var(--bg-panel);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .stat-panel {
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border-right: 1px solid var(--border);
-    }
-
-    .stat-panel:last-child {
-      border-right: none;
-    }
-
-    .stat-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      font-weight: 400;
-      color: var(--text-3);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-val {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 2.8rem;
-      line-height: 1.1;
-      color: var(--text-1);
-      margin-bottom: 0.25rem;
-    }
-
-    .stat-delta {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--text-3);
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .stat-delta.active-delta {
-      color: var(--amber);
-    }
-
-    /* ── 4.5 WAF SANDBOX ─────────────────────────────────────────── */
-    .preset-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .preset-btn {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      background-color: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-2);
-      padding: 4px 10px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .preset-btn:hover {
-      border-color: var(--border-lit);
-      color: var(--text-1);
-      background-color: var(--bg-raised);
-    }
-
-    .sandbox-input-panel {
-      background-color: var(--bg-terminal);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.25rem;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .sandbox-line {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      width: 100%;
-    }
-
-    .sandbox-prompt {
-      color: var(--green-dim);
-      white-space: nowrap;
-      user-select: none;
-      margin-top: 1px;
-    }
-
-    .sandbox-textarea {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-1);
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      resize: none;
-      line-height: 1.4;
-      caret-color: var(--green);
-      padding: 0;
-      height: auto;
-      min-height: 24px;
-    }
-
-    .sandbox-submit-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 2rem;
-    }
-
-    /* Sandbox Results Container */
-    .sandbox-result-container {
-      display: none;
-    }
-
-    .result-box {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      line-height: 1.6;
-      background-color: var(--bg-terminal);
-      overflow: hidden;
-    }
-
-    .result-box.passed {
-      border-color: var(--border-lit);
-    }
-
-    .result-box.blocked {
-      border-color: var(--border-danger);
-    }
-
-    .result-header {
-      padding: 0.75rem 1.25rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .result-box.passed .result-header {
-      background-color: rgba(0, 210, 106, 0.05);
-      color: var(--green);
-      border-bottom-color: rgba(0, 210, 106, 0.12);
-    }
-
-    .result-box.blocked .result-header {
-      background-color: rgba(255, 69, 58, 0.05);
-      color: var(--red);
-      border-bottom-color: rgba(255, 69, 58, 0.12);
-    }
-
-    .result-content {
-      padding: 1.25rem;
-      white-space: pre-wrap;
-      color: var(--text-2);
-    }
-
-    .result-detail-line {
-      display: flex;
-      margin-bottom: 0.4rem;
-    }
-
-    .result-detail-label {
-      width: 130px;
-      color: var(--text-3);
-      flex-shrink: 0;
-    }
-
-    .result-detail-val {
-      color: var(--text-1);
-    }
-
-    .violation-card {
-      margin-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      padding-top: 1rem;
-    }
-
-    .violation-item {
-      margin-bottom: 1rem;
-      padding-left: 1.25rem;
-      border-left: 2px solid var(--blue);
-    }
-
-    .violation-title-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .violation-id {
-      color: var(--blue);
-      font-weight: 600;
-    }
-
-    .violation-name {
-      color: var(--text-1);
-    }
-
-    .violation-match {
-      color: var(--text-2);
-      font-size: 0.78rem;
-      margin-top: 0.2rem;
-      background-color: rgba(255, 255, 255, 0.02);
-      padding: 4px 8px;
-      border-radius: 4px;
-      display: inline-block;
-    }
-
-    /* ── 4.6 LIVE THREAT FEED ────────────────────────────────────── */
-    .threat-grid {
-      display: grid;
-      grid-template-columns: 65% 35%;
-      gap: 2rem;
-    }
-
-    .threat-feed-pane {
-      display: flex;
-      flex-direction: column;
-      height: 400px;
-    }
-
-    .threat-stream-body {
-      flex: 1;
-      background-color: var(--bg-terminal);
-      padding: 1.25rem;
-      overflow-y: auto;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .threat-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-      padding-bottom: 0.4rem;
-    }
-
-    .threat-left {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      min-width: 0;
-    }
-
-    .threat-time {
-      color: var(--text-3);
-      flex-shrink: 0;
-    }
-
-    .threat-badge {
-      flex-shrink: 0;
-    }
-
-    .threat-info {
-      color: var(--text-1);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .threat-ip {
-      color: var(--text-3);
-      font-weight: 500;
-      text-align: right;
-      padding-left: 1rem;
-      flex-shrink: 0;
-    }
-
-    .threat-system-msg {
-      color: var(--green-dim);
-      border-left: 2px solid var(--green);
-      padding-left: 0.75rem;
-      margin: 0.25rem 0;
-    }
-
-    .threat-system-msg.error {
-      color: var(--amber);
-      border-left-color: var(--amber);
-    }
-
-    /* Pulse Dot animation */
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--green);
-      display: inline-block;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.9); }
-    }
-
-    /* Stats breakdown right panel */
-    .stats-breakdown {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .breakdown-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .breakdown-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-2);
-    }
-
-    .breakdown-label {
-      font-weight: 500;
-      color: var(--text-3);
-    }
-
-    .breakdown-val {
-      font-weight: 600;
-      color: var(--text-1);
-    }
-
-    .progress-track {
-      height: 8px;
-      background-color: rgba(255, 255, 255, 0.04);
-      border-radius: 4px;
-      overflow: hidden;
-      display: flex;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .fill-critical { background-color: var(--red); }
-    .fill-high { background-color: var(--red); }
-    .fill-medium { background-color: var(--amber); }
-    .fill-low { background-color: var(--purple); }
-    .fill-other { background-color: var(--blue); }
-
-    /* ── 4.7 PROTECTION LAYERS (RULES) ───────────────────────────── */
-    .rules-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .rule-card {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .rule-card-top {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .rule-card-icon {
-      color: var(--text-2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .rule-card-title {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-1);
-    }
-
-    .rule-card-bottom {
-      margin-top: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    .rule-card-num {
-      font-family: var(--font-mono);
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text-1);
-      line-height: 1;
-    }
-
-    /* Expandable Rule Details */
-    .rules-table-container {
-      margin-top: 1.5rem;
-      border-top: 1px solid var(--border);
-      padding-top: 2rem;
-      display: none;
-    }
-
-    .rules-table-scroll {
-      overflow-x: auto;
-      max-height: 400px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-    }
-
-    .rules-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      text-align: left;
-    }
-
-    .rules-table th, .rules-table td {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .rules-table th {
-      background-color: var(--bg-raised);
-      color: var(--text-2);
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .rules-table tr:hover td {
-      background-color: rgba(255, 255, 255, 0.02);
-    }
-
-    .rules-table td {
-      color: var(--text-1);
-    }
-
-    .rules-table td.rule-pattern {
-      color: var(--text-3);
-      font-size: 0.7rem;
-    }
-
-    .admin-req-msg {
-      text-align: center;
-      padding: 2rem;
-      border: 1px dashed var(--border);
-      border-radius: 6px;
-      color: var(--text-3);
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-    }
-
-    /* ── 4.8 ARCHITECTURE DIAGRAM ────────────────────────────────── */
-    .arch-panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 0;
-    }
-
-    .arch-svg-container {
-      width: 100%;
-      max-width: 700px;
-    }
-
-    .arch-svg text {
-      fill: var(--text-1);
-    }
-    .arch-svg text.dim {
-      fill: var(--text-2);
-    }
-    .arch-svg text.meta {
-      fill: var(--text-3);
-    }
-
-    .arch-callout-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-      width: 100%;
-    }
-
-    .arch-callout-card {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.25rem;
-    }
-
-    .arch-callout-title {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--green);
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.05em;
-    }
-
-    .arch-callout-desc {
-      font-size: 0.85rem;
-      color: var(--text-2);
-      line-height: 1.5;
-    }
-
-    /* ── 4.9 ADMIN PANEL ─────────────────────────────────────────── */
-    .admin-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-1);
-      user-select: none;
-      transition: background-color 0.15s;
-    }
-
-    .admin-trigger:hover {
-      background-color: var(--bg-raised);
-    }
-
-    .admin-content {
-      display: none;
-      border: 1px solid var(--border);
-      border-top: none;
-      border-bottom-left-radius: 6px;
-      border-bottom-right-radius: 6px;
-      background-color: var(--bg-panel);
-      padding: 1.5rem;
-    }
-
-    .admin-trigger.expanded {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      border-bottom-color: transparent;
-    }
-
-    .admin-form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .admin-form-label {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-2);
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .key-input-row {
-      display: flex;
-      gap: 0.5rem;
-      max-width: 500px;
-    }
-
-    .text-input {
-      flex: 1;
-      background-color: var(--bg-terminal);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-1);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      padding: 8px 12px;
-      outline: none;
-    }
-
-    .text-input:focus {
-      border-color: var(--border-lit);
-    }
-
-    .btn-toggle-key {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-2);
-      padding: 0 10px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-toggle-key:hover {
-      border-color: var(--text-3);
-      color: var(--text-1);
-    }
-
-    .admin-key-status {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      margin-top: 0.4rem;
-    }
-
-    .admin-controls-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .admin-subpanel-title {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-1);
-      margin-bottom: 1rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .admin-action-row {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .admin-output-pane {
-      background-color: var(--bg-terminal);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1rem;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-2);
-      max-height: 250px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-
-    .blocklist-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-    }
-
-    .blocklist-table th, .blocklist-table td {
-      padding: 0.5rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-    }
-
-    .blocklist-table th {
-      color: var(--text-3);
-      font-weight: 500;
-    }
-
-    .blocklist-table td {
-      color: var(--text-1);
-    }
-
-    .btn-unblock {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      color: var(--red);
-      padding: 2px 6px;
-      cursor: pointer;
-      font-size: 0.65rem;
-      font-family: var(--font-mono);
-    }
-
-    .btn-unblock:hover {
-      background-color: rgba(255, 69, 58, 0.08);
-      border-color: rgba(255, 69, 58, 0.2);
-    }
-
-    .ip-block-form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      max-width: 400px;
-    }
-
-    .ip-block-form .text-input {
-      padding: 6px 10px;
-    }
-
-    /* ── 4.10 FOOTER ─────────────────────────────────────────────── */
-    footer {
-      padding: 4rem 0 2.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-3);
-      border-top: 1px solid var(--border);
-      margin-top: 2rem;
-    }
-
-    .footer-grid {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-left {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .footer-logo {
-      color: var(--text-1);
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .footer-right {
-      display: flex;
-      gap: 3rem;
-    }
-
-    .footer-col {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .footer-col-title {
-      color: var(--text-2);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .footer-col a {
-      transition: color 0.15s;
-    }
-
-    .footer-col a:hover {
-      color: var(--text-1);
-    }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.02);
-      padding-top: 1.5rem;
-    }
-
-    /* ── 4.11 STATUS BAR ─────────────────────────────────────────── */
-    #status-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 32px;
-      z-index: 500;
-      background-color: #0D0D12;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--text-2);
-      user-select: none;
-    }
-
-    .sb-left {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 500;
-    }
-
-    .sb-active-dot {
-      width: 6px;
-      height: 6px;
-      background-color: var(--green);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--green);
-      display: inline-block;
-    }
-
-    .sb-center {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      color: var(--text-2);
-    }
-
-    .sb-center span {
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    .sb-right {
-      color: var(--text-3);
-    }
-
-    /* ── 7. RESPONSIVE BREAKPOINTS ───────────────────────────────── */
-    /* Tablet: 768px – 1024px */
-    @media (max-width: 1024px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-      .terminal-pane {
-        height: 320px;
-      }
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .stat-panel {
-        border-bottom: 1px solid var(--border);
-      }
-      .stat-panel:nth-child(even) {
-        border-right: none;
-      }
-      .stat-panel:nth-child(3), .stat-panel:nth-child(4) {
-        border-bottom: none;
-      }
-      .threat-grid {
-        grid-template-columns: 1fr;
-      }
-      .rules-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .arch-callout-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      .admin-controls-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-    }
-
-    /* Mobile: < 768px */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-      .menu-toggle {
-        display: block;
-      }
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      .stat-panel {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-      }
-      .stat-panel:last-child {
-        border-bottom: none;
-      }
-      .rules-grid {
-        grid-template-columns: 1fr;
-      }
-      /* Status bar responsive updates */
-      .sb-center {
-        display: none;
-      }
-      .sb-right {
-        display: none;
-      }
-    }
-  </style>
+  <!-- Decoupled Styling -->
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-  <!-- 4.1 BOOT SEQUENCE -->
-  <div id="boot-loader">
-    <div class="boot-content">
-      <div class="boot-logo">
- ___  _  _ ___ _    ___   ___  ___  
-/ _ \| | |  | | |  / _ \ / _ \|  _ \ 
-| | | | | |  | | |__| | | | | | |_) |
-\___/ \___/  |_|_____\___/ \___/| .__/ 
-                                |_|    </div>
-      <div class="boot-log-lines" id="boot-lines"></div>
+  <!-- 1. BOOT SEQUENCE LOADER -->
+  <div id="boot-loader" class="boot-loader">
+    <div class="boot-container">
+      <div class="boot-logo-line">
+        <span>OUTLOOP SECURITY ENGINE v1.0.0</span>
+        <span class="pulse-dot"></span>
+      </div>
+      <div id="boot-lines" class="boot-console-feed">
+        <!-- Dynanmic boot stages printed here -->
+      </div>
     </div>
   </div>
 
-  <!-- 4.2 NAVIGATION -->
-  <header id="main-header">
-    <div class="container nav-wrapper">
-      <a href="#hero" class="logo-container">
-        [OUTLOOP WAF]
+  <!-- HEADER NAVIGATION -->
+  <header>
+    <div class="nav-wrapper">
+      <a href="#" class="brand">
+        <span class="brand-shield">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7s0 6 8 10z"/>
+          </svg>
+        </span>
+        <span>OUTLOOP WAF</span>
       </a>
       <ul class="nav-links">
-        <li><a href="#stats">Features</a></li>
-        <li><a href="#sandbox">Sandbox</a></li>
-        <li><a href="#threat-feed">Threats</a></li>
-        <li><a href="#rules">Rules</a></li>
-        <li><a href="#architecture">Architecture</a></li>
-        <li><a href="#admin">Admin</a></li>
-        <li><a href="https://github.com/obstinix/outloop-waf" target="_blank" class="btn-github">GitHub ↗</a></li>
+        <li><a href="#metrics" class="active">Overview</a></li>
+        <li><a href="#playground">Playground</a></li>
+        <li><a href="#threats">Threat Stream</a></li>
+        <li><a href="#rules">Signature Explorer</a></li>
+        <li><a href="#pipeline">Architecture</a></li>
+        <li><a href="#admin">Workspace</a></li>
+        <li><a href="https://github.com/obstinix/outloop-waf" target="_blank" class="github-btn">
+          <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub
+        </a></li>
       </ul>
-      <button class="menu-toggle" id="menu-toggle-btn">[≡]</button>
+      <div class="hamburger-btn" id="menu-toggle-btn">[≡]</div>
     </div>
   </header>
 
   <!-- Mobile nav overlay -->
-  <div class="mobile-overlay" id="mobile-nav-overlay">
-    <ul class="mobile-links">
-      <li><a href="#stats" onclick="toggleMobileMenu()">Features</a></li>
-      <li><a href="#sandbox" onclick="toggleMobileMenu()">Sandbox</a></li>
-      <li><a href="#threat-feed" onclick="toggleMobileMenu()">Threats</a></li>
-      <li><a href="#rules" onclick="toggleMobileMenu()">Rules</a></li>
-      <li><a href="#architecture" onclick="toggleMobileMenu()">Architecture</a></li>
-      <li><a href="#admin" onclick="toggleMobileMenu()">Admin</a></li>
-      <li><a href="https://github.com/obstinix/outloop-waf" target="_blank" class="btn-github" onclick="toggleMobileMenu()">GitHub ↗</a></li>
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay">
+    <ul class="mobile-nav-links">
+      <li><a href="#metrics" onclick="document.getElementById('mobile-nav-overlay').classList.remove('active')">Overview</a></li>
+      <li><a href="#playground" onclick="document.getElementById('mobile-nav-overlay').classList.remove('active')">Playground</a></li>
+      <li><a href="#threats" onclick="document.getElementById('mobile-nav-overlay').classList.remove('active')">Threat Stream</a></li>
+      <li><a href="#rules" onclick="document.getElementById('mobile-nav-overlay').classList.remove('active')">Signatures</a></li>
+      <li><a href="#pipeline" onclick="document.getElementById('mobile-nav-overlay').classList.remove('active')">Pipeline</a></li>
+      <li><a href="#admin" onclick="document.getElementById('mobile-nav-overlay').classList.remove('active')">Workspace</a></li>
     </ul>
   </div>
 
-  <div class="container" id="main-content">
-    
-    <!-- 4.3 HERO SECTION -->
-    <section id="hero">
-      <div class="hero-grid">
-        <div class="hero-text">
-          <span class="section-eyebrow">&gt; PERIMETER-GRADE WAF</span>
-          <h1 class="hero-h1">Web Attack<br>Protection<br><span class="underline">At The Edge.</span></h1>
+  <!-- APP VIEW CONTAINER -->
+  <div class="app-container">
+
+    <!-- 2. COMMAND CENTER & HERO -->
+    <section id="hero" class="command-center">
+      <div class="command-center-grid">
+        <div class="hero-info" data-reveal>
+          <span class="hero-eyebrow">&gt; Enterprise Perimeter Protection</span>
+          <h1 class="hero-title">Zero Trust Request<br>Security at the Edge</h1>
           <p class="hero-desc">
-            OUTERLOOP WAF inspects every request through a multi-layer rule engine — detecting SQL injection, XSS, command injection, and path traversal before they reach your application.
+            OUTLOOP WAF acts as an edge proxy gateway, inspecting HTTP packets in real-time. Detects SQLi, XSS, SSRF, and injection attacks before they reach downstream servers.
           </p>
-          <div class="hero-actions">
-            <a href="#sandbox" class="btn btn-primary">[→ Try the Sandbox]</a>
-            <a href="#architecture" class="btn btn-secondary">[↗ API Docs]</a>
+          <div class="hero-actions-row">
+            <a href="#playground" class="btn btn-primary">Open Sandbox</a>
+            <a href="#pipeline" class="btn btn-secondary">Pipeline Diagram</a>
           </div>
         </div>
-        
-        <div class="panel terminal-pane" data-reveal>
+
+        <div class="panel hero-console-panel" data-reveal>
           <div class="panel-header">
-            <span class="panel-title">bash — waf-engine — 80x24</span>
+            <div class="panel-title">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 17l6-5-6-5M12 16h8" />
+              </svg>
+              waf-service --status-monitor
+            </div>
             <div class="panel-meta">
-              <span class="status-dot" id="hero-status-dot"></span>
+              <span class="status-dot" id="console-status-indicator"></span>
             </div>
           </div>
-          <div class="terminal-body" id="hero-terminal">
-            <div class="terminal-line"><span class="terminal-prompt">root@outloop-waf:~$</span> <span id="hero-command">waf status</span></div>
-            <div id="hero-output" class="terminal-line">Loading live status indicators...</div>
+          <div class="console-output" id="hero-terminal">
+            <div class="console-line">Waiting for engine startup logs...</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4.4 LIVE STATS BAR -->
-    <section id="stats" data-reveal>
-      <div class="stats-grid">
-        <div class="stat-panel">
-          <span class="stat-label">REQUESTS ANALYZED</span>
-          <span class="stat-val" id="stat-req-val">0</span>
-          <span class="stat-delta" id="stat-req-delta">Waiting for sync...</span>
+    <!-- 3. SECURITY OVERVIEW (METRICS) -->
+    <section id="metrics" class="metrics-section" data-reveal>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-label">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+            Analysed Packets
+          </span>
+          <span class="metric-val" id="stat-req-val">0</span>
+          <span class="metric-footer" id="stat-req-delta">Waiting for sync...</span>
         </div>
-        <div class="stat-panel">
-          <span class="stat-label">THREATS BLOCKED</span>
-          <span class="stat-val" id="stat-blocked-val">0</span>
-          <span class="stat-delta" id="stat-blocked-delta">Waiting for sync...</span>
+
+        <div class="metric-card">
+          <span class="metric-label">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M9 9l6 6M15 9l-6 6"/>
+            </svg>
+            Threats Intercepted
+          </span>
+          <span class="metric-val" id="stat-blocked-val">0</span>
+          <span class="metric-footer" id="stat-blocked-delta">Waiting for sync...</span>
         </div>
-        <div class="stat-panel">
-          <span class="stat-label">ACTIVE RULES</span>
-          <span class="stat-val" id="stat-rules-val">57</span>
-          <span class="stat-delta">Static loaded</span>
+
+        <div class="metric-card">
+          <span class="metric-label">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            Active Signatures
+          </span>
+          <span class="metric-val" id="stat-rules-val">57</span>
+          <span class="metric-footer">Security engine dynamic</span>
         </div>
-        <div class="stat-panel">
-          <span class="stat-label">BLOCKED IPS</span>
-          <span class="stat-val" id="stat-ips-val">0</span>
-          <span class="stat-delta" id="stat-ips-delta">Waiting for sync...</span>
-        </div>
-      </div>
-    </section>
 
-    <!-- 4.5 WAF SANDBOX -->
-    <section id="sandbox">
-      <span class="section-eyebrow">&gt; PAYLOAD SANDBOX</span>
-      <h2 class="section-title">Test The WAF</h2>
-      <p class="section-desc">
-        Send any string through the WAF engine. Clean requests pass. Malicious payloads are blocked with a full violation report.
-      </p>
-
-      <div class="preset-row" data-reveal>
-        <button class="preset-btn" onclick="loadPayload('sqli')">[SQL Injection]</button>
-        <button class="preset-btn" onclick="loadPayload('xss')">[XSS Attack]</button>
-        <button class="preset-btn" onclick="loadPayload('path')">[Path Traversal]</button>
-        <button class="preset-btn" onclick="loadPayload('cmd')">[Cmd Injection]</button>
-        <button class="preset-btn" onclick="loadPayload('clean')">[Clean Request]</button>
-        <button class="preset-btn" onclick="loadPayload('custom')">[Custom...]</button>
-      </div>
-
-      <div class="sandbox-input-panel" data-reveal>
-        <div class="sandbox-line">
-          <span class="sandbox-prompt">root@waf-sandbox:~$ waf analyze --payload "</span>
-          <textarea id="sandbox-input" class="sandbox-textarea" rows="1" oninput="autoExpandTextarea(this)">Hello, this is a legitimate message.</textarea>
-          <span class="sandbox-prompt">"</span>
-        </div>
-      </div>
-
-      <div class="sandbox-submit-row" data-reveal>
-        <button class="btn btn-primary" onclick="submitSandbox()">[→ ANALYZE]</button>
-      </div>
-
-      <!-- Result pane -->
-      <div class="sandbox-result-container" id="sandbox-result-wrapper">
-        <div class="result-box" id="sandbox-result-box">
-          <div class="result-header" id="sandbox-result-header">
-            <!-- Dynamic header text & status indicator -->
-          </div>
-          <div class="result-content" id="sandbox-result-content">
-            <!-- Dynamic result detail lines -->
-          </div>
+        <div class="metric-card">
+          <span class="metric-label">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 0 0-10 10v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-7a10 10 0 0 0-10-10z"/>
+            </svg>
+            Active IP Blocks
+          </span>
+          <span class="metric-val" id="stat-ips-val">0</span>
+          <span class="metric-footer" id="stat-ips-delta">Waiting for sync...</span>
         </div>
       </div>
     </section>
 
-    <!-- 4.6 LIVE THREAT FEED -->
-    <section id="threat-feed">
-      <span class="section-eyebrow">&gt; LIVE THREAT STREAM</span>
-      <h2 class="section-title">Real-Time Attack Detection</h2>
-      <p class="section-desc">
-        Connect to the WAF's Server-Sent Event stream. Every blocked request appears here in real time.
-      </p>
+    <!-- 4. INTERACTIVE ATTACK PLAYGROUND -->
+    <section id="playground" data-reveal>
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="font-mono" style="font-size:1.25rem; text-transform:uppercase; margin-bottom:var(--space-1);">Payload Sandbox Simulator</h2>
+        <p style="color:var(--gray-400); max-width:600px;">Inject test payloads below to audit the WAF's multi-stage validation and threat signature classification pipeline.</p>
+      </div>
 
-      <div class="threat-grid">
-        <div class="panel threat-feed-pane" data-reveal>
-          <div class="panel-header">
-            <span class="panel-title">tail -f /var/log/waf/threats.log</span>
-            <div class="panel-meta">
-              <span class="pulse-dot"></span>
-              <span>LIVE</span>
+      <div class="playground-grid">
+        <!-- Left presets menu -->
+        <div class="playground-left">
+          <span class="preset-group-title">Attack Presets</span>
+          <button class="preset-tab-btn" data-preset="sqli" onclick="loadPresetPayload('sqli')">
+            SQL Injection <span>→</span>
+          </button>
+          <button class="preset-tab-btn" data-preset="xss" onclick="loadPresetPayload('xss')">
+            Cross-Site Scripting <span>→</span>
+          </button>
+          <button class="preset-tab-btn" data-preset="ssrf" onclick="loadPresetPayload('ssrf')">
+            SSRF / Metadata <span>→</span>
+          </button>
+          <button class="preset-tab-btn" data-preset="rce" onclick="loadPresetPayload('rce')">
+            Shellshock RCE <span>→</span>
+          </button>
+          <button class="preset-tab-btn" data-preset="lfi" onclick="loadPresetPayload('lfi')">
+            Local File Inclusion <span>→</span>
+          </button>
+          <button class="preset-tab-btn" data-preset="path" onclick="loadPresetPayload('path')">
+            Path Traversal <span>→</span>
+          </button>
+          <button class="preset-tab-btn" data-preset="cmd" onclick="loadPresetPayload('cmd')">
+            Command Injection <span>→</span>
+          </button>
+          
+          <span class="preset-group-title">Baseline Presets</span>
+          <button class="preset-tab-btn" data-preset="clean" onclick="loadPresetPayload('clean')">
+            Clean Request <span>→</span>
+          </button>
+        </div>
+
+        <!-- Center Workspace -->
+        <div class="playground-content">
+          <div class="sandbox-console-wrapper">
+            <div class="sandbox-console-prompt">
+              <span class="sandbox-console-path">waf-analyzer:~# inspect --payload "</span>
+              <textarea id="sandbox-input" class="sandbox-textarea" rows="1" placeholder="Type or choose a payload to evaluate..."></textarea>
+              <span class="sandbox-console-path">"</span>
+            </div>
+            <div class="sandbox-console-footer">
+              <span class="sandbox-console-char-count" id="sandbox-char-count">0 / 1000</span>
+              <button class="btn btn-primary" id="btn-analyze-sandbox" onclick="analyzeSandboxPayload()">
+                Analyze Package
+              </button>
             </div>
           </div>
-          <div class="threat-stream-body" id="threat-feed-container">
-            <div class="threat-system-msg">[establishing stream connection...]</div>
-          </div>
-        </div>
 
-        <div class="stats-breakdown" data-reveal>
-          <div class="panel">
+          <!-- Pipeline Graph -->
+          <div class="panel detection-timeline-wrapper">
+            <div class="timeline-flow">
+              <div class="timeline-step" id="step-inbound">
+                <div class="timeline-node">1</div>
+                <div class="timeline-label">Inbound HTTP</div>
+              </div>
+              <div class="timeline-step" id="step-decoder">
+                <div class="timeline-node">2</div>
+                <div class="timeline-label">Multi-Decoder</div>
+              </div>
+              <div class="timeline-step" id="step-match">
+                <div class="timeline-node">3</div>
+                <div class="timeline-label">Regex Match</div>
+              </div>
+              <div class="timeline-step" id="step-policy">
+                <div class="timeline-node">4</div>
+                <div class="timeline-label">Policy Layer</div>
+              </div>
+              <div class="timeline-step" id="step-verdict">
+                <div class="timeline-node">✓</div>
+                <div class="timeline-label">Final Verdict</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inspector Details -->
+          <div class="inspector-detail-box">
             <div class="panel-header">
-              <span class="panel-title">Threat Level Breakdown</span>
+              <span class="panel-title">Inspection Audit Logs</span>
             </div>
-            <div class="panel-body">
-              <div class="breakdown-row">
-                <div class="breakdown-label-row">
-                  <span class="breakdown-label">CRITICAL</span>
-                  <span class="breakdown-val" id="breakdown-val-critical">0</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill fill-critical" id="breakdown-bar-critical" style="width: 0%"></div>
-                </div>
+            <div class="inspector-grid">
+              <div class="inspector-pane" id="inspector-request-pane">
+                <!-- Request details rendered here -->
+                Waiting for payload execution...
               </div>
-              
-              <hr>
-
-              <div class="breakdown-row">
-                <div class="breakdown-label-row">
-                  <span class="breakdown-label">HIGH</span>
-                  <span class="breakdown-val" id="breakdown-val-high">0</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill fill-high" id="breakdown-bar-high" style="width: 0%"></div>
-                </div>
-              </div>
-
-              <hr>
-
-              <div class="breakdown-row">
-                <div class="breakdown-label-row">
-                  <span class="breakdown-label">MEDIUM</span>
-                  <span class="breakdown-val" id="breakdown-val-medium">0</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill fill-medium" id="breakdown-bar-medium" style="width: 0%"></div>
-                </div>
-              </div>
-
-              <hr>
-
-              <div class="breakdown-row">
-                <div class="breakdown-label-row">
-                  <span class="breakdown-label">LOW</span>
-                  <span class="breakdown-val" id="breakdown-val-low">0</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill fill-low" id="breakdown-bar-low" style="width: 0%"></div>
-                </div>
-              </div>
-
-              <hr>
-
-              <div class="breakdown-row">
-                <div class="breakdown-label-row">
-                  <span class="breakdown-label">OTHER</span>
-                  <span class="breakdown-val" id="breakdown-val-other">0</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill fill-other" id="breakdown-bar-other" style="width: 0%"></div>
-                </div>
+              <div class="inspector-pane" id="inspector-verdict-pane">
+                <!-- Verdict details rendered here -->
+                No audit log loaded.
               </div>
             </div>
           </div>
@@ -1659,299 +263,296 @@
       </div>
     </section>
 
-    <!-- 4.7 PROTECTION LAYERS (RULES) -->
-    <section id="rules">
-      <span class="section-eyebrow">&gt; PROTECTION LAYERS</span>
-      <h2 class="section-title">Security Rule Engine</h2>
-      <p class="section-desc">
-        57 regex-based detection patterns across 5 attack categories, processed on every inbound request.
-      </p>
-
-      <div class="rules-grid">
-        <!-- SQLi Card -->
-        <div class="panel rule-card interactive" data-reveal>
-          <div class="panel-body">
-            <div class="rule-card-top">
-              <span class="rule-card-icon">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 2" />
-                  <path d="M12 7v10M8 12h8" />
-                  <circle cx="12" cy="12" r="3" fill="var(--bg-panel)" />
-                </svg>
-              </span>
-              <span class="rule-card-title">SQL Injection</span>
-            </div>
-            <div class="rule-card-bottom">
-              <span class="rule-card-num">18</span>
-              <span class="badge badge-critical">CRITICAL</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- XSS Card -->
-        <div class="panel rule-card interactive" data-reveal>
-          <div class="panel-body">
-            <div class="rule-card-top">
-              <span class="rule-card-icon">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M10 8L6 12l4 4M14 8l4 4-4 4" />
-                  <line x1="13" y1="7" x2="11" y2="17" />
-                </svg>
-              </span>
-              <span class="rule-card-title">Cross-Site Scripting</span>
-            </div>
-            <div class="rule-card-bottom">
-              <span class="rule-card-num">14</span>
-              <span class="badge badge-high">HIGH</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Path Traversal Card -->
-        <div class="panel rule-card interactive" data-reveal>
-          <div class="panel-body">
-            <div class="rule-card-top">
-              <span class="rule-card-icon">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2-2H5a2 2 0 0 0-2 2z" />
-                  <path d="M8 14h8M12 10l-4 4 4 4" />
-                </svg>
-              </span>
-              <span class="rule-card-title">Path Traversal</span>
-            </div>
-            <div class="rule-card-bottom">
-              <span class="rule-card-num">9</span>
-              <span class="badge badge-high">HIGH</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Command Injection Card -->
-        <div class="panel rule-card interactive" data-reveal>
-          <div class="panel-body">
-            <div class="rule-card-top">
-              <span class="rule-card-icon">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M4 17l6-5-6-5M12 16h8" />
-                </svg>
-              </span>
-              <span class="rule-card-title">Command Injection</span>
-            </div>
-            <div class="rule-card-bottom">
-              <span class="rule-card-num">9</span>
-              <span class="badge badge-critical">CRITICAL</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- SSRF Card -->
-        <div class="panel rule-card interactive" data-reveal>
-          <div class="panel-body">
-            <div class="rule-card-top">
-              <span class="rule-card-icon">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="5" r="2" />
-                  <circle cx="5" cy="19" r="2" />
-                  <circle cx="19" cy="19" r="2" />
-                  <path d="M5 17l6-10M19 17l-6-10" />
-                </svg>
-              </span>
-              <span class="rule-card-title">SSRF / Pollution</span>
-            </div>
-            <div class="rule-card-bottom">
-              <span class="rule-card-num">7</span>
-              <span class="badge badge-high">HIGH</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Header Validation Card -->
-        <div class="panel rule-card interactive" data-reveal>
-          <div class="panel-body">
-            <div class="rule-card-top">
-              <span class="rule-card-icon">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M12 3v18M3 12h18" />
-                  <rect x="5" y="5" width="14" height="14" rx="1" />
-                </svg>
-              </span>
-              <span class="rule-card-title">Header Validation</span>
-            </div>
-            <div class="rule-card-bottom">
-              <span class="rule-card-num">Runtime</span>
-              <span class="badge badge-medium">MEDIUM</span>
-            </div>
-          </div>
-        </div>
+    <!-- 5. THREAT OPERATIONS CENTER (SOC) -->
+    <section id="threats" data-reveal>
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="font-mono" style="font-size:1.25rem; text-transform:uppercase; margin-bottom:var(--space-1);">Threat Operations Stream</h2>
+        <p style="color:var(--gray-400); max-width:600px;">Real-time perimeter telemetry. Server-Sent Events (SSE) stream blocked exploits and threat intelligence records below.</p>
       </div>
 
-      <!-- Expandable Rule Details -->
-      <div id="rules-details-trigger" class="admin-trigger" onclick="toggleRulesTable()" data-reveal>
-        <span>[+] SHOW INDIVIDUAL DETECTION PATTERNS</span>
-        <span id="rules-expand-indicator">Expand ▼</span>
-      </div>
-
-      <div class="rules-table-container" id="rules-table-wrapper">
-        <div id="rules-table-placeholder" class="admin-req-msg">
-          [Admin key required to view rule details. Configure key in admin section below.]
+      <div class="threat-soc-grid">
+        <!-- Live SOC Feed Table -->
+        <div class="panel threat-stream-pane">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="pulse-dot"></span>
+              tail -f /var/log/waf/threats.log
+            </div>
+          </div>
+          <div class="soc-table-wrapper">
+            <table class="soc-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Severity</th>
+                  <th>Rule ID</th>
+                  <th>Description</th>
+                  <th style="text-align:right;">Source IP</th>
+                </tr>
+              </thead>
+              <tbody id="soc-threat-logs-body">
+                <tr id="soc-empty-row">
+                  <td colspan="5" style="text-align: center; color: var(--gray-500); padding: var(--space-6);">
+                    Waiting for threat telemetry...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="rules-table-scroll" id="rules-table-data" style="display: none;">
-          <table class="rules-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Rule Name</th>
-                <th>Threat Level</th>
-                <th>Pattern regex</th>
-              </tr>
-            </thead>
-            <tbody id="rules-table-body">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
+
+        <!-- Right Side: Severity Breakdown -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Signature Severity Distribution</span>
+          </div>
+          <div class="panel-body threat-meta-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-meta-row">
+                <span class="breakdown-name">CRITICAL</span>
+                <span class="breakdown-val-label" id="breakdown-val-critical">0</span>
+              </div>
+              <div class="breakdown-progress-track">
+                <div class="breakdown-progress-fill bg-red" id="breakdown-bar-critical"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-meta-row">
+                <span class="breakdown-name">HIGH</span>
+                <span class="breakdown-val-label" id="breakdown-val-high">0</span>
+              </div>
+              <div class="breakdown-progress-track">
+                <div class="breakdown-progress-fill bg-critical" style="background-color:var(--color-orange);" id="breakdown-bar-high"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-meta-row">
+                <span class="breakdown-name">MEDIUM</span>
+                <span class="breakdown-val-label" id="breakdown-val-medium">0</span>
+              </div>
+              <div class="breakdown-progress-track">
+                <div class="breakdown-progress-fill bg-medium" id="breakdown-bar-medium"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-meta-row">
+                <span class="breakdown-name">LOW</span>
+                <span class="breakdown-val-label" id="breakdown-val-low">0</span>
+              </div>
+              <div class="breakdown-progress-track">
+                <div class="breakdown-progress-fill bg-low" id="breakdown-bar-low"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-meta-row">
+                <span class="breakdown-name">OTHER</span>
+                <span class="breakdown-val-label" id="breakdown-val-other">0</span>
+              </div>
+              <div class="breakdown-progress-track">
+                <div class="breakdown-progress-fill bg-neutral" id="breakdown-bar-other"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 4.8 ARCHITECTURE SECTION -->
-    <section id="architecture">
-      <span class="section-eyebrow">&gt; HOW IT WORKS</span>
-      <h2 class="section-title">Request Inspection Pipeline</h2>
-      <p class="section-desc">
-        High-performance proxy filter that acts as the front gateway to FastAPI routes.
-      </p>
+    <!-- 6. RULE INTELLIGENCE EXPLORER -->
+    <section id="rules" data-reveal>
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="font-mono" style="font-size:1.25rem; text-transform:uppercase; margin-bottom:var(--space-1);">Rule Intelligence Explorer</h2>
+        <p style="color:var(--gray-400); max-width:600px;">Search and audit active signature databases compiled inside the core WAF engine.</p>
+      </div>
 
-      <div class="panel arch-panel" data-reveal>
-        <div class="arch-svg-container">
-          <svg viewBox="0 0 700 520" class="arch-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:auto;">
+      <!-- Toolbar Search/Filters -->
+      <div class="rule-explorer-toolbar">
+        <div class="search-input-wrapper">
+          <svg class="search-icon-marker" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+          <input type="text" id="rules-search-field" class="text-input rules-search-field" placeholder="Search signature identifier, name, pattern..." oninput="filterRulesExplorer()">
+        </div>
+        <select id="rules-filter-severity" class="filter-select" onchange="filterRulesExplorer()">
+          <option value="all">Severity: All</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+
+      <!-- Rules Table -->
+      <div class="rules-explorer-table-wrapper">
+        <table class="rules-explorer-table">
+          <thead>
+            <tr>
+              <th>Signature ID</th>
+              <th>Rule Name</th>
+              <th>Severity</th>
+              <th>Regex Pattern</th>
+            </tr>
+          </thead>
+          <tbody id="rules-explorer-tbody">
+            <!-- Rendered by JS or locked message -->
+            <tr>
+              <td colspan="4" style="text-align:center; padding:var(--space-6); color:var(--gray-400);">
+                [Admin authorization token is required to view signature assets. Enter token in the workspace below.]
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7. SYSTEM ARCHITECTURE VISUALIZATION -->
+    <section id="pipeline" data-reveal>
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="font-mono" style="font-size:1.25rem; text-transform:uppercase; margin-bottom:var(--space-1);">Request Validation Pipeline</h2>
+        <p style="color:var(--gray-400); max-width:600px;">Request lifecycle architecture from boundary connection to downstream controller invocation.</p>
+      </div>
+
+      <div class="architecture-svg-wrapper">
+        <div class="svg-container">
+          <svg viewBox="0 0 700 500" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:auto;">
             <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#5A5A6A"/>
+              <marker id="svg-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--gray-700)"/>
               </marker>
-              <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#00D26A"/>
+              <marker id="svg-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-green)"/>
               </marker>
-              <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF453A"/>
+              <marker id="svg-arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-red)"/>
               </marker>
             </defs>
 
-            <!-- INCOMING REQUEST -->
-            <text x="350" y="35" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" letter-spacing="1">INCOMING HTTP REQUEST</text>
-            <line x1="350" y1="45" x2="350" y2="80" stroke="#5A5A6A" stroke-dasharray="2 2" marker-end="url(#arrow)" />
+            <!-- Outer request -->
+            <text x="350" y="25" text-anchor="middle" fill="var(--gray-50)" font-family="var(--font-mono)" font-size="11" font-weight="600" letter-spacing="1">CLIENT INBOUND CONNECTION</text>
+            <line x1="350" y1="35" x2="350" y2="70" stroke="var(--gray-700)" stroke-width="1.2" stroke-dasharray="2 2" marker-end="url(#svg-arrow)" />
 
-            <!-- WAF MIDDLEWARE -->
-            <rect x="230" y="80" width="240" height="90" rx="6" fill="#0F0F13" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
-            <text x="350" y="105" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#EBEBF5">WAF MIDDLEWARE</text>
-            <text x="260" y="130" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● rate_limiter</text>
-            <text x="260" y="150" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● ip_blocklist</text>
-            <text x="380" y="130" font-family="var(--font-mono)" font-size="10" fill="#5A5A6A" class="meta">[Rate limits / IP checks]</text>
+            <!-- Edge Middleware node -->
+            <rect x="220" y="70" width="260" height="90" rx="6" class="svg-node-rect" />
+            <text x="350" y="92" text-anchor="middle" class="svg-text-title">EDGE MIDDLEWARE LAYER</text>
+            <text x="245" y="118" class="svg-text-body">● rate_limit_evaluator</text>
+            <text x="245" y="138" class="svg-text-body">● blocklist_perimeter_check</text>
+            <text x="385" y="118" class="svg-text-dim">[Cheapest gate first]</text>
 
-            <line x1="350" y1="170" x2="350" y2="205" stroke="#5A5A6A" stroke-width="1.2" marker-end="url(#arrow)" />
+            <line x1="350" y1="160" x2="350" y2="195" stroke="var(--gray-700)" stroke-width="1.2" marker-end="url(#svg-arrow)" />
 
-            <!-- WAF ENGINE -->
-            <rect x="230" y="205" width="240" height="95" rx="6" fill="#0F0F13" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
-            <text x="350" y="230" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#EBEBF5">WAF ENGINE</text>
-            <text x="260" y="255" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● analyze()</text>
-            <text x="260" y="275" font-family="var(--font-mono)" font-size="11" fill="#9898A8">● rule_pipeline</text>
-            <text x="380" y="255" font-family="var(--font-mono)" font-size="10" fill="#5A5A6A" class="meta">[Multi-pass decoder]</text>
+            <!-- WAF Core signature engine -->
+            <rect x="220" y="195" width="260" height="90" rx="6" class="svg-node-rect" />
+            <text x="350" y="217" text-anchor="middle" class="svg-text-title">WAF ASSESSMENT ENGINE</text>
+            <text x="245" y="243" class="svg-text-body">● multi_pass_url_decoder</text>
+            <text x="245" y="263" class="svg-text-body">● regex_signature_evaluator</text>
+            <text x="385" y="243" class="svg-text-dim">[Assessment Engine]</text>
 
-            <!-- SPLIT DECISION -->
-            <!-- Block Arrow (Left) -->
-            <path d="M 310 300 C 310 330, 190 330, 190 355" stroke="#FF453A" stroke-width="1.2" fill="none" marker-end="url(#arrow-red)" />
-            <text x="210" y="325" font-family="var(--font-mono)" font-size="10" fill="#FF453A">Blocked (403)</text>
+            <!-- Split branches path -->
+            <!-- Blocked -->
+            <path d="M 310 285 C 310 320, 190 320, 190 355" class="svg-flow-path block" marker-end="url(#svg-arrow-red)" />
+            <text x="200" y="320" fill="var(--color-red)" font-family="var(--font-mono)" font-size="9">Threat Verified (403)</text>
 
-            <!-- Pass Arrow (Right) -->
-            <path d="M 390 300 C 390 330, 510 330, 510 355" stroke="#00D26A" stroke-width="1.2" fill="none" marker-end="url(#arrow-green)" />
-            <text x="495" y="325" font-family="var(--font-mono)" font-size="10" fill="#00D26A">Passed (200)</text>
+            <!-- Passed -->
+            <path d="M 390 285 C 390 320, 510 320, 510 355" class="svg-flow-path pass" marker-end="url(#svg-arrow-green)" />
+            <text x="440" y="320" fill="var(--color-green)" font-family="var(--font-mono)" font-size="9">Assessment Clean (200)</text>
 
-            <!-- BLOCK PANEL -->
-            <rect x="100" y="360" width="180" height="100" rx="6" fill="#0F0F13" stroke="rgba(255, 69, 58, 0.15)" stroke-width="1.5" />
-            <text x="190" y="385" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#FF453A">BLOCK ROUTE</text>
-            <text x="120" y="415" font-family="var(--font-mono)" font-size="10" fill="#9898A8">HTTP 403 Forbidden</text>
-            <text x="120" y="435" font-family="var(--font-mono)" font-size="10" fill="#9898A8">Log to threat stream</text>
+            <!-- Block Response Panel -->
+            <rect x="90" y="355" width="200" height="90" rx="6" style="fill:var(--gray-950); stroke:var(--color-red-border); stroke-width:1.2;" />
+            <text x="190" y="378" text-anchor="middle" fill="var(--color-red)" font-family="var(--font-mono)" font-size="11" font-weight="600">BLOCK PIPELINE</text>
+            <text x="115" y="405" class="svg-text-body">● HTTP 403 Forbidden</text>
+            <text x="115" y="423" class="svg-text-body">● Emit threat events log</text>
 
-            <!-- PASS PANEL -->
-            <rect x="420" y="360" width="180" height="100" rx="6" fill="#0F0F13" stroke="rgba(0, 210, 106, 0.15)" stroke-width="1.5" />
-            <text x="510" y="385" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="#00D26A">FORWARD ROUTE</text>
-            <text x="440" y="415" font-family="var(--font-mono)" font-size="10" fill="#9898A8">Accept request</text>
-            <text x="440" y="435" font-family="var(--font-mono)" font-size="10" fill="#9898A8">Invoke FastAPI controller</text>
+            <!-- Allow Downstream Panel -->
+            <rect x="410" y="355" width="200" height="90" rx="6" style="fill:var(--gray-950); stroke:var(--color-green-border); stroke-width:1.2;" />
+            <text x="510" y="378" text-anchor="middle" fill="var(--color-green)" font-family="var(--font-mono)" font-size="11" font-weight="600">FORWARD PIPELINE</text>
+            <text x="435" y="405" class="svg-text-body">● Invoke FastAPI route</text>
+            <text x="435" y="423" class="svg-text-body">● Append verification header</text>
           </svg>
         </div>
 
-        <div class="arch-callout-grid">
-          <div class="arch-callout-card">
-            <h4 class="arch-callout-title">REQUEST_ID</h4>
-            <p class="arch-callout-desc">Every request gets a unique REQ-YYYYMMDD-NNNNNN identifier for traceability.</p>
+        <div class="architecture-callout-grid">
+          <div class="callout-card">
+            <h4 class="callout-title">Uptime tracking</h4>
+            <p class="callout-desc">Telemetry logs monitor core engines uptime indicators continuously.</p>
           </div>
-          <div class="arch-callout-card">
-            <h4 class="arch-callout-title">MULTI-DECODE</h4>
-            <p class="arch-callout-desc">3-pass URL decoding catches base64, hex, and double-encoded obfuscation evasion techniques.</p>
+          <div class="callout-card">
+            <h4 class="callout-title">Multi-Decoding</h4>
+            <p class="callout-desc">Decodes base64, hex, and double URL obfuscation to catch evasion bypasses.</p>
           </div>
-          <div class="arch-callout-card">
-            <h4 class="arch-callout-title">SSE_EVENTS</h4>
-            <p class="arch-callout-desc">Blocked requests emit real-time events immediately to all connected monitoring dashboard clients.</p>
+          <div class="callout-card">
+            <h4 class="callout-title">SSE Event Stream</h4>
+            <p class="callout-desc">Real-time exploits are pushed immediately to listening dashboard clients.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4.9 ADMIN PANEL -->
-    <section id="admin">
-      <div id="admin-panel-trigger" class="admin-trigger" onclick="toggleAdminPanel()" data-reveal>
-        <span>[⚙] WAF ADMIN CONTROL CENTER</span>
-        <span id="admin-expand-indicator">Expand ▼</span>
+    <!-- 8. ADMINISTRATIVE WORKSPACE -->
+    <section id="admin" class="admin-workspace" data-reveal>
+      <div class="admin-header-trigger" id="admin-workspace-trigger" onclick="toggleAdminWorkspace()">
+        <span class="panel-title" style="font-size:0.8125rem; font-weight:600; display:flex; align-items:center; gap:var(--space-2)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          WAF Administration Workspace
+        </span>
+        <span id="admin-expand-indicator" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--gray-400)">Expand ▼</span>
       </div>
 
-      <div class="admin-content" id="admin-content-wrapper">
+      <div class="admin-panel-content" id="admin-workspace-body">
+        <!-- Credentials config -->
         <div class="admin-form-group">
-          <label class="admin-form-label" for="admin-key-field">X-Admin-Key configuration</label>
-          <div class="key-input-row">
-            <input type="password" id="admin-key-field" class="text-input" placeholder="Enter WAF_ADMIN_KEY...">
-            <button class="btn-toggle-key" onclick="toggleKeyVisibility()" type="button">Show</button>
-            <button class="btn btn-primary" onclick="saveAdminKey()" style="padding: 8px 16px;">[Set Key]</button>
+          <label class="admin-label" for="admin-key-field">Admin Authorization Key (X-Admin-Key)</label>
+          <div class="admin-input-row" style="max-width: 500px;">
+            <input type="password" id="admin-key-field" class="text-input" placeholder="Configure WAF_ADMIN_KEY...">
+            <button class="btn btn-secondary" id="btn-toggle-key-visible" onclick="toggleAdminKeyVisibility()">Show</button>
+            <button class="btn btn-primary" onclick="saveAdminKey()">Sync key</button>
           </div>
-          <div id="key-status-msg" class="admin-key-status text-amber">No admin key configured in browser local storage.</div>
+          <div id="admin-key-status" class="admin-status-text">Checking credentials configuration...</div>
         </div>
 
-        <div class="admin-controls-grid" id="admin-operations-panel" style="opacity: 0.4; pointer-events: none;">
+        <div class="admin-grid" id="admin-ops-controls" style="opacity: 0.4; pointer-events: none; transition: opacity 0.2s ease;">
+          <!-- Left: CLI console output -->
           <div>
-            <h3 class="admin-subpanel-title">System Commands</h3>
-            
+            <h3 class="admin-subpanel-title">Operations Console</h3>
             <div class="admin-action-row">
-              <button class="btn btn-secondary" onclick="fetchAdminStats()">[waf admin stats]</button>
-              <button class="btn btn-secondary" onclick="fetchAdminBlocklist()">[waf blocklist show]</button>
+              <button class="btn btn-secondary" onclick="fetchAdminStats()">waf admin stats</button>
+              <button class="btn btn-secondary" onclick="fetchAdminBlocklist()">waf blocklist show</button>
             </div>
-
-            <div class="admin-output-pane" id="admin-output-log">$ system ready. execute query.</div>
+            <div class="admin-output-console" id="admin-output-console">$ system ready. authenticate token request.</div>
           </div>
 
+          <!-- Right: Perimeter Ban controls -->
           <div>
-            <h3 class="admin-subpanel-title">Perimeter Security Controls</h3>
+            <h3 class="admin-subpanel-title">Address blocks control</h3>
             
-            <div style="margin-bottom: 2rem;">
-              <h4 class="admin-form-label">Block Host IP Address</h4>
-              <div class="ip-block-form">
-                <input type="text" id="block-ip-addr" class="text-input" placeholder="IP Address (e.g. 192.168.1.100)">
-                <input type="text" id="block-ip-reason" class="text-input" placeholder="Reason (e.g. Rate limit burst)">
-                <button class="btn btn-primary" onclick="submitBlockIP()" style="align-self: flex-start;">[Block IP]</button>
+            <div style="margin-bottom: var(--space-6);">
+              <label class="admin-label">Ban Target Host IP</label>
+              <div class="admin-input-row" style="flex-direction: column; gap: var(--space-2); max-width: 380px;">
+                <input type="text" id="admin-block-ip-addr" class="text-input" placeholder="Host IP (e.g. 192.168.1.102)">
+                <input type="text" id="admin-block-ip-reason" class="text-input" placeholder="Ban reason (e.g. AbuseIPDB threshold)">
+                <button class="btn btn-primary" style="align-self: start;" onclick="blockIPAddress()">Enforce Ban</button>
               </div>
             </div>
 
             <div>
-              <h4 class="admin-form-label">Active Blocklist</h4>
-              <div style="max-height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: 4px;">
-                <table class="blocklist-table">
+              <label class="admin-label">Enforced IP Ban List</label>
+              <div class="admin-ban-table-wrapper">
+                <table class="admin-ban-table">
                   <thead>
                     <tr>
-                      <th>IP</th>
-                      <th>Reason</th>
-                      <th>Action</th>
+                      <th>Banned IP Address</th>
+                      <th>Reason context</th>
+                      <th style="text-align: right;">Action</th>
                     </tr>
                   </thead>
-                  <tbody id="blocklist-table-body">
+                  <tbody id="admin-blocklist-tbody">
+                    <!-- Rendered by JS -->
                     <tr>
-                      <td colspan="3" style="text-align: center; color: var(--text-3);">No blocked IPs</td>
+                      <td colspan="3" style="text-align: center; color: var(--gray-500);">No active perimeter address blocks.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1963,19 +564,19 @@
       </div>
     </section>
 
-    <!-- 4.10 FOOTER -->
+    <!-- FOOTER -->
     <footer data-reveal>
       <div class="footer-grid">
-        <div class="footer-left">
-          <span class="footer-logo">[OUTLOOP WAF]</span>
+        <div class="footer-brand">
+          <span class="footer-brand-title">OUTLOOP WAF</span>
           <span>MIT License &copy; 2026 obstinix</span>
-          <span>FastAPI + Python engine. Deployed on Vercel infrastructure.</span>
+          <span>Python FastAPI core proxy. Compiled serverless edge routes.</span>
         </div>
-        <div class="footer-right">
+        <div class="footer-links">
           <div class="footer-col">
             <span class="footer-col-title">Documentation</span>
             <a href="/api/docs" target="_blank">Swagger OpenAPI</a>
-            <a href="/api/redoc" target="_blank">ReDoc</a>
+            <a href="/api/redoc" target="_blank">ReDoc Schema</a>
           </div>
           <div class="footer-col">
             <span class="footer-col-title">Endpoints</span>
@@ -1986,868 +587,33 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>Build: <span class="text-green" id="footer-build">terminal-ui-v2</span></span>
+        <span>Channel: <span class="text-green" id="footer-build">terminal-ui-v2</span></span>
         <span>Version: <span class="text-green" id="footer-ver">v1.0.0</span></span>
       </div>
     </footer>
 
   </div>
 
-  <!-- 4.11 STATUS BAR -->
+  <!-- 9. BOTTOM STATUS BAR -->
   <div id="status-bar">
-    <span class="sb-left">[OUTLOOP WAF v1.0.0] &nbsp;<span class="sb-active-dot"></span>&nbsp; ACTIVE</span>
-    <span class="sb-center">REQ: <span id="sb-req">00000</span> &nbsp;│&nbsp; BLOCKED: <span id="sb-blocked">00000</span> &nbsp;│&nbsp; RULES: <span id="sb-rules">57</span></span>
-    <span class="sb-right" id="sb-time">00:00:00 UTC</span>
+    <div style="display:flex; align-items:center; gap:var(--space-2)">
+      <span>[OUTLOOP WAF v1.0.0]</span>
+      <span class="pulse-dot"></span>
+      <span style="color:var(--gray-50); font-weight:600;">ACTIVE</span>
+    </div>
+    
+    <div class="sb-metric-group">
+      <div class="sb-metric-item">REQ: <span id="sb-req">00000</span></div>
+      <span>│</span>
+      <div class="sb-metric-item">BLOCKED: <span id="sb-blocked">00000</span></div>
+      <span>│</span>
+      <div class="sb-metric-item">RULES: <span id="sb-rules">57</span></div>
+    </div>
+
+    <div id="sb-time">00:00:00 UTC</div>
   </div>
 
-  <!-- ── JAVASCRIPT ARCHITECTURE ──────────────────────────────────── -->
-  <script>
-    // Global State & Cache
-    const WAF_STATE = {
-      requestsAnalyzed: 0,
-      blockedRequests: 0,
-      blockedIps: 0,
-      rulesCount: 57,
-      rulesByLevel: { critical: 0, high: 0, medium: 0, low: 0 },
-      isWafHealthy: true,
-      lastFetchTime: 0
-    };
-
-    // Helper: Headers with CORS identifier
-    const apiHeaders = () => {
-      const headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/json'
-      };
-      const key = localStorage.getItem('waf_admin_key');
-      if (key) {
-        headers['X-Admin-Key'] = key;
-      }
-      return headers;
-    };
-
-    // ── BOOT SEQUENCE ─────────────────────────────────────────────────
-    (function() {
-      const bootLines = [
-        { text: "Initializing WAF engine...", wait: 200, status: "OK" },
-        { text: "Loading security rule set (57)...", wait: 350, status: "OK" },
-        { text: "Connecting to threat database...", wait: 250, status: "OK" },
-        { text: "Mounting middleware stack...", wait: 300, status: "OK" },
-        { text: "Starting SSE event bus...", wait: 400, status: "OK" },
-        { text: "System ready. Perimeter active.", wait: 150, status: "" }
-      ];
-
-      const container = document.getElementById("boot-lines");
-      let lineIndex = 0;
-
-      function printBootLine() {
-        if (lineIndex < bootLines.length) {
-          const item = bootLines[lineIndex];
-          const row = document.createElement("div");
-          row.className = "boot-line";
-          
-          const label = document.createElement("span");
-          label.textContent = item.text;
-          row.appendChild(label);
-
-          if (item.status) {
-            const statusSpan = document.createElement("span");
-            statusSpan.className = "text-green";
-            statusSpan.textContent = `[${item.status}]`;
-            row.appendChild(statusSpan);
-          }
-
-          container.appendChild(row);
-          
-          gsap.to(row, { opacity: 1, y: 0, duration: 0.3 });
-          lineIndex++;
-          setTimeout(printBootLine, item.wait + 80);
-        } else {
-          // Finished. Fade out loading overlay
-          setTimeout(() => {
-            gsap.to("#boot-loader", {
-              opacity: 0,
-              duration: 0.5,
-              onComplete: () => {
-                document.getElementById("boot-loader").style.display = "none";
-                initAfterBoot();
-              }
-            });
-          }, 450);
-        }
-      }
-
-      window.addEventListener("DOMContentLoaded", () => {
-        setTimeout(printBootLine, 100);
-      });
-    })();
-
-    // ── NAVIGATION ────────────────────────────────────────────────────
-    const header = document.getElementById("main-header");
-    const menuToggle = document.getElementById("menu-toggle-btn");
-    const mobileOverlay = document.getElementById("mobile-nav-overlay");
-
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 60) {
-        header.classList.add("scrolled");
-      } else {
-        header.classList.remove("scrolled");
-      }
-    });
-
-    menuToggle.addEventListener("click", () => {
-      const active = mobileOverlay.classList.toggle("active");
-      menuToggle.textContent = active ? "[X]" : "[≡]";
-    });
-
-    function toggleMobileMenu() {
-      mobileOverlay.classList.remove("active");
-      menuToggle.textContent = "[≡]";
-    }
-
-    // ── STATUS BAR ────────────────────────────────────────────────────
-    (function() {
-      // UTC Clock
-      setInterval(() => {
-        const now = new Date();
-        const hrs = String(now.getUTCHours()).padStart(2, '0');
-        const mins = String(now.getUTCMinutes()).padStart(2, '0');
-        const secs = String(now.getUTCSeconds()).padStart(2, '0');
-        document.getElementById("sb-time").textContent = `${hrs}:${mins}:${secs} UTC`;
-      }, 1000);
-
-      // Periodic health sync (every 15s)
-      setInterval(syncSystemStats, 15000);
-    })();
-
-    // ── HERO TERMINAL ─────────────────────────────────────────────────
-    (function() {
-      const outputEl = document.getElementById("hero-output");
-      const commandEl = document.getElementById("hero-command");
-      const statusDot = document.getElementById("hero-status-dot");
-
-      window.typewriteCommand = function(cmdText, callback) {
-        commandEl.innerHTML = "";
-        let charIndex = 0;
-        const cursor = document.createElement("span");
-        cursor.className = "cursor";
-        commandEl.appendChild(cursor);
-
-        const typing = setInterval(() => {
-          if (charIndex < cmdText.length) {
-            cursor.before(cmdText[charIndex]);
-            charIndex++;
-          } else {
-            clearInterval(typing);
-            if (callback) callback();
-          }
-        }, 45);
-      };
-
-      window.updateHeroTerminal = function(stats) {
-        const uptimeStr = formatUptime(stats.uptime_seconds || 0);
-        outputEl.innerHTML = `root@outloop-waf:~$ waf status
-● WAF Engine       <span class="text-green">${stats.status || 'operational'}</span>
-● Redis Backend    <span class="text-green">[connected / ${stats.backend || 'memory'}]</span>
-● Total Rules      ${stats.total_rules || 57}
-● Uptime           ${uptimeStr}
-● Requests         ${(stats.requests_analyzed || 0).toLocaleString()}
-● Blocked          ${(stats.blocked_requests || 0).toLocaleString()}
-
-root@outloop-waf:~$ <span class="cursor"></span>`;
-        statusDot.className = "status-dot";
-      };
-
-      window.showHeroTerminalError = function(err) {
-        outputEl.innerHTML = `root@outloop-waf:~$ waf status
-<span class="text-amber">[ERROR] Could not reach WAF engine: ${err.message || 'connection failed'}</span>
-
-root@outloop-waf:~$ <span class="cursor"></span>`;
-        statusDot.className = "status-dot warn";
-      };
-
-      function formatUptime(sec) {
-        const h = Math.floor(sec / 3600);
-        const m = Math.floor((sec % 3600) / 60);
-        const s = Math.floor(sec % 60);
-        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-      }
-    })();
-
-    // ── STATS BAR ─────────────────────────────────────────────────────
-    (function() {
-      window.refreshStatsBar = function(stats, previousStats) {
-        const reqVal = document.getElementById("stat-req-val");
-        const blockedVal = document.getElementById("stat-blocked-val");
-        const rulesVal = document.getElementById("stat-rules-val");
-        const ipsVal = document.getElementById("stat-ips-val");
-
-        // Simple check if ScrollTrigger has fired yet, or do incremental update
-        animateCounter(reqVal, stats.requests_analyzed || 0);
-        animateCounter(blockedVal, stats.blocked_requests || 0);
-        animateCounter(ipsVal, stats.blocked_ips || 0);
-        rulesVal.textContent = stats.total_rules || 57;
-
-        // Calculate delta
-        if (previousStats) {
-          const reqDiff = (stats.requests_analyzed || 0) - (previousStats.requests_analyzed || 0);
-          const blockedDiff = (stats.blocked_requests || 0) - (previousStats.blocked_requests || 0);
-          const ipsDiff = (stats.blocked_ips || 0) - (previousStats.blocked_ips || 0);
-
-          updateDeltaLabel("stat-req-delta", reqDiff);
-          updateDeltaLabel("stat-blocked-delta", blockedDiff);
-          updateDeltaLabel("stat-ips-delta", ipsDiff);
-        } else {
-          document.getElementById("stat-req-delta").textContent = "+0 / last 15s";
-          document.getElementById("stat-blocked-delta").textContent = "+0 / last 15s";
-          document.getElementById("stat-ips-delta").textContent = "+0 / last 15s";
-        }
-      };
-
-      function updateDeltaLabel(elId, diff) {
-        const el = document.getElementById(elId);
-        if (diff > 0) {
-          el.textContent = `+${diff} / last 15s`;
-          el.classList.add("active-delta");
-        } else {
-          el.textContent = `+0 / last 15s`;
-          el.classList.remove("active-delta");
-        }
-      }
-
-      function animateCounter(el, target) {
-        const startVal = parseInt(el.textContent.replace(/,/g, '')) || 0;
-        if (startVal === target) return;
-
-        gsap.fromTo({ val: startVal }, {
-          val: target,
-          duration: 1.2,
-          ease: 'power2.out',
-          onUpdate: function() {
-            el.textContent = Math.round(this.targets()[0].val).toLocaleString();
-          }
-        });
-      }
-    })();
-
-    // ── WAF SANDBOX ───────────────────────────────────────────────────
-    const sandboxInput = document.getElementById("sandbox-input");
-    const resultWrapper = document.getElementById("sandbox-result-wrapper");
-    const resultBox = document.getElementById("sandbox-result-box");
-    const resultHeader = document.getElementById("sandbox-result-header");
-    const resultContent = document.getElementById("sandbox-result-content");
-
-    const payloads = {
-      sqli: "'; DROP TABLE users; --",
-      xss: "<script>alert(document.cookie)</script>",
-      path: "../../etc/passwd",
-      cmd: "; cat /etc/shadow",
-      clean: "Hello, this is a legitimate message.",
-      custom: ""
-    };
-
-    function loadPayload(key) {
-      const text = payloads[key];
-      sandboxInput.value = text;
-      autoExpandTextarea(sandboxInput);
-      sandboxInput.focus();
-
-      if (key !== 'custom') {
-        submitSandbox();
-      }
-    }
-
-    function autoExpandTextarea(el) {
-      el.style.height = 'auto';
-      el.style.height = el.scrollHeight + 'px';
-    }
-
-    async function submitSandbox() {
-      const text = sandboxInput.value;
-      if (!text.trim()) return;
-
-      try {
-        const response = await fetch(`/api/secure/test?payload=${encodeURIComponent(text)}`, {
-          method: 'GET',
-          headers: apiHeaders()
-        });
-
-        const data = await response.json();
-
-        if (response.status === 200) {
-          showSandboxResult(true, data);
-        } else if (response.status === 403) {
-          showSandboxResult(false, data);
-        } else {
-          throw new Error(data.detail || 'Inspection failed');
-        }
-      } catch (err) {
-        showSandboxError(err.message);
-      }
-    }
-
-    function showSandboxResult(passed, data) {
-      resultWrapper.style.display = 'block';
-      
-      if (passed) {
-        resultBox.className = "result-box passed";
-        resultHeader.innerHTML = `✓  REQUEST PASSED WAF INSPECTION`;
-        resultContent.innerHTML = `
-<div class="result-detail-line"><span class="result-detail-label">Request ID</span><span class="result-detail-val">${data.waf_request_id || 'REQ-UNKNOWN'}</span></div>
-<div class="result-detail-line"><span class="result-detail-label">Status</span><span class="result-detail-val text-green">CLEAN</span></div>
-<div class="result-detail-line"><span class="result-detail-label">Payload</span><span class="result-detail-val">${escapeHtml(data.received_payload || sandboxInput.value)}</span></div>
-        `;
-      } else {
-        resultBox.className = "result-box blocked";
-        resultHeader.innerHTML = `✗  REQUEST BLOCKED BY WAF`;
-        
-        let violationsHtml = '';
-        if (data.violations && data.violations.length > 0) {
-          violationsHtml = `
-            <div class="violation-card">
-              ${data.violations.map(v => `
-                <div class="violation-item">
-                  <div class="violation-title-row">
-                    <span class="violation-id">${escapeHtml(v.rule_id)}</span>
-                    <span class="violation-name">${escapeHtml(v.rule_name)}</span>
-                    <span class="badge ${getLevelBadgeClass(v.threat_level)}">${escapeHtml(v.threat_level)}</span>
-                  </div>
-                  <div class="violation-match">Matched: "${escapeHtml(v.matched_content)}"</div>
-                </div>
-              `).join('')}
-            </div>
-          `;
-        }
-
-        const threatLevel = data.violations && data.violations.length > 0
-          ? data.violations[0].threat_level.toUpperCase() 
-          : 'CRITICAL';
-
-        resultContent.innerHTML = `
-<div class="result-detail-line"><span class="result-detail-label">Request ID</span><span class="result-detail-val">${data.request_id || 'REQ-UNKNOWN'}</span></div>
-<div class="result-detail-line"><span class="result-detail-label">Threat Level</span><span class="result-detail-val text-red">${threatLevel}</span></div>
-<div class="result-detail-line"><span class="result-detail-label">Violations</span><span class="result-detail-val">${data.violations ? data.violations.length : 1} rule(s) triggered</span></div>
-${violationsHtml}
-        `;
-      }
-
-      gsap.fromTo(resultBox, 
-        { opacity: 0, y: 8 }, 
-        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-      );
-    }
-
-    function showSandboxError(message) {
-      resultWrapper.style.display = 'block';
-      resultBox.className = "result-box blocked";
-      resultHeader.innerHTML = `[ERROR] WAF inspection error`;
-      resultHeader.style.color = "var(--amber)";
-      resultHeader.style.backgroundColor = "rgba(245, 166, 35, 0.05)";
-      resultContent.innerHTML = `<span class="text-amber">[ERROR] WAF endpoint unreachable. Is the server running? (${message})</span>`;
-      
-      gsap.fromTo(resultBox, 
-        { opacity: 0, y: 8 }, 
-        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-      );
-    }
-
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text.toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function getLevelBadgeClass(lvl) {
-      lvl = lvl ? lvl.toLowerCase() : '';
-      if (lvl === 'critical') return 'badge-critical';
-      if (lvl === 'high') return 'badge-high';
-      if (lvl === 'medium') return 'badge-medium';
-      return 'badge-low';
-    }
-
-    // ── THREAT STREAM (SSE) ───────────────────────────────────────────
-    (function() {
-      const feedContainer = document.getElementById("threat-feed-container");
-      let es = null;
-      let reconnectDelay = 1000;
-      let lastEventTime = Date.now();
-      let streamCheckInterval = null;
-
-      function connectThreatStream() {
-        if (es) {
-          es.close();
-        }
-
-        es = new EventSource('/api/events/threats');
-
-        es.onopen = () => {
-          reconnectDelay = 1000;
-          lastEventTime = Date.now();
-          appendSystemMessage("[connected to threat stream]");
-        };
-
-        es.onerror = (err) => {
-          appendSystemMessage(`[stream disconnected — retrying in ${reconnectDelay/1000}s]`, true);
-          es.close();
-          setTimeout(connectThreatStream, reconnectDelay);
-          reconnectDelay = Math.min(reconnectDelay * 2, 30000);
-        };
-
-        es.onmessage = (event) => {
-          lastEventTime = Date.now();
-          let data;
-          try {
-            data = JSON.parse(event.data);
-          } catch (e) {
-            return;
-          }
-
-          if (data.type === 'connected') return;
-
-          appendThreat(data);
-        };
-      }
-
-      function appendSystemMessage(msg, isErr = false) {
-        // Remove old system loading alerts if any
-        const rows = feedContainer.querySelectorAll(".threat-system-msg");
-        rows.forEach(r => r.remove());
-
-        const div = document.createElement("div");
-        div.className = "threat-system-msg" + (isErr ? " error" : "");
-        div.textContent = msg;
-        feedContainer.prepend(div);
-      }
-
-      function appendThreat(threat) {
-        // Clear empty placeholder if exists
-        const ph = document.getElementById("threat-placeholder");
-        if (ph) ph.remove();
-
-        const row = document.createElement("div");
-        row.className = "threat-row";
-        row.style.opacity = "0";
-
-        const timeStr = formatThreatTime(threat.timestamp || new Date().toISOString());
-        const level = (threat.threat_level || 'critical').toLowerCase();
-        const ruleId = threat.rule_id || 'RULE';
-        const ruleName = threat.rule_name || 'Threat Detected';
-        const ip = threat.client_ip || 'unknown';
-
-        row.innerHTML = `
-          <div class="threat-left">
-            <span class="threat-time">[${timeStr}]</span>
-            <span class="badge ${getLevelBadgeClass(level)} threat-badge">${level}</span>
-            <span class="threat-info"><span class="text-blue">${escapeHtml(ruleId)}</span> &nbsp;${escapeHtml(ruleName)}</span>
-          </div>
-          <span class="threat-ip">→ &nbsp;${escapeHtml(ip)}</span>
-        `;
-
-        feedContainer.prepend(row);
-
-        gsap.fromTo(row,
-          { opacity: 0, x: 16 },
-          { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }
-        );
-
-        // Keep container clean of excessive elements
-        while (feedContainer.children.length > 50) {
-          feedContainer.lastElementChild.remove();
-        }
-      }
-
-      function formatThreatTime(iso) {
-        try {
-          const d = new Date(iso);
-          return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')} ${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`;
-        } catch(e) {
-          return '';
-        }
-      }
-
-      // Check for silent periods
-      streamCheckInterval = setInterval(() => {
-        if (Date.now() - lastEventTime > 60000) {
-          if (!document.getElementById("threat-placeholder")) {
-            const div = document.createElement("div");
-            div.className = "threat-system-msg";
-            div.id = "threat-placeholder";
-            div.textContent = "[no threats detected — system clean ✓]";
-            feedContainer.prepend(div);
-          }
-        }
-      }, 10000);
-
-      window.initThreatStream = connectThreatStream;
-    })();
-
-    // ── ADMIN PANEL ───────────────────────────────────────────────────
-    const adminTrigger = document.getElementById("admin-panel-trigger");
-    const adminWrapper = document.getElementById("admin-content-wrapper");
-    const keyField = document.getElementById("admin-key-field");
-    const keyStatusMsg = document.getElementById("key-status-msg");
-    const opsPanel = document.getElementById("admin-operations-panel");
-    const outputLog = document.getElementById("admin-output-log");
-    const blocklistBody = document.getElementById("blocklist-table-body");
-
-    function toggleAdminPanel() {
-      const expanded = adminTrigger.classList.toggle("expanded");
-      document.getElementById("admin-expand-indicator").textContent = expanded ? "Collapse ▲" : "Expand ▼";
-      adminWrapper.style.display = expanded ? "block" : "none";
-      if (expanded) {
-        loadAdminState();
-      }
-    }
-
-    function toggleKeyVisibility() {
-      const show = keyField.type === "password";
-      keyField.type = show ? "text" : "password";
-      document.querySelector(".btn-toggle-key").textContent = show ? "Hide" : "Show";
-    }
-
-    function saveAdminKey() {
-      const val = keyField.value.trim();
-      if (val) {
-        localStorage.setItem('waf_admin_key', val);
-        loadAdminState();
-      } else {
-        localStorage.removeItem('waf_admin_key');
-        loadAdminState();
-      }
-    }
-
-    function loadAdminState() {
-      const key = localStorage.getItem('waf_admin_key');
-      if (key) {
-        keyField.value = key;
-        keyStatusMsg.textContent = "✓ Admin key loaded from browser local storage.";
-        keyStatusMsg.className = "admin-key-status text-green";
-        opsPanel.style.opacity = "1";
-        opsPanel.style.pointerEvents = "auto";
-        // Also sync admin features
-        syncAdminRuleList();
-      } else {
-        keyField.value = "";
-        keyStatusMsg.textContent = "No admin key configured in browser local storage.";
-        keyStatusMsg.className = "admin-key-status text-amber";
-        opsPanel.style.opacity = "0.4";
-        opsPanel.style.pointerEvents = "none";
-        // Revert rules table placeholder
-        document.getElementById("rules-table-placeholder").style.display = "block";
-        document.getElementById("rules-table-data").style.display = "none";
-      }
-    }
-
-    async function fetchAdminStats() {
-      writeAdminLog("$ waf admin stats\nfetching database stats...\n");
-      try {
-        const res = await fetch('/api/admin/stats', {
-          headers: apiHeaders()
-        });
-
-        if (res.status === 401) {
-          clearInvalidKey();
-          return;
-        }
-
-        const data = await res.json();
-        writeAdminLog(`$ waf admin stats\n` + JSON.stringify(data, null, 2));
-      } catch(err) {
-        writeAdminLog(`[ERROR] stats fetch failed: ${err.message}`);
-      }
-    }
-
-    async function fetchAdminBlocklist() {
-      writeAdminLog("$ waf blocklist show\nretrieving active IP bans...\n");
-      try {
-        const res = await fetch('/api/admin/blocklist', {
-          headers: apiHeaders()
-        });
-
-        if (res.status === 401) {
-          clearInvalidKey();
-          return;
-        }
-
-        const data = await res.json();
-        writeAdminLog(`$ waf blocklist show\n` + JSON.stringify(data, null, 2));
-        renderBlocklist(data.blocked_ips);
-      } catch(err) {
-        writeAdminLog(`[ERROR] blocklist fetch failed: ${err.message}`);
-      }
-    }
-
-    async function submitBlockIP() {
-      const ip = document.getElementById("block-ip-addr").value.trim();
-      const reason = document.getElementById("block-ip-reason").value.trim();
-      if (!ip) return;
-
-      writeAdminLog(`$ waf blocklist add ${ip}\nadding to active perimeter ban...`);
-      try {
-        const res = await fetch('/api/admin/blocklist', {
-          method: 'POST',
-          headers: apiHeaders(),
-          body: JSON.stringify({ ip, reason })
-        });
-
-        if (res.status === 401) {
-          clearInvalidKey();
-          return;
-        }
-
-        if (res.status === 422) {
-          writeAdminLog(`[ERROR] IP validation failed. Invalid format.`);
-          return;
-        }
-
-        const data = await res.json();
-        writeAdminLog(`$ waf blocklist add ${ip}\nIP blocked successfully.\n` + JSON.stringify(data, null, 2));
-        document.getElementById("block-ip-addr").value = "";
-        document.getElementById("block-ip-reason").value = "";
-        fetchAdminBlocklist();
-        syncSystemStats();
-      } catch(err) {
-        writeAdminLog(`[ERROR] block ip failed: ${err.message}`);
-      }
-    }
-
-    async function unblockIP(ip) {
-      writeAdminLog(`$ waf blocklist remove ${ip}\nremoving ban rule...`);
-      try {
-        const res = await fetch(`/api/admin/blocklist/${encodeURIComponent(ip)}`, {
-          method: 'DELETE',
-          headers: apiHeaders()
-        });
-
-        if (res.status === 401) {
-          clearInvalidKey();
-          return;
-        }
-
-        const data = await res.json();
-        writeAdminLog(`$ waf blocklist remove ${ip}\nIP unblocked.\n` + JSON.stringify(data, null, 2));
-        fetchAdminBlocklist();
-        syncSystemStats();
-      } catch(err) {
-        writeAdminLog(`[ERROR] unblock ip failed: ${err.message}`);
-      }
-    }
-
-    function clearInvalidKey() {
-      writeAdminLog("[INVALID KEY] WAF admin authorization failed. Key cleared.");
-      localStorage.removeItem('waf_admin_key');
-      loadAdminState();
-    }
-
-    function writeAdminLog(text) {
-      outputLog.textContent = text;
-      outputLog.scrollTop = outputLog.scrollHeight;
-    }
-
-    function renderBlocklist(ips) {
-      blocklistBody.innerHTML = "";
-      if (!ips || ips.length === 0) {
-        blocklistBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-3);">No blocked IPs</td></tr>`;
-        return;
-      }
-
-      ips.forEach(ip => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${escapeHtml(ip)}</td>
-          <td>Manual Ban</td>
-          <td><button class="btn-unblock" onclick="unblockIP('${escapeHtml(ip)}')">Unblock</button></td>
-        `;
-        blocklistBody.appendChild(tr);
-      });
-    }
-
-    // ── RULES TABLE INTEGRATION ───────────────────────────────────────
-    let rulesExpanded = false;
-    const rulesTrigger = document.getElementById("rules-details-trigger");
-    const rulesWrapper = document.getElementById("rules-table-wrapper");
-
-    function toggleRulesTable() {
-      rulesExpanded = !rulesExpanded;
-      document.getElementById("rules-expand-indicator").textContent = rulesExpanded ? "Collapse ▲" : "Expand ▼";
-      rulesWrapper.style.display = rulesExpanded ? "block" : "none";
-      if (rulesExpanded) {
-        syncAdminRuleList();
-      }
-    }
-
-    async function syncAdminRuleList() {
-      const key = localStorage.getItem('waf_admin_key');
-      if (!key) {
-        document.getElementById("rules-table-placeholder").style.display = "block";
-        document.getElementById("rules-table-data").style.display = "none";
-        return;
-      }
-
-      document.getElementById("rules-table-placeholder").style.display = "none";
-      document.getElementById("rules-table-data").style.display = "block";
-
-      const body = document.getElementById("rules-table-body");
-      if (body.children.length > 0) return; // already loaded
-
-      try {
-        const res = await fetch('/api/admin/rules', {
-          headers: apiHeaders()
-        });
-
-        if (res.status === 401) {
-          clearInvalidKey();
-          return;
-        }
-
-        const data = await res.json();
-        body.innerHTML = "";
-        data.rules.forEach(rule => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${escapeHtml(rule.id)}</td>
-            <td>${escapeHtml(rule.name)}</td>
-            <td><span class="badge ${getLevelBadgeClass(rule.threat_level)}">${escapeHtml(rule.threat_level)}</span></td>
-            <td class="rule-pattern">${escapeHtml(rule.pattern)}</td>
-          `;
-          body.appendChild(tr);
-        });
-      } catch(err) {
-        body.innerHTML = `<tr><td colspan="4" style="color: var(--amber);">[ERROR] Failed to fetch rule details: ${escapeHtml(err.message)}</td></tr>`;
-      }
-    }
-
-    // ── SYSTEM STATS SYNC ─────────────────────────────────────────────
-    async function syncSystemStats() {
-      try {
-        const response = await fetch('/api/health/detailed', {
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-
-        if (!response.ok) throw new Error('Status check failed');
-
-        const data = await response.json();
-        
-        // Check if structure matches
-        if (data.components && data.components.waf_engine && data.components.waf_engine.stats) {
-          const stats = data.components.waf_engine.stats;
-          const systemUptime = data.uptime_seconds || 0;
-          
-          const prev = { ...WAF_STATE };
-
-          WAF_STATE.requestsAnalyzed = stats.requests_analyzed || 0;
-          WAF_STATE.blockedRequests = stats.blocked_requests || 0;
-          WAF_STATE.blockedIps = stats.blocked_ips || 0;
-          WAF_STATE.rulesCount = stats.total_rules || 57;
-          WAF_STATE.rulesByLevel = stats.rules_by_level || { critical: 0, high: 0, medium: 0, low: 0 };
-          WAF_STATE.isWafHealthy = true;
-          WAF_STATE.uptime = systemUptime;
-
-          // Update Status bar numbers
-          document.getElementById("sb-req").textContent = WAF_STATE.requestsAnalyzed.toLocaleString();
-          document.getElementById("sb-blocked").textContent = WAF_STATE.blockedRequests.toLocaleString();
-          document.getElementById("sb-rules").textContent = WAF_STATE.rulesCount;
-
-          // Update Hero
-          updateHeroTerminal({
-            status: data.components.waf_engine.status || 'operational',
-            backend: stats.backend,
-            total_rules: stats.total_rules,
-            uptime_seconds: systemUptime,
-            requests_analyzed: WAF_STATE.requestsAnalyzed,
-            blocked_requests: WAF_STATE.blockedRequests
-          });
-
-          // Refresh Stats bar (will trigger count animations if differences found)
-          if (prev.requestsAnalyzed > 0) {
-            refreshStatsBar(stats, prev);
-          } else {
-            // First time load
-            refreshStatsBar(stats, null);
-          }
-
-          // Update breakdown bars
-          updateBreakdownBars(stats.rules_by_level || {});
-        }
-      } catch(err) {
-        WAF_STATE.isWafHealthy = false;
-        showHeroTerminalError(err);
-      }
-    }
-
-    function updateBreakdownBars(levels) {
-      const crit = levels.critical || 0;
-      const high = levels.high || 0;
-      const med = levels.medium || 0;
-      const low = levels.low || 0;
-      const other = levels.other || 0;
-
-      const total = crit + high + med + low + other || 1;
-
-      updateBar("critical", crit, total);
-      updateBar("high", high, total);
-      updateBar("medium", med, total);
-      updateBar("low", low, total);
-      updateBar("other", other, total);
-    }
-
-    function updateBar(lvl, count, total) {
-      document.getElementById(`breakdown-val-${lvl}`).textContent = count;
-      const pct = (count / total) * 100;
-      document.getElementById(`breakdown-bar-${lvl}`).style.width = `${pct}%`;
-    }
-
-    // ── SCROLL ANIMATIONS (GSAP) ──────────────────────────────────────
-    function initScrollAnimations() {
-      gsap.registerPlugin(ScrollTrigger);
-
-      gsap.utils.toArray('[data-reveal]').forEach(el => {
-        gsap.fromTo(el,
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 88%',
-              once: true
-            }
-          }
-        );
-      });
-    }
-
-    // ── INIT ──────────────────────────────────────────────────────────
-    function initAfterBoot() {
-      // Fetch version info
-      fetch('/api/version')
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("footer-build").textContent = data.build || 'terminal-ui-v2';
-          document.getElementById("footer-ver").textContent = data.version || 'v1.0.0';
-        })
-        .catch(() => {});
-
-      // Initial stats sync
-      typewriteCommand("waf status", () => {
-        syncSystemStats().then(() => {
-          // Trigger animations after elements have received values
-          initScrollAnimations();
-        });
-      });
-
-      // Stream init
-      initThreatStream();
-
-      // Admin load
-      loadAdminState();
-    }
-  </script>
+  <!-- Decoupled Controller Script -->
+  <script src="/static/app.js"></script>
 </body>
 </html>

@@ -12,6 +12,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from api.routes import admin, events, gravity, health, metrics, secure
 from api.utils.logger import get_logger
@@ -68,6 +69,9 @@ app.include_router(gravity.router, prefix="/api", tags=["Gravity"])
 app.include_router(admin.router)
 app.include_router(events.router)
 app.include_router(metrics.router)
+
+# Serve static assets (CSS, JS, images)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 @app.get("/api/version")
