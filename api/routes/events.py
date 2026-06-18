@@ -26,7 +26,7 @@ async def threat_event_stream(engine: WAFEngine = Depends(get_engine), test: boo
                 try:
                     event = await asyncio.wait_for(q.get(), timeout=30.0)
                     yield f"data: {json.dumps(event)}\n\n"
-                except TimeoutError:
+                except (asyncio.TimeoutError, TimeoutError):
                     yield ": keepalive\n\n"  # SSE keepalive comment
         finally:
             engine.unsubscribe(q)

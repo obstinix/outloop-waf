@@ -71,11 +71,26 @@ app.include_router(events.router)
 app.include_router(metrics.router)
 
 # Serve static assets (CSS, JS, images)
+@app.api_route("/static/style.css", methods=["GET", "HEAD"], response_class=FileResponse)
+@app.api_route("/api/static/style.css", methods=["GET", "HEAD"], response_class=FileResponse)
+async def serve_css():
+    """Serve the main stylesheet with explicit MIME type."""
+    return FileResponse(STATIC_DIR / "style.css", media_type="text/css")
+
+
+@app.api_route("/static/app.js", methods=["GET", "HEAD"], response_class=FileResponse)
+@app.api_route("/api/static/app.js", methods=["GET", "HEAD"], response_class=FileResponse)
+async def serve_js():
+    """Serve the main controller script with explicit MIME type."""
+    return FileResponse(STATIC_DIR / "app.js", media_type="application/javascript")
+
+
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 @app.get("/api/version")
 async def get_version():
+
     return {"version": "1.0.0", "build": "terminal-ui-v2"}
 
 

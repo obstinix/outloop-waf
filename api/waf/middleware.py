@@ -42,7 +42,11 @@ class WAFMiddleware(BaseHTTPMiddleware):
         "/api/health",
         "/favicon.ico",
         "/api/events/threats",
-        "/api/metrics"
+        "/api/metrics",
+        "/static/style.css",
+        "/api/static/style.css",
+        "/static/app.js",
+        "/api/static/app.js"
     }
 
     def __init__(self, app, engine: WAFEngine):
