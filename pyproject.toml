@@ -1,3 +1,19 @@
+[project]
+name = "outloop-waf"
+version = "1.0.0"
+description = "Perimeter-grade Web Application Firewall"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "starlette>=0.35.0",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "upstash-redis>=1.0.0",
+    "prometheus-client>=0.20.0"
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py39"
